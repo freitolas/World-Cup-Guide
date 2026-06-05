@@ -1,0 +1,68 @@
+{
+  "_README": {
+    "purpose": "Input contract for the WC2026 squad update. The real version of this file is filled on/after 2 June 2026 from the chosen FIFA source (see CLAUDE_CODE_BRIEF.md §2).",
+    "WARNING": "The example team below is ILLUSTRATIVE FORMAT ONLY. The players are placeholders ('Player 01' etc.) and are NOT a real squad. Do not load the example into the app.",
+    "field_groups": {
+      "official": "Comes from FIFA. shirt_number, position, name, club, age, caps. A player is included ONLY if the FIFA source lists them.",
+      "app": "The app's own editorial creations, NOT from FIFA: overall, stats{pac,sho,pas,dri,def,phy}, badges, bio, featured. Filled by Claude during data prep. New players rated on the same scale as existing cards (brief §6); retained players keep their existing values."
+    },
+    "position_codes": "GK = goalkeeper, DF = defender, MF = midfielder, FW = forward. Minimum 3 GK per squad; 23-26 players total.",
+    "source_field": "Set 'source' to 'fifa.com' when a team is pasted directly from the FIFA article, otherwise 'wikipedia:2026_FIFA_World_Cup_squads' for the verbatim transcription. fifa.com is always the authority. Keep it honest per team."
+  },
+
+  "tournament": "FIFA World Cup 2026",
+  "data_locked_official": "2026-06-02",
+
+  "teams": [
+    {
+      "name": "EXAMPLE TEAM — ILLUSTRATIVE ONLY, NOT REAL DATA",
+      "group": "X",
+      "confederation": "XXX",
+      "coach": "<<coach full name>>",
+      "source": "wikipedia:2026_FIFA_World_Cup_squads",
+      "intro": "<<2-4 sentence team intro, paraphrased from the FIFA article. Leave blank if no FIFA text available.>>",
+      "highlights": [
+        "<<key player and why>>",
+        "<<tactical identity in one line>>",
+        "<<one storyline / what to watch>>"
+      ],
+      "players": [
+        {
+          "official": {
+            "shirt_number": 1,
+            "position": "GK",
+            "name": "Player 01 (placeholder)",
+            "club": "<<club>>",
+            "age": 0,
+            "caps": 0
+          },
+          "app": {
+            "overall": null,
+            "stats": { "pac": null, "sho": null, "pas": null, "dri": null, "def": null, "phy": null },
+            "badges": [],
+            "bio": "",
+            "featured": false,
+            "_note": "New player -> Claude fills overall/stats/bio/badges on the same scale as existing cards (brief §6). Retained player -> copy existing app fields from current App.jsx, do not overwrite."
+          }
+        },
+        {
+          "official": {
+            "shirt_number": 10,
+            "position": "FW",
+            "name": "Player 02 (placeholder)",
+            "club": "<<club>>",
+            "age": 0,
+            "caps": 0
+          },
+          "app": {
+            "overall": null,
+            "stats": { "pac": null, "sho": null, "pas": null, "dri": null, "def": null, "phy": null },
+            "badges": [],
+            "bio": "",
+            "featured": false
+          }
+        }
+      ]
+    }
+  ]
+}
