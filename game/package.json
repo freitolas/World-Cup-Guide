@@ -1,0 +1,20 @@
+{
+  "name": "humans-are-inferior",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Humans Are Inferior — THE AI's World Cup prediction game. Standalone front-end; shares the Guide's prediction engine + data read-only.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.7"
+  }
+}

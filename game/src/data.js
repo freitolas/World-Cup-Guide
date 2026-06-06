@@ -1,0 +1,53 @@
+// Shared data, imported READ-ONLY from the Guide. The Game never forks or
+// duplicates this — it's the same daily-updated source the prediction pipeline
+// writes. THE AI's frozen scoreline picks come from botPicks.json (see
+// scripts/update.mjs §freezeBotPicks).
+import { teams } from '../../src/data/teams.js';
+import { players } from '../../src/data/players.js';
+import { matches } from '../../src/data/matches.js';
+import { groups } from '../../src/data/groups.js';
+import { venues } from '../../src/data/venues.js';
+import predictions from '../../src/data/predictions.json';
+import results from '../../src/data/results.json';
+import botPicks from '../../src/data/botPicks.json';
+
+export { teams, players, matches, groups, venues, predictions, results, botPicks };
+
+export const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
+export const playersByTeam = players.reduce((acc, p) => {
+  (acc[p.team] ||= []).push(p);
+  return acc;
+}, {});
+
+export function team(id) {
+  return teamById[id] || { id, name: id, flag: '🌍' };
+}
+
+// Kickoff as a Date. Stored times are treated as UTC for now (refine when the
+// official per-venue timezones are confirmed; pre-tournament this is harmless).
+export function kickoff(m) {
+  return new Date(`${m.date}T${m.time || '00:00'}:00Z`);
+}
+
+// Lock = kickoff. Before lock you can edit; at/after lock the pick freezes and
+// THE AI's pick is revealed (Game brief §4).
+export function isLocked(m, now = new Date()) {
+  return now.getTime() >= kickoff(m).getTime();
+}
+
+export const resultFor = (m) => results[m.id] || null;
+export const botPickFor = (m) => botPicks[m.id] || null;
+export const predictionFor = (m) => predictions[m.id] || null;
+
+// Group-stage scope (all current fixtures are group stage; knockout arrives in M2).
+export const groupMatches = matches
+  .filter((m) => m.group)
+  .slice()
+  .sort((a, b) => kickoff(a) - kickoff(b));
+
+// Fixtures grouped by calendar date, ascending — used by the fixtures-first home.
+export function matchesByDate(list = groupMatches) {
+  const map = new Map();
+  for (const m of list) (map.get(m.date) || map.set(m.date, []).get(m.date)).push(m);
+  return [...map.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1));
+}

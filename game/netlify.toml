@@ -1,0 +1,19 @@
+# Netlify config for the Game (humansareinferior.com).
+#
+# Connect a NEW, SEPARATE Netlify site to this repo with:
+#   Base directory:    game
+#   Build command:     npm run build
+#   Publish directory:  game/dist   (i.e. "dist" relative to the base)
+#
+# Because the base directory is `game`, Netlify rebuilds the Game on every push
+# (including the daily data pipeline's commits), so its data stays fresh. The
+# Guide is a different Netlify site and is unaffected.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# SPA: serve index.html for client-side (hash) routes and unknown paths.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

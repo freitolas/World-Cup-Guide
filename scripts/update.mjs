@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { matches } from '../src/data/matches.js';
 import { teams } from '../src/data/teams.js';
-import { matchProb, expectedScore } from '../vendor/wc-model/elo.mjs';
+import { matchProb, expectedScore, expectedGoals, poissonPmf, DC_RHO } from '../vendor/wc-model/elo.mjs';
 import { buildRatings, HOSTS, HOME_ADV } from './lib/ratings.mjs';
 import { nameToSlug, isPlaceholder, unmapped } from './lib/teamMap.mjs';
 
@@ -23,6 +23,7 @@ const OPENFOOTBALL = 'https://raw.githubusercontent.com/openfootball/worldcup.js
 const root = (p) => fileURLToPath(new URL(`../${p}`, import.meta.url));
 const RESULTS_FILE = root('src/data/results.json');
 const PREDICTIONS_FILE = root('src/data/predictions.json');
+const BOTPICKS_FILE = root('src/data/botPicks.json');
 
 const args = new Set(process.argv.slice(2));
 const log = (...a) => console.log('[update]', ...a);
@@ -100,6 +101,71 @@ function predictionsFor(ratings, source) {
 const round = (x) => Math.round(x * 1000) / 1000;
 const round1 = (x) => Math.round(x * 100) / 100;
 
+// Dixon-Coles low-score correction (mirrors vendor/wc-model/elo.mjs, which keeps
+// it private). Used to find THE AI's modal scoreline for the Game's bot picks.
+function dcTau(a, b, lambda, mu, rho) {
+  if (a === 0 && b === 0) return 1 - lambda * mu * rho;
+  if (a === 0 && b === 1) return 1 + lambda * rho;
+  if (a === 1 && b === 0) return 1 + mu * rho;
+  if (a === 1 && b === 1) return 1 - rho;
+  return 1;
+}
+
+// Most probable scoreline = mode of the DC bivariate-Poisson grid (0–8 each side).
+function modalScore(ratingA, ratingB, homeBonusA = 0) {
+  const lambda = expectedGoals(ratingA, ratingB, homeBonusA);
+  const mu = expectedGoals(ratingB, ratingA, -homeBonusA / 2);
+  let best = [0, 0];
+  let bestP = -1;
+  for (let a = 0; a <= 8; a++) {
+    for (let b = 0; b <= 8; b++) {
+      const p = poissonPmf(a, lambda) * poissonPmf(b, mu) * dcTau(a, b, lambda, mu, DC_RHO);
+      if (p > bestP) {
+        bestP = p;
+        best = [a, b];
+      }
+    }
+  }
+  return best;
+}
+
+// Freeze THE AI's pick per fixture. Once a fixture has a pick it is NEVER
+// regenerated — that immutability is what lets the bot honestly claim it never
+// changes its mind (Game brief §3). Picks are the modal scoreline at first sight.
+function freezeBotPicks(ratings, results) {
+  const picks = existsSync(BOTPICKS_FILE)
+    ? JSON.parse(readFileSync(BOTPICKS_FILE, 'utf8'))
+    : {};
+  let added = 0;
+  if (ratings) {
+    for (const m of matches) {
+      if (picks[m.id]) continue; // frozen — never regenerate
+      const rh = ratings[m.home];
+      const ra = ratings[m.away];
+      if (rh == null || ra == null) continue; // knockout slots not yet resolved
+      const hb = HOSTS.has(m.home) ? HOME_ADV : 0;
+      picks[m.id] = modalScore(rh, ra, hb);
+      added++;
+    }
+  }
+  writeFileSync(BOTPICKS_FILE, JSON.stringify(picks, null, 2) + '\n');
+  log(`bot picks: ${Object.keys(picks).length} frozen (${added} new)`);
+
+  // QA: every not-yet-played fixture with known teams must have a frozen pick.
+  const missing = matches.filter(
+    (m) =>
+      !results[m.id] &&
+      !picks[m.id] &&
+      ratings &&
+      ratings[m.home] != null &&
+      ratings[m.away] != null,
+  );
+  if (missing.length) {
+    log(`ERROR: ${missing.length} fixture(s) missing a bot pick: ${missing.map((m) => m.id).join(', ')}`);
+    process.exitCode = 1;
+  }
+}
+
 async function main() {
   // --- results ---
   let results = {};
@@ -121,9 +187,11 @@ async function main() {
 
   // --- predictions (with graceful fallback) ---
   let predictions;
+  let ratings = null;
   try {
-    const { ratings, gapFilled } = buildRatings(playedForModel);
-    if (gapFilled.length) log(`rank-filled ratings for: ${gapFilled.join(', ')}`);
+    const built = buildRatings(playedForModel);
+    ratings = built.ratings;
+    if (built.gapFilled.length) log(`rank-filled ratings for: ${built.gapFilled.join(', ')}`);
     predictions = predictionsFor(ratings, 'model');
     log(`predictions: ${Object.keys(predictions).length} fixtures (model)`);
   } catch (err) {
@@ -131,6 +199,9 @@ async function main() {
     predictions = fallbackPredictions();
   }
   writeFileSync(PREDICTIONS_FILE, JSON.stringify(predictions, null, 2) + '\n');
+
+  // --- bot picks (THE AI's frozen scoreline, consumed by the Game) ---
+  freezeBotPicks(ratings, results);
 
   // --- build / commit ---
   if (!args.has('--no-build')) {
