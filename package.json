@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "update": "node scripts/update.mjs",
+    "update:commit": "node scripts/update.mjs --commit"
   },
   "dependencies": {
     "react": "^19.2.0",
