@@ -1,0 +1,36 @@
+name: Daily update
+
+# Pulls results + refreshes predictions each morning, rebuilds the site, and
+# commits the result. Netlify serves the committed dist/, so the push deploys.
+on:
+  schedule:
+    - cron: '0 8 * * *' # ~09:00 BST during the tournament
+  workflow_dispatch: {} # allow manual runs
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Configure git
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Update results, predictions, and rebuild
+        run: npm run update:commit
