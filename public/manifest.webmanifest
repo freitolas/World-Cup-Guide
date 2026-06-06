@@ -1,0 +1,26 @@
+{
+  "name": "World Cup 2026 Fan Guide",
+  "short_name": "WC 2026 Guide",
+  "description": "Unofficial fan guide to the 2026 World Cup — fixtures, groups, teams, players, host cities and match predictions.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d1525",
+  "theme_color": "#0d1525",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

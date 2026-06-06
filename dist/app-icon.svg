@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Maskable icon: full-bleed dark background with the brand mark inside the safe zone. -->
+  <rect width="512" height="512" fill="#0d1525"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#f4b942" stroke-width="10"/>
+  <text x="256" y="244" text-anchor="middle" font-family="'Bebas Neue', Impact, sans-serif"
+        font-size="120" letter-spacing="2" fill="#f4b942">WORLD</text>
+  <text x="256" y="344" text-anchor="middle" font-family="'Bebas Neue', Impact, sans-serif"
+        font-size="120" letter-spacing="2" fill="#ffffff">CUP 26</text>
+</svg>

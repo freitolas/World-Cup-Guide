@@ -1188,7 +1188,7 @@ function D({ navigate: e, favTeam: t, onToggleFav: n }) {
           padding: `20px`,
         },
         children: [
-          (0, f.jsx)(T, { children: `FIFA WORLD CUP` }),
+          (0, f.jsx)(T, { children: `WORLD CUP` }),
           (0, f.jsx)(le, {
             style: { fontSize: 44, marginTop: 4 },
             children: `2026`,
@@ -2544,7 +2544,7 @@ function Se({ group: e, navigate: t }) {
           padding: 20,
         },
         children: [
-          (0, f.jsx)(T, { children: `FIFA World Cup 2026` }),
+          (0, f.jsx)(T, { children: `World Cup 2026` }),
           (0, f.jsxs)(le, {
             style: { fontSize: 52, marginTop: 4 },
             children: [`GROUP `, e.id],
@@ -2965,7 +2965,7 @@ function Te() {
                     color: `#f4b942`,
                     letterSpacing: `0.05em`,
                   },
-                  children: `FIFA`,
+                  children: `WORLD CUP`,
                 }),
                 (0, f.jsx)(`span`, {
                   style: {
@@ -2974,7 +2974,7 @@ function Te() {
                     color: `#fff`,
                     letterSpacing: `0.05em`,
                   },
-                  children: `World Cup 2026`,
+                  children: `’26 · Unofficial`,
                 }),
               ],
             }),
@@ -3275,6 +3275,84 @@ function Te() {
                   }),
                 ],
               }),
+          ],
+        }),
+      !g &&
+        (0, f.jsxs)(`footer`, {
+          style: {
+            padding: `28px 16px 96px`,
+            borderTop: `1px solid rgba(255,255,255,0.06)`,
+            marginTop: 8,
+          },
+          children: [
+            (0, f.jsx)(`p`, {
+              style: {
+                fontFamily: `Barlow, sans-serif`,
+                fontSize: 11,
+                lineHeight: 1.6,
+                color: `#4a5568`,
+                margin: 0,
+              },
+              children: `Independent and unofficial. Not affiliated with, endorsed by, or sponsored by FIFA or any football governing body. Team and competition names are used descriptively; all trademarks belong to their respective owners.`,
+            }),
+            (0, f.jsx)(`p`, {
+              style: {
+                fontFamily: `Barlow, sans-serif`,
+                fontSize: 11,
+                lineHeight: 1.6,
+                color: `#4a5568`,
+                margin: `8px 0 0`,
+              },
+              children: `Match data via openfootball. Predictions are statistical model estimates for entertainment only — not betting advice.`,
+            }),
+            (0, f.jsx)(`div`, {
+              style: {
+                display: `flex`,
+                flexWrap: `wrap`,
+                gap: 14,
+                marginTop: 12,
+              },
+              children: [
+                { label: `Terms`, href: `/terms.html` },
+                { label: `Privacy`, href: `/privacy.html` },
+                { label: `Cookies`, href: `/cookies.html` },
+                { label: `Refunds`, href: `/refunds.html` },
+              ].map((e) =>
+                (0, f.jsx)(
+                  `a`,
+                  {
+                    href: e.href,
+                    style: {
+                      fontFamily: `Barlow, sans-serif`,
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: `#f4b942`,
+                      textDecoration: `none`,
+                    },
+                    children: e.label,
+                  },
+                  e.href,
+                ),
+              ),
+            }),
+            (0, f.jsx)(`button`, {
+              onClick: () =>
+                window.openCookieSettings && window.openCookieSettings(),
+              style: {
+                marginTop: 12,
+                background: `none`,
+                border: `none`,
+                padding: 0,
+                fontFamily: `Barlow, sans-serif`,
+                fontSize: 12,
+                fontWeight: 600,
+                color: `#6b7a99`,
+                cursor: `pointer`,
+                textAlign: `left`,
+                display: `block`,
+              },
+              children: `Cookie settings`,
+            }),
           ],
         }),
       (0, f.jsx)(Ce, { tab: e, setTab: d }),
