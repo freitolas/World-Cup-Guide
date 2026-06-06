@@ -1,6 +1,6 @@
 import * as l from 'react';
 import * as f from 'react/jsx-runtime';
-import { venues, teams, players, featured, groups, matches } from './data/index.js';
+import { venues, teams, players, featured, groups, matches, predictions, results } from './data/index.js';
 
 let
   p = `@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700;800&display=swap');*{box-sizing:border-box;margin:0;padding:0}body{background:#06090f}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#0d1220}::-webkit-scrollbar-thumb{background:#f4b942;border-radius:2px}`,
@@ -844,6 +844,8 @@ let
             : `#6b7a99`,
   ne = groups,
   re = matches,
+  pr = predictions,
+  rs = results,
   w = (e) => v.find((t) => t.id === e),
   ie = (e) => y.filter((t) => t.team === e),
   ae = (e) => ne.find((t) => t.teams.includes(e)),
@@ -974,7 +976,9 @@ function me({ fixture: e, navigate: t, compact: n }) {
   let r = w(e.home),
     i = w(e.away),
     a = new Date().toISOString().split(`T`)[0],
-    o = e.date === a;
+    o = e.date === a,
+    P = rs[e.id],
+    Q = pr[e.id];
   return (0, f.jsxs)(`div`, {
     style: {
       background: `#0d1525`,
@@ -1047,12 +1051,12 @@ function me({ fixture: e, navigate: t, compact: n }) {
           (0, f.jsx)(`span`, {
             style: {
               fontFamily: `Bebas Neue, sans-serif`,
-              fontSize: 16,
+              fontSize: P ? 22 : 16,
               color: `#f4b942`,
-              letterSpacing: `0.1em`,
+              letterSpacing: P ? `0.05em` : `0.1em`,
               flexShrink: 0,
             },
-            children: `VS`,
+            children: P ? `${P.hg}–${P.ag}` : `VS`,
           }),
           (0, f.jsxs)(`button`, {
             onClick: () => i && t(`team`, i.id),
@@ -1086,6 +1090,73 @@ function me({ fixture: e, navigate: t, compact: n }) {
           }),
         ],
       }),
+      !P &&
+        Q &&
+        (0, f.jsxs)(`div`, {
+          style: { marginTop: 9 },
+          children: [
+            (0, f.jsxs)(`div`, {
+              style: {
+                display: `flex`,
+                justifyContent: `space-between`,
+                marginBottom: 4,
+                fontFamily: `Barlow, sans-serif`,
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: `0.04em`,
+              },
+              children: [
+                (0, f.jsx)(`span`, {
+                  style: { color: `#f4b942` },
+                  children: `${Math.round(Q.win * 100)}%`,
+                }),
+                (0, f.jsxs)(`span`, {
+                  style: { color: `#6b7a99` },
+                  children: [
+                    `DRAW ${Math.round(Q.draw * 100)}%`,
+                    Q.source === `estimated`
+                      ? (0, f.jsx)(`span`, {
+                          style: {
+                            marginLeft: 5,
+                            padding: `1px 4px`,
+                            borderRadius: 3,
+                            background: `rgba(107,122,153,0.18)`,
+                            color: `#8b97ad`,
+                            fontSize: 8,
+                          },
+                          children: `EST`,
+                        })
+                      : null,
+                  ],
+                }),
+                (0, f.jsx)(`span`, {
+                  style: { color: `#3b82f6` },
+                  children: `${Math.round(Q.loss * 100)}%`,
+                }),
+              ],
+            }),
+            (0, f.jsxs)(`div`, {
+              style: {
+                display: `flex`,
+                height: 5,
+                borderRadius: 3,
+                overflow: `hidden`,
+                background: `#0a0f1a`,
+              },
+              children: [
+                (0, f.jsx)(`div`, {
+                  style: { flexGrow: Q.win, background: `#f4b942` },
+                }),
+                (0, f.jsx)(`div`, {
+                  style: { flexGrow: Q.draw, background: `#3a4456` },
+                }),
+                (0, f.jsx)(`div`, {
+                  style: { flexGrow: Q.loss, background: `#3b82f6` },
+                }),
+              ],
+            }),
+          ],
+        }),
     ],
   });
 }
@@ -2565,6 +2636,84 @@ function Se({ group: e, navigate: t }) {
     ],
   });
 }
+function Re({ navigate: e }) {
+  let r = new Date(),
+    i = r.toISOString().split(`T`)[0],
+    y = new Date(r.getTime() - 864e5).toISOString().split(`T`)[0],
+    k = new Date(`2026-06-11`),
+    dd = Math.ceil((k - r) / 864e5),
+    started = r >= k,
+    todays = re.filter((m) => m.date === i),
+    yResults = re.filter((m) => m.date === y && rs[m.id]),
+    nd = re
+      .filter((m) => m.date > i)
+      .map((m) => m.date)
+      .sort()[0],
+    nextUp = nd ? re.filter((m) => m.date === nd) : [],
+    section = (title, list) =>
+      list.length
+        ? (0, f.jsxs)(`div`, {
+            style: { marginBottom: 24 },
+            children: [
+              (0, f.jsx)(ue, { style: { marginBottom: 12 }, children: title }),
+              (0, f.jsx)(`div`, {
+                style: { display: `flex`, flexDirection: `column`, gap: 10 },
+                children: list.map((m) => (0, f.jsx)(me, { fixture: m, navigate: e }, m.id)),
+              }),
+            ],
+          })
+        : null;
+  return (0, f.jsxs)(`div`, {
+    style: { padding: `20px 16px 90px` },
+    children: [
+      (0, f.jsx)(le, { children: `Today` }),
+      (0, f.jsx)(E, {
+        style: { marginTop: 4, marginBottom: 20 },
+        children: new Date(i + `T12:00:00`).toLocaleDateString(`en-GB`, {
+          weekday: `long`,
+          day: `numeric`,
+          month: `long`,
+        }),
+      }),
+      !started &&
+        !todays.length &&
+        (0, f.jsxs)(`div`, {
+          style: {
+            background: `linear-gradient(135deg, rgba(244,185,66,0.15), rgba(244,185,66,0.04))`,
+            border: `1px solid rgba(244,185,66,0.3)`,
+            borderRadius: 12,
+            padding: `16px 18px`,
+            marginBottom: 24,
+            textAlign: `center`,
+          },
+          children: [
+            (0, f.jsx)(`div`, {
+              style: { fontFamily: `Bebas Neue, sans-serif`, fontSize: 44, color: `#f4b942`, lineHeight: 1 },
+              children: Math.max(0, dd),
+            }),
+            (0, f.jsx)(`div`, {
+              style: {
+                fontFamily: `Barlow, sans-serif`,
+                fontSize: 13,
+                color: `#a0aec0`,
+                marginTop: 4,
+                letterSpacing: `0.05em`,
+              },
+              children: dd === 1 ? `day until kick-off` : `days until kick-off`,
+            }),
+          ],
+        }),
+      todays.length
+        ? section(`Today's Matches`, todays)
+        : section(started ? `Next Up` : `First Fixtures — June 2026`, nextUp),
+      section(`Yesterday's Results`, yResults),
+      (0, f.jsx)(T, {
+        style: { marginTop: 8, color: `#4a5568`, textAlign: `center` },
+        children: `Win / draw / loss from an Elo + Dixon-Coles model, refreshed daily.`,
+      }),
+    ],
+  });
+}
 function Ce({ tab: e, setTab: t }) {
   return (0, f.jsx)(`div`, {
     style: {
@@ -2580,6 +2729,7 @@ function Ce({ tab: e, setTab: t }) {
     },
     children: [
       { id: `home`, icon: `🏠`, label: `Home` },
+      { id: `today`, icon: `📅`, label: `Today` },
       { id: `search`, icon: `🔍`, label: `Search` },
       { id: `teams`, icon: `⚽`, label: `Teams` },
       { id: `players`, icon: `⭐`, label: `Players` },
@@ -2863,6 +3013,7 @@ function Te() {
           children: [
             e === `home` &&
               (0, f.jsx)(D, { navigate: c, favTeam: o, onToggleFav: h }),
+            e === `today` && (0, f.jsx)(Re, { navigate: c }),
             e === `search` &&
               (0, f.jsxs)(`div`, {
                 style: { padding: `20px 16px` },
