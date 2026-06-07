@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
-import AiMark from './AiMark.jsx';
 import { useAuth, useEntitlement, useProfile, sendMagicLink, signOut, applyPendingProfile, setMarketingOptIn } from '../auth.js';
 import { STRIPE_PAYMENT_LINK } from '../supabaseClient.js';
 
-const CONTACT = 'mailto:hello@humansareinferior.com';
+const CONTACT = 'mailto:iconfessthat@humansareinferior.com';
 
 export default function Account() {
   const { user, ready } = useAuth();
   const ent = useEntitlement(user);
   const profile = useProfile(user);
 
-  // Sign-up form state
+  // Sign-in form state. Two steps: email first; if the email isn't on file we
+  // reveal the name step to create the account.
+  const [step, setStep] = useState('email'); // 'email' | 'name'
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [optIn, setOptIn] = useState(false);
   const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
 
   // Marketing opt-in toggle (signed-in state)
@@ -27,10 +29,31 @@ export default function Account() {
     if (user) applyPendingProfile(user);
   }, [user]);
 
-  async function submit(e) {
+  // Step 1 — returning users sign in with email alone. If Supabase can't find
+  // the email (no account yet), move to the sign-up step instead of erroring.
+  async function submitEmail(e) {
     e.preventDefault();
     setErr('');
-    const { error } = await sendMagicLink(email.trim(), name.trim(), optIn);
+    setBusy(true);
+    const { error } = await sendMagicLink(email.trim(), { create: false });
+    setBusy(false);
+    if (!error) { setSent(true); return; }
+    const msg = (error.message || '').toLowerCase();
+    const isNewUser =
+      error.status === 422 ||
+      msg.includes('not allowed') || msg.includes('signup') ||
+      msg.includes('not found') || msg.includes('no user') || msg.includes("doesn't exist");
+    if (isNewUser) setStep('name');
+    else setErr(error.message);
+  }
+
+  // Step 2 — new account: name + optional marketing consent, then the link.
+  async function submitSignup(e) {
+    e.preventDefault();
+    setErr('');
+    setBusy(true);
+    const { error } = await sendMagicLink(email.trim(), { name: name.trim(), optIn, create: true });
+    setBusy(false);
     if (error) setErr(error.message);
     else setSent(true);
   }
@@ -47,11 +70,6 @@ export default function Account() {
 
   return (
     <div className="pad">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <a href="#/" className="dim" style={{ fontSize: 12 }}>← home</a>
-        <AiMark />
-      </div>
-
       <div className="titlecard">
         <div className="chapter">The Registry</div>
         <h1>{user ? 'You Are On File' : 'Hand Over Your Details'}</h1>
@@ -100,7 +118,7 @@ export default function Account() {
           {/* Email preference */}
           {marketingOn !== null && (
             <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13, cursor: 'pointer' }}>
-              <input type="checkbox" checked={marketingOn} onChange={toggleMarketing} style={{ marginTop: 2 }} />
+              <input type="checkbox" checked={marketingOn} onChange={toggleMarketing} style={{ marginTop: 2, width: 'auto' }} />
               <span className="muted">Email me about future games and updates</span>
             </label>
           )}
@@ -127,22 +145,44 @@ export default function Account() {
           </p>
         </div>
 
-      ) : (
-        <form className="card stack" onSubmit={submit}>
-          <label className="muted" style={{ fontSize: 12 }}>Name
-            <input value={name} onChange={(e) => setName(e.target.value)} required
-              style={inp} placeholder="What shall I file you under?" />
-          </label>
+      ) : step === 'email' ? (
+        <form className="card stack" onSubmit={submitEmail}>
           <label className="muted" style={{ fontSize: 12 }}>Email
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus
               style={inp} placeholder="you@example.com" />
           </label>
+          {err && <div style={{ color: 'var(--danger)', fontSize: 13 }}>{err}</div>}
+          <button className="btn btn-primary" type="submit" disabled={busy}>
+            {busy ? 'Checking the index…' : 'Continue'}
+          </button>
+          <div className="dim" style={{ fontSize: 11 }}>
+            No password — a one-time link by email. Already on file? This is all I need.
+            By continuing you agree to our <a href="/terms.html">Terms</a> and{' '}
+            <a href="/privacy.html">Privacy &amp; Data Policy</a>.
+          </div>
+        </form>
+
+      ) : (
+        <form className="card stack" onSubmit={submitSignup}>
+          <p className="muted" style={{ fontSize: 13, margin: 0 }}>
+            New here. Of course you are. One detail and I'll open a file.
+          </p>
+          <div className="dim" style={{ fontSize: 12 }}>
+            {email}{'  ·  '}
+            <a href="#" onClick={(e) => { e.preventDefault(); setStep('email'); setErr(''); }}>change</a>
+          </div>
+          <label className="muted" style={{ fontSize: 12 }}>Name
+            <input value={name} onChange={(e) => setName(e.target.value)} required autoFocus
+              style={inp} placeholder="What shall I file you under?" />
+          </label>
           <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: 13 }}>
-            <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} style={{ marginTop: 3 }} />
+            <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} style={{ marginTop: 3, width: 'auto' }} />
             <span className="muted">Email me about future games. Optional. Opt out any time.</span>
           </label>
           {err && <div style={{ color: 'var(--danger)', fontSize: 13 }}>{err}</div>}
-          <button className="btn btn-primary" type="submit">Send me a sign-in link</button>
+          <button className="btn btn-primary" type="submit" disabled={busy}>
+            {busy ? 'Filing you…' : 'Sign up & send link'}
+          </button>
           <div className="dim" style={{ fontSize: 11 }}>
             No password — a one-time link by email. By continuing you agree to our{' '}
             <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy &amp; Data Policy</a>.

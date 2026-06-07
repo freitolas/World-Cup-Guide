@@ -1,6 +1,5 @@
 import { team, playersByTeam, groupMatches, teamById } from '../data.js';
 import { ERRORS, OMNISCIENCE, pick as choose } from '../voice.js';
-import AiMark from './AiMark.jsx';
 import { go } from '../hooks.js';
 
 export default function TeamDetail({ id }) {
@@ -19,10 +18,7 @@ export default function TeamDetail({ id }) {
 
   return (
     <div className="pad stack">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <a href="#/play" className="dim mono" style={{ fontSize: 12 }}>← fixtures</a>
-        <AiMark />
-      </div>
+      <a href="#/play" className="dim mono" style={{ fontSize: 12 }}>← fixtures</a>
 
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

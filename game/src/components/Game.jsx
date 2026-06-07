@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import Scoreboard from './Scoreboard.jsx';
 import MatchCard from './MatchCard.jsx';
-import AiMark from './AiMark.jsx';
 import { DeviceNudge, UpgradeNudge } from './Nudges.jsx';
 import { groupMatches, matchesByDate, results, botPicks, kickoff } from '../data.js';
 import { tally } from '../scoring.js';
@@ -32,16 +31,7 @@ export default function Game() {
     <div>
       <Scoreboard tally={t} />
       <div className="pad">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <AiMark />
-          <span style={{ display: 'flex', gap: 12, fontSize: 12 }}>
-            <a href="#/warmups" className="dim">warm-ups</a>
-            <a href="#/knockouts" className="dim">$5 pass</a>
-            <a href="#/account" className="dim">account</a>
-          </span>
-        </div>
-
-        <div style={{ marginTop: 12 }}>
+        <div>
           <DeviceNudge show={madeAnyPick} />
         </div>
 

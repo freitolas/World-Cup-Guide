@@ -7,9 +7,9 @@ import { HERO, TRUST, NAME, pick as choose } from '../voice.js';
 // The 2026 opener. The countdown to "the real humiliation".
 const OPENER = new Date('2026-06-11T16:00:00Z');
 
-function Cta({ children = 'Prove me wrong', className = 'btn btn-primary' }) {
+function Cta({ children = 'Prove me wrong', className = 'btn btn-primary', to = '/play' }) {
   return (
-    <button className={className} onClick={() => go('/play')}>
+    <button className={className} onClick={() => go(to)}>
       {children} →
     </button>
   );
@@ -47,6 +47,10 @@ export default function Landing() {
   );
 
   const countdown = fmtCountdown(OPENER.getTime() - now.getTime());
+
+  // Before the opener the only real, playable games are the warm-up friendlies —
+  // so every CTA points there. It flips to the World Cup game once it kicks off.
+  const playHref = now.getTime() < OPENER.getTime() ? '/warmups' : '/play';
 
   return (
     <div className="has-sticky">
@@ -99,7 +103,7 @@ export default function Landing() {
               <span className="vs">VS</span>
               <span>{next.awayName} {team(next.away).flag}</span>
             </div>
-            <Cta />
+            <Cta to={playHref} />
             <div className="micro">{HERO.microTrust}</div>
           </div>
         )}
@@ -127,7 +131,7 @@ export default function Landing() {
               <div className="line"><span className="t">[18:45:06 UTC]</span> &gt; LOCK SECURED.</div>
             </div>
           </div>
-          <div className="cta-wrap" style={{ marginTop: 20 }}><Cta /></div>
+          <div className="cta-wrap" style={{ marginTop: 20 }}><Cta to={playHref} /></div>
         </div>
 
         {/* ── THE DARE ───────────────────────────────────────────────────── */}
@@ -138,7 +142,7 @@ export default function Landing() {
             "I don't get nervous. I don't have a favourite team. I've never once said 'they're
             due.' That's why I win — and why it's so satisfying when, rarely, you don't."
           </p>
-          <div className="cta-wrap" style={{ marginTop: 22 }}><Cta /></div>
+          <div className="cta-wrap" style={{ marginTop: 22 }}><Cta to={playHref} /></div>
         </div>
 
         {/* ── THE $5 PASS ────────────────────────────────────────────────── */}
@@ -209,7 +213,7 @@ export default function Landing() {
 
       {/* ── STICKY MOBILE CTA ────────────────────────────────────────────── */}
       <div className="sticky-cta">
-        <Cta />
+        <Cta to={playHref} />
       </div>
     </div>
   );

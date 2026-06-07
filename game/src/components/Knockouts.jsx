@@ -1,4 +1,3 @@
-import AiMark from './AiMark.jsx';
 import { useAuth, useEntitlement } from '../auth.js';
 import { STRIPE_PAYMENT_LINK } from '../supabaseClient.js';
 
@@ -13,11 +12,6 @@ export default function Knockouts() {
 
   return (
     <div className="pad">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <a href="#/" className="dim" style={{ fontSize: 12 }}>← home</a>
-        <AiMark />
-      </div>
-
       <div className="titlecard">
         <div className="chapter">The Members' Wing · $5</div>
         <h1>The Knockout Pass</h1>

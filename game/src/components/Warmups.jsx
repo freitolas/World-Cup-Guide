@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import AiMark from './AiMark.jsx';
 import Scoreboard from './Scoreboard.jsx';
 import FriendlyCard from './FriendlyCard.jsx';
 import { friendlies, friendlyKickoff } from '../data.js';
@@ -52,11 +51,6 @@ export default function Warmups() {
     <div>
       <Scoreboard tally={duel} />
       <div className="pad">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <a href="#/" className="dim" style={{ fontSize: 12 }}>← home</a>
-          <AiMark />
-        </div>
-
         <div className="titlecard">
           <div className="chapter">An Appendix · The Warm-Ups</div>
           <h1>The Tune-Up Dossier</h1>

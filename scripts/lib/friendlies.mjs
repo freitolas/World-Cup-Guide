@@ -8,7 +8,7 @@
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { matchProb, expectedGoals, poissonPmf, DC_RHO } from '../../vendor/wc-model/elo.mjs';
+import { matchProb, expectedGoals } from '../../vendor/wc-model/elo.mjs';
 
 const API_FOOTBALL_KEY = process.env.API_FOOTBALL_KEY || '';
 // Confirm the right id from the discovery log, then pin it via env if needed.
@@ -34,22 +34,11 @@ function ratingFor(name) {
   return calibrated[s] != null ? { slug: s, elo: calibrated[s] } : null;
 }
 
-function dcTau(a, b, l, m, r) {
-  if (a === 0 && b === 0) return 1 - l * m * r;
-  if (a === 0 && b === 1) return 1 + l * r;
-  if (a === 1 && b === 0) return 1 + m * r;
-  if (a === 1 && b === 1) return 1 - r;
-  return 1;
-}
-function modalScore(rh, ra, hb) {
-  const l = expectedGoals(rh, ra, hb);
-  const m = expectedGoals(ra, rh, -hb / 2);
-  let best = [0, 0]; let bp = -1;
-  for (let a = 0; a <= 8; a++) for (let b = 0; b <= 8; b++) {
-    const p = poissonPmf(a, l) * poissonPmf(b, m) * dcTau(a, b, l, m, DC_RHO);
-    if (p > bp) { bp = p; best = [a, b]; }
-  }
-  return best;
+// THE AI's scoreline call: round the model's expected goals for each side. This
+// is the model's honest central estimate and calls more results correctly than
+// the single most-probable scoreline (which collapses toward low-scoring draws).
+function egPick(rh, ra, hb) {
+  return [Math.round(expectedGoals(rh, ra, hb)), Math.round(expectedGoals(ra, rh, -hb / 2))];
 }
 const r3 = (x) => Math.round(x * 1000) / 1000;
 const r1 = (x) => Math.round(x * 100) / 100;
@@ -97,7 +86,7 @@ export async function buildFriendlies(now = new Date()) {
         kickoff: f.fixture.date,
         home: rh.slug, away: ra.slug, homeName: hN, awayName: aN,
         prediction: { win: r3(p.winA), draw: r3(p.draw), loss: r3(p.winB), eg: [r1(p.expectedGoalsA), r1(p.expectedGoalsB)] },
-        botPick: modalScore(rh.elo, ra.elo, FRIENDLY_HOME_ADV),
+        botPick: egPick(rh.elo, ra.elo, FRIENDLY_HOME_ADV),
       };
       const ft = f.score?.fulltime;
       if (f.fixture?.status?.short === 'FT' && ft && ft.home != null) rec.result = { hg: ft.home, ag: ft.away };

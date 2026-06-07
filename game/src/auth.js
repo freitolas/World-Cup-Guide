@@ -16,15 +16,19 @@ export function useAuth() {
   return { session, user: session?.user ?? null, ready };
 }
 
-// Send a passwordless sign-in link. Name + marketing consent are stashed locally
-// and written to the profile once the link is followed and the session exists.
-export async function sendMagicLink(email, name, optIn) {
-  localStorage.setItem('hai_pending_profile', JSON.stringify({ name, optIn }));
+// Send a passwordless sign-in link.
+//   create:false → existing users only (returning sign-in by email alone). If
+//                  the email isn't on file, Supabase returns an error and the
+//                  caller switches to the sign-up step.
+//   create:true  → new account; name + marketing consent are stashed locally and
+//                  written to the profile once the link is followed.
+export async function sendMagicLink(email, { name = '', optIn = false, create = true } = {}) {
+  if (create) localStorage.setItem('hai_pending_profile', JSON.stringify({ name, optIn }));
   // Redirect to origin root (no hash) so Supabase can find the ?code= param
   // in window.location.search. Hash-based routes swallow query params.
   return supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${window.location.origin}/` },
+    options: { shouldCreateUser: create, emailRedirectTo: `${window.location.origin}/` },
   });
 }
 

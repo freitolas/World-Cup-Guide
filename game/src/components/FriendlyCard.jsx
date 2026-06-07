@@ -6,7 +6,6 @@ import { MATCH, NAME } from '../voice.js';
 
 const fmt = (f) =>
   friendlyKickoff(f).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-const pct = (x) => Math.round(x * 100);
 
 function verdict(pick, r) {
   const s = scorePick(pick, r);
@@ -22,7 +21,6 @@ export default function FriendlyCard({ f, userPick, now }) {
   const result = f.result || null;
   const [draft, setDraft] = useState(userPick || [0, 0]);
   const committed = !!userPick;
-  const p = f.prediction;
 
   return (
     <div className={`card ${!locked ? 'glow' : ''}`}>
@@ -32,17 +30,6 @@ export default function FriendlyCard({ f, userPick, now }) {
           {result ? <span className="sc">{result.hg}–{result.ag}</span> : <span className="dim" style={{ fontSize: 12 }}>{fmt(f)}</span>}
         </span>
         <span className="nm">{f.awayName}</span>
-      </div>
-
-      <div className="probbar">
-        <span className="w" style={{ width: `${pct(p.win)}%` }} />
-        <span className="d" style={{ width: `${pct(p.draw)}%` }} />
-        <span className="l" style={{ width: `${pct(p.loss)}%` }} />
-      </div>
-      <div className="problabels">
-        <span>{pct(p.win)}% {f.homeName}</span>
-        <span>{pct(p.draw)}% draw</span>
-        <span>{pct(p.loss)}% {f.awayName}</span>
       </div>
 
       {!locked && (
