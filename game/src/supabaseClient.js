@@ -13,4 +13,6 @@ export const supabase = createClient(url, key, {
 
 // The Stripe Payment Link ($5 one-time). Set once it exists in Stripe; until
 // then the upgrade button shows "not yet available".
-export const STRIPE_PAYMENT_LINK = import.meta.env.VITE_STRIPE_PAYMENT_LINK || '';
+export const STRIPE_PAYMENT_LINK =
+  import.meta.env.VITE_STRIPE_PAYMENT_LINK ||
+  'https://buy.stripe.com/14A7sM3R09Jr3cKf2MdAk04';
