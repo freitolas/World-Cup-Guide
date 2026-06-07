@@ -70,11 +70,17 @@ injuries/suspensions per fixture → availability hit; news/RSS → crisis modif
 
 ---
 
-## IMMEDIATE NEXT STEPS (tomorrow)
-1. Get user confirm on the **freeze-timing change** (and reset `botPicks.json`).
-2. Get the **two API keys** into GitHub secrets.
-3. Build the context layer as an **env-gated module that's a safe no-op until keys exist**, then activate + tune against real responses.
-4. (Separately, when ready) Guide Phase 2 paywall + Game Milestone 2.
+## DONE 2026-06-07 (this session)
+- Keys set; context layer built + verified live (suspensions from cards, news injuries/crisis hedged). `CONTEXT_ENABLED` still 0 — activate at matchday 1–2 per the checkpoint above.
+- **Freeze timing:** picks freeze only within 24h of kickoff (FREEZE_HORIZON_HOURS); botPicks reset; QA on imminent fixtures. ✅
+- **Schedule:** phased cron (14:00+15:00 BST group→R16; 17:00 BST QF→final) via date phase gate. ✅
+- **Per-fixture injuries probe** wired (`injuries?fixture=`); returns 0 now (no WC fixtures within 3 days) — activates at matchday 1. Re-check then.
+- **Friendlies (ISOLATED):** `scripts/lib/friendlies.mjs` → `src/data/friendlies.json`. League id **10**. **28 predictable** fixtures (23 played w/ results = instant bot track record, 5 upcoming). Friendly results NEVER touch WC data. Verified live.
+
+## IMMEDIATE NEXT STEPS
+1. **Surface friendlies in the Game** (front-end, `game/`) — a "Warm-ups" view consuming `friendlies.json`: show the bot's record on the 23 played + let users play the 5 upcoming. This is what turns the data into marketable live content. (Isolated localStorage scoreboard, reuse MatchCard/scoring.)
+2. **Matchday 1–2:** run the activation checkpoint (above) — validate suspensions/news/injuries-probe on real data, then set `CONTEXT_ENABLED=1`.
+3. When ready: Guide Phase 2 paywall + Game Milestone 2 (accounts/Stripe/X/global scoreboard).
 
 ## Identity / brand locks (for the Game)
 THE AI · handle **@inferiorhumans** · **humansareinferior.com**. Voice = `game/src/voice.js` + the uploaded VOICE_GUIDE. Not gambling; unofficial; not affiliated with FIFA.
