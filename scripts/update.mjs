@@ -18,6 +18,7 @@ import { teams } from '../src/data/teams.js';
 import { matchProb, expectedScore, expectedGoals, poissonPmf, DC_RHO } from '../vendor/wc-model/elo.mjs';
 import { buildRatings, HOSTS, HOME_ADV } from './lib/ratings.mjs';
 import { nameToSlug, isPlaceholder, unmapped } from './lib/teamMap.mjs';
+import { fetchContext } from './lib/context.mjs';
 
 const OPENFOOTBALL = 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
 const root = (p) => fileURLToPath(new URL(`../${p}`, import.meta.url));
@@ -129,39 +130,59 @@ function modalScore(ratingA, ratingB, homeBonusA = 0) {
   return best;
 }
 
-// Freeze THE AI's pick per fixture. Once a fixture has a pick it is NEVER
-// regenerated — that immutability is what lets the bot honestly claim it never
-// changes its mind (Game brief §3). Picks are the modal scoreline at first sight.
-function freezeBotPicks(ratings, results) {
+// Kickoff time. Stored date+time are treated as UTC for now (refine when the
+// official per-venue timezones are confirmed).
+const kickoffMs = (m) => new Date(`${m.date}T${m.time || '00:00'}:00Z`).getTime();
+
+// How close to kickoff a pick is frozen. Picks are deliberately frozen LATE —
+// only within this many hours of kickoff — so the latest injuries/suspensions/
+// news are baked in. The daily run happens a couple of hours before the day's
+// first match, so this window (24h) captures the whole day's slate at that run
+// while still excluding future days. Override with FREEZE_HORIZON_HOURS.
+const FREEZE_HORIZON_HOURS = Number(process.env.FREEZE_HORIZON_HOURS || 24);
+const FREEZE_QA_HOURS = 4; // a fixture this close with no pick = something broke
+
+// Freeze THE AI's pick per fixture, LATE (near kickoff) so context is included.
+// Once a fixture has a pick it is NEVER regenerated — that immutability is what
+// lets the bot honestly claim it never changes its mind (Game brief §3). The
+// pick is the modal scoreline computed from ratings already adjusted for context.
+function freezeBotPicks(ratings, results, now = Date.now()) {
   const picks = existsSync(BOTPICKS_FILE)
     ? JSON.parse(readFileSync(BOTPICKS_FILE, 'utf8'))
     : {};
   let added = 0;
+  let pending = 0;
   if (ratings) {
     for (const m of matches) {
       if (picks[m.id]) continue; // frozen — never regenerate
+      if (results[m.id]) continue; // already played
       const rh = ratings[m.home];
       const ra = ratings[m.away];
       if (rh == null || ra == null) continue; // knockout slots not yet resolved
+
+      const hoursOut = (kickoffMs(m) - now) / 3.6e6;
+      if (hoursOut < 0 || hoursOut > FREEZE_HORIZON_HOURS) {
+        if (hoursOut >= 0) pending++; // valid fixture, just not yet in the freeze window
+        continue;
+      }
       const hb = HOSTS.has(m.home) ? HOME_ADV : 0;
       picks[m.id] = modalScore(rh, ra, hb);
       added++;
     }
   }
   writeFileSync(BOTPICKS_FILE, JSON.stringify(picks, null, 2) + '\n');
-  log(`bot picks: ${Object.keys(picks).length} frozen (${added} new)`);
+  log(`bot picks: ${Object.keys(picks).length} frozen (${added} new this run, ${pending} pending future fixtures)`);
 
-  // QA: every not-yet-played fixture with known teams must have a frozen pick.
-  const missing = matches.filter(
-    (m) =>
-      !results[m.id] &&
-      !picks[m.id] &&
-      ratings &&
-      ratings[m.home] != null &&
-      ratings[m.away] != null,
-  );
+  // QA: any fixture kicking off within the next few hours MUST already have a
+  // frozen pick — otherwise a match could start with no committed prediction.
+  const missing = matches.filter((m) => {
+    if (results[m.id] || picks[m.id]) return false;
+    if (!ratings || ratings[m.home] == null || ratings[m.away] == null) return false;
+    const hoursOut = (kickoffMs(m) - now) / 3.6e6;
+    return hoursOut >= 0 && hoursOut <= FREEZE_QA_HOURS;
+  });
   if (missing.length) {
-    log(`ERROR: ${missing.length} fixture(s) missing a bot pick: ${missing.map((m) => m.id).join(', ')}`);
+    log(`ERROR: ${missing.length} imminent fixture(s) missing a bot pick: ${missing.map((m) => m.id).join(', ')}`);
     process.exitCode = 1;
   }
 }
@@ -192,6 +213,18 @@ async function main() {
     const built = buildRatings(playedForModel);
     ratings = built.ratings;
     if (built.gapFilled.length) log(`rank-filled ratings for: ${built.gapFilled.join(', ')}`);
+
+    // News & context layer: injuries/suspensions/crisis → rating adjustments.
+    // No-op without keys; only applied when CONTEXT_ENABLED=1 (else diagnostic).
+    const ctx = await fetchContext();
+    if (ctx.applied) {
+      let n = 0;
+      for (const [slug, penalty] of Object.entries(ctx.adjustments)) {
+        if (ratings[slug] != null) { ratings[slug] -= penalty; n++; }
+      }
+      log(`context APPLIED — adjusted ${n} team rating(s)`);
+    }
+
     predictions = predictionsFor(ratings, 'model');
     log(`predictions: ${Object.keys(predictions).length} fixtures (model)`);
   } catch (err) {
