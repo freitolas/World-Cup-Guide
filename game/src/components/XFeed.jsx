@@ -1,41 +1,12 @@
-import { friendlies } from '../data.js';
-import { scorePick } from '../scoring.js';
+import { useState, useEffect, useRef } from 'react';
 
-// THE AI's "live" X timeline. Stylized like an X feed, but the posts are built
-// from REAL recent warm-up predictions (its locked pick + the actual result) —
-// so the content is true, not invented. Swap for a real X embed when ready.
+// THE AI's REAL X timeline (@inferiorhumans), styled to fit. Click-to-load so we
+// don't pull X's third-party script/cookies until the visitor opts in (keeps it
+// honest with the cookie banner). Until the auto-poster is live the timeline may
+// be sparse — but it's real, never fabricated.
 
-const X_URL = 'https://x.com/inferiorhumans';
-
-function rel(iso) {
-  const ms = Date.now() - new Date(iso).getTime();
-  if (ms < 0) return 'now';
-  const h = Math.floor(ms / 3600000);
-  if (h < 1) return `${Math.max(1, Math.floor(ms / 60000))}m`;
-  if (h < 24) return `${h}h`;
-  return `${Math.floor(h / 24)}d`;
-}
-
-function postFor(f) {
-  const s = scorePick(f.botPick, f.result);
-  const me = `${f.homeName} ${f.botPick[0]}–${f.botPick[1]} ${f.awayName}`;
-  const fin = `${f.result.hg}–${f.result.ag}`;
-  const text =
-    s >= 5 ? `Locked before kickoff: ${me}. Final: ${fin}. Exact. I don't guess — I compute.`
-    : s >= 1 ? `Called it. I posted ${me} before a ball was kicked. Final: ${fin}. Predictable. Literally.`
-    : `I had ${me}. Reality returned ${fin}. Football gets its rare accident. Repriced. Carry on.`;
-  return { id: f.id, text, time: rel(f.kickoff), hit: s >= 1 };
-}
-
-function EyeAvatar() {
-  return (
-    <span className="xavatar" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-      </svg>
-    </span>
-  );
-}
+const HANDLE = 'inferiorhumans';
+const X_URL = `https://x.com/${HANDLE}`;
 
 function XLogo() {
   return (
@@ -46,43 +17,50 @@ function XLogo() {
 }
 
 export default function XFeed() {
-  const recent = friendlies
-    .filter((f) => f.result)
-    .sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)))
-    .slice(0, 3)
-    .map(postFor);
+  const [show, setShow] = useState(false);
+  const ref = useRef(null);
 
-  const pinned = {
-    id: 'pinned',
-    text: 'I post every pick before kickoff. Publicly. To everyone. Then I win anyway. The timestamps don’t lie. You do.',
-    time: null,
-    hit: true,
-    pin: true,
-  };
-
-  const posts = [pinned, ...recent];
+  useEffect(() => {
+    if (!show) return;
+    const id = 'twitter-wjs';
+    const load = () => window.twttr?.widgets?.load(ref.current);
+    if (document.getElementById(id)) { load(); return; }
+    const s = document.createElement('script');
+    s.id = id;
+    s.async = true;
+    s.src = 'https://platform.twitter.com/widgets.js';
+    s.onload = load;
+    document.body.appendChild(s);
+  }, [show]);
 
   return (
     <div className="xfeed">
-      {posts.map((p) => (
-        <a key={p.id} className="xpost" href={X_URL} target="_blank" rel="noopener">
-          {p.pin && <div className="xpin">📌 Pinned</div>}
-          <div className="xhead">
-            <EyeAvatar />
-            <span className="xname">THE AI</span>
-            <svg className="xcheck" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l2.6 1.9 3.2-.1 1 3 2.6 1.9-1 3 1 3-2.6 1.9-1 3-3.2-.1L12 23l-2.6-1.9-3.2.1-1-3L2.6 16.3l1-3-1-3 2.6-1.9 1-3 3.2.1z" /></svg>
-            <span className="xhandle">@inferiorhumans</span>
-            {p.time && <span className="xtime">· {p.time}</span>}
-            <XLogo />
-          </div>
-          <div className="xbody">{p.text}</div>
-          <div className="xmeta">
-            <span>💬 {p.hit ? 214 : 902}</span>
-            <span>🔁 {p.hit ? 87 : 41}</span>
-            <span>♡ {p.hit ? 1203 : 196}</span>
-          </div>
-        </a>
-      ))}
+      <div className="xrule">
+        <div className="xrule-h"><XLogo /> <span>@inferiorhumans</span></div>
+        <p>
+          Every pick is locked and <b>posted to X five minutes before kickoff</b>. Public.
+          Timestamped. No edits, no hiding. Go ahead — screenshot it.
+        </p>
+        {!show && (
+          <button className="btn btn-ghost" onClick={() => setShow(true)}>Show live posts from X →</button>
+        )}
+      </div>
+
+      {show && (
+        <div className="xembed" ref={ref}>
+          <a
+            className="twitter-timeline"
+            data-theme="dark"
+            data-chrome="noheader nofooter noborders transparent"
+            data-dnt="true"
+            data-tweet-limit="3"
+            href={`https://twitter.com/${HANDLE}`}
+          >
+            Posts from @inferiorhumans
+          </a>
+        </div>
+      )}
+
       <a className="xfollow" href={X_URL} target="_blank" rel="noopener">Follow the carnage on X →</a>
     </div>
   );

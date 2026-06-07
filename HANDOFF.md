@@ -103,5 +103,29 @@ injuries/suspensions per fixture → availability hit; news/RSS → crisis modif
 - X auto-posting, global "Humanity vs THE AI" scoreboard, leaderboard (rest of M2).
 - Guide Phase 2 paywall (separate product).
 
+## NEXT: X (Twitter) auto-posting — THE AI posts its picks before kickoff
+The honesty mechanic ("public, timestamped, before kickoff, no edits") only holds
+if THE AI actually posts. The lock/post rule is now **5 minutes before kickoff**
+(`LOCK_LEAD_MS` in `game/src/data.js`; copy in `voice.js` + landing). To make the
+posting real:
+
+1. **X API access:** create an X developer app with **write** scope. Get
+   `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_SECRET` (OAuth 1.0a
+   user context — needed to post). Store as CI/host secrets, never in the repo.
+2. **Poster:** add `scripts/lib/postToX.mjs` — given a fixture + its frozen
+   `botPick`, format the post (e.g. `Locked: ENG 2–1 BRA. Before kickoff, as
+   always.`) and call `POST /2/tweets`. Make it **idempotent**: record posted
+   match ids (e.g. a committed `src/data/posted.json`) so a match is never
+   tweeted twice.
+3. **Scheduler (the real work):** the daily Action is too coarse. Add a GitHub
+   Actions `schedule` cron running every ~5 min that finds fixtures kicking off in
+   the next 5–6 min that haven't been posted, freezes/reads their `botPick`,
+   posts, and marks them posted. (Alternatively a Supabase scheduled Edge
+   Function.)
+4. **Feed:** `game/src/components/XFeed.jsx` already embeds the real
+   @inferiorhumans timeline (click-to-load). Once posting is live it fills in.
+   With API access we could later swap the embed for our own styled render of
+   fetched posts for a fully on-brand feed.
+
 ## Identity / brand locks (for the Game)
 THE AI · handle **@inferiorhumans** · **humansareinferior.com**. Voice = `game/src/voice.js` + the uploaded VOICE_GUIDE. Not gambling; unofficial; not affiliated with FIFA.

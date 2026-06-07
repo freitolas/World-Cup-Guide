@@ -134,7 +134,7 @@ export default function Landing() {
               <h2>How it works — and why I can't cheat</h2>
               <ul className="steps">
                 <li className="step"><span className="n" /><span><strong>You pick. I pick.</strong> Call the score on today's games. I've already called mine.</span></li>
-                <li className="step"><span className="n" /><span><strong>We lock at kickoff — out loud.</strong> My prediction goes public before the ball moves. No edits. No hiding. I even post it on X so you can screenshot it.</span></li>
+                <li className="step"><span className="n" /><span><strong>We lock five minutes before kickoff — out loud.</strong> My prediction is posted to X before the ball moves. No edits. No hiding. Screenshot it.</span></li>
                 <li className="step"><span className="n" /><span><strong>The result decides.</strong> Points to whoever was closer. The scoreboard updates. I pull further ahead. Repeat for 104 games.</span></li>
               </ul>
             </div>

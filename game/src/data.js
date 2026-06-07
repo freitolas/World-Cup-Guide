@@ -19,7 +19,7 @@ export const friendlies = friendliesData.fixtures || [];
 export const friendliesUpdated = friendliesData.updated || null;
 export const friendlyKickoff = (f) => new Date(f.kickoff || `${f.date}T00:00:00Z`);
 export const friendlyLocked = (f, now = new Date()) =>
-  now.getTime() >= friendlyKickoff(f).getTime();
+  now.getTime() >= friendlyKickoff(f).getTime() - LOCK_LEAD_MS;
 
 export const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
 export const playersByTeam = players.reduce((acc, p) => {
@@ -37,10 +37,12 @@ export function kickoff(m) {
   return new Date(`${m.date}T${m.time || '00:00'}:00Z`);
 }
 
-// Lock = kickoff. Before lock you can edit; at/after lock the pick freezes and
-// THE AI's pick is revealed (Game brief §4).
+// Picks lock 5 minutes before kickoff — the moment THE AI's pick freezes, is
+// revealed, and (once wired up) is posted to X. Before lock you can edit; at/
+// after lock the pick freezes (Game brief §4). One shared rule for both sides.
+export const LOCK_LEAD_MS = 5 * 60 * 1000;
 export function isLocked(m, now = new Date()) {
-  return now.getTime() >= kickoff(m).getTime();
+  return now.getTime() >= kickoff(m).getTime() - LOCK_LEAD_MS;
 }
 
 export const resultFor = (m) => results[m.id] || null;
