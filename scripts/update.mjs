@@ -19,12 +19,14 @@ import { matchProb, expectedScore, expectedGoals, poissonPmf, DC_RHO } from '../
 import { buildRatings, HOSTS, HOME_ADV } from './lib/ratings.mjs';
 import { nameToSlug, isPlaceholder, unmapped } from './lib/teamMap.mjs';
 import { fetchContext } from './lib/context.mjs';
+import { buildFriendlies } from './lib/friendlies.mjs';
 
 const OPENFOOTBALL = 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
 const root = (p) => fileURLToPath(new URL(`../${p}`, import.meta.url));
 const RESULTS_FILE = root('src/data/results.json');
 const PREDICTIONS_FILE = root('src/data/predictions.json');
 const BOTPICKS_FILE = root('src/data/botPicks.json');
+const FRIENDLIES_FILE = root('src/data/friendlies.json');
 
 const args = new Set(process.argv.slice(2));
 const log = (...a) => console.log('[update]', ...a);
@@ -235,6 +237,13 @@ async function main() {
 
   // --- bot picks (THE AI's frozen scoreline, consumed by the Game) ---
   freezeBotPicks(ratings, results);
+
+  // --- friendlies (ISOLATED warm-up predictions; never affects WC data) ---
+  const friendlies = await buildFriendlies();
+  if (friendlies) {
+    writeFileSync(FRIENDLIES_FILE, JSON.stringify(friendlies, null, 2) + '\n');
+    log(`friendlies written: ${friendlies.fixtures.length} fixture(s)`);
+  }
 
   // --- build / commit ---
   if (!args.has('--no-build')) {

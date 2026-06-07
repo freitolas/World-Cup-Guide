@@ -27,6 +27,7 @@ const log = (...a) => console.log('[context]', ...a);
 // absences (higher); news-based injuries are uncertain (low); crisis is a small
 // mood tax. Capped so a depleted team can't be nuked below plausibility.
 const SUSPENSION_WEIGHT = 18;
+const STRUCT_INJURY_WEIGHT = 16; // structured (per-fixture) injury — higher confidence than news
 const NEWS_INJURY_WEIGHT = 8; // hedged — news is noisy
 const CRISIS_PENALTY = 12;
 const MAX_TEAM_PENALTY = 70;
@@ -176,6 +177,26 @@ export async function fetchContext() {
       await discoverLeague();
       try { susp = await fetchSuspensions(); } catch (e) { log(`suspensions failed: ${e.message}`); }
       for (const [slug, info] of Object.entries(susp.byTeam)) bump(slug, info.penalty);
+    }
+
+    // Per-fixture injuries probe — national-team availability tends to appear on
+    // the fixture endpoint near matchday (the season-wide query returned 0).
+    let probe = { fixtures: 0, rows: 0 };
+    if (API_FOOTBALL_KEY) {
+      try {
+        const today = new Date().toISOString().slice(0, 10);
+        const to = new Date(Date.now() + 3 * 864e5).toISOString().slice(0, 10);
+        const upcoming = await afFetch(`fixtures?league=${WC_LEAGUE_ID}&season=${WC_SEASON}&from=${today}&to=${to}`);
+        for (const f of upcoming.slice(0, 8)) {
+          const inj = await afFetch(`injuries?fixture=${f.fixture?.id}`);
+          probe.fixtures++;
+          probe.rows += inj.length;
+          for (const row of inj) bump(toSlug(row.team?.name), STRUCT_INJURY_WEIGHT);
+        }
+      } catch (e) {
+        log(`injuries probe failed: ${e.message}`);
+      }
+      log(`per-fixture injuries probe: ${probe.fixtures} upcoming fixture(s), ${probe.rows} injury row(s)`);
     }
 
     const news = await fetchNews();
