@@ -221,8 +221,15 @@ button { font-family: inherit; }
 .hero-score .col.you .v { color: var(--you); }
 .hero-score .col.ai .v { color: var(--ai); }
 .hero-score .dash { color: var(--line-strong); font-weight: 300; font-size: 32px; }
+.hero-score .record { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
+.hero-score .record .v { color: var(--ai); }
+.hero-score .of { font-family: var(--mono); font-size: 22px; color: var(--muted); }
+.hero-score .record-sub { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 12px; }
+.hero-score .record-sub .you { color: var(--you); font-weight: 700; }
 .hero-score .countdown { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
 .hero-score .countdown b { color: var(--text); font-weight: 700; }
+.hero-score .mechanic { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.hero-score .mechanic b { color: var(--text); font-weight: 700; }
 
 /* In-hero "today's target" pick panel */
 .target { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 16px; margin-bottom: 16px; }

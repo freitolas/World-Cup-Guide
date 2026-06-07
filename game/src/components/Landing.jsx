@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { friendlies, team } from '../data.js';
 import { scorePick } from '../scoring.js';
 import { go, useNow } from '../hooks.js';
-import { HERO, TRUST, NAME, pick as choose } from '../voice.js';
+import { HERO, TRUST, pick as choose } from '../voice.js';
 
 // The 2026 opener. The countdown to "the real humiliation".
 const OPENER = new Date('2026-06-11T16:00:00Z');
@@ -68,22 +68,20 @@ export default function Landing() {
         <h1>{HERO.headline}</h1>
         <p className="sub">{HERO.subhead}</p>
 
-        {/* Live scoreboard — never dead, never faked */}
+        {/* Live element — THE AI's own prediction track record (NOT a score
+            against the visitor). The personal duel starts 0–0 on first pick. */}
         <div className="glass hero-score">
           <span className="live-badge"><span className="dot" /><span className="lbl">Live feed</span></span>
-          <div className="phase">Warm-ups</div>
+          <div className="phase">Warm-ups · my record so far</div>
           {rec.total > 0 ? (
-            <div className="tally">
-              <div className="col you">
-                <span className="v">{rec.humans}</span>
-                <span className="k">Humans</span>
-              </div>
-              <span className="dash">—</span>
-              <div className="col ai">
+            <>
+              <div className="record">
                 <span className="v">{rec.ai}</span>
-                <span className="k">{NAME}</span>
+                <span className="of">/ {rec.total}</span>
               </div>
-            </div>
+              <div className="k">warm-up results I've already called</div>
+              <div className="record-sub">Humanity has snuck <span className="you">{rec.humans}</span> past me. Savour them.</div>
+            </>
           ) : (
             <div className="phase" style={{ color: 'var(--text)' }}>Warm-up verdicts incoming.</div>
           )}
@@ -92,6 +90,7 @@ export default function Landing() {
               The real humiliation begins in <b>{countdown}</b>
             </div>
           )}
+          <div className="mechanic">Our duel starts <b>0–0</b> — the moment you make your first pick.</div>
         </div>
 
         {/* In-hero target: a real upcoming friendly */}
