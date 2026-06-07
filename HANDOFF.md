@@ -38,10 +38,9 @@ User wants the bot to weigh **yellow cards, suspensions, injuries, and crises** 
 - **News/crisis → NewsData.io (free, commercial-OK, 200 credits/day, 12h delay)** + free RSS (BBC Sport, Guardian Football). Use for fuzzy "turmoil" only; get injuries from the structured API, not news.
 - **User DECIDED: pay ~$19/mo for the real thing.** ✅
 
-### Blocking on owner (NOT yet provided) — secrets, never commit:
-1. **API-Football** key (subscribe Pro ~$19/mo at api-football.com).
-2. **NewsData.io** key (free signup).
-Both → **GitHub Actions secrets** (pipeline runs there).
+### Keys: DONE ✅
+`API_FOOTBALL_KEY` and `NEWSDATA_KEY` are set as **GitHub Actions repo secrets**.
+(X API keys for M2 still pending.)
 
 ### ⚠️ Architectural change AWAITING USER CONFIRM (raised, not yet answered):
 **Freeze each fixture's bot pick on the match-day run (~24h window before kickoff) with that day's injuries/suspensions/news baked in — NOT 3 weeks early.** This requires **resetting the current `botPicks.json`** (harmless pre-tournament). Recommended; early-freeze would make the injury feature pointless. Get explicit yes before changing.
@@ -49,8 +48,22 @@ Both → **GitHub Actions secrets** (pipeline runs there).
 ### Planned data flow (in `scripts/`, before predictions):
 injuries/suspensions per fixture → availability hit; news/RSS → crisis modifier → combined rating/expected-goals adjustment for that match → predictions + frozen pick reflect it.
 
-### Caveat to verify on first real API call:
-API-Football injury coverage is rich for clubs but can be **thin for national teams** — run a test call against real WC fixtures and report completeness before relying on it.
+### Coverage VERIFIED via live Action run (2026-06-07):
+- ✅ League id = **1** (World Cup, season 2026). NewsData reachable (commercial-OK).
+- 🚩 **API-Football `/injuries` returns NOTHING for the WC** (it tracks club injuries, not national teams). So injuries CANNOT come from there.
+- **Decision (user):** ship **suspensions (from WC card events) + crisis (news)** now; treat **injuries as best-effort from news, hedged + low weight**; re-test `/injuries` during the tournament.
+
+### Built (committed): `scripts/lib/context.mjs`
+- **Suspensions:** API-Football `/fixtures?status=FT` + `/fixtures/events` → card accumulation → next-match ban heuristic (weight 18). Only produces signal from matchday 2+.
+- **News (NewsData.io):** injury signal (hedged, weight 8) + crisis (weight 12), team matched by name + keyword.
+- Still a no-op signal pre-tournament (0 finished matches, little crisis news). **CONTEXT_ENABLED stays 0.**
+
+### ACTIVATION CHECKPOINT (do during matchday 1–2, ~June 12–13):
+1. Re-run the Action; read `[context]` logs — confirm cards are being read and suspensions computed correctly against real results; sanity-check news matching.
+2. Tune weights / the suspension heuristic (FIFA: 2nd yellow or red = 1-match ban; yellows wiped after QFs) and team-name aliases for any `UNMATCHED` names in logs.
+3. Re-test API-Football `/injuries` (may populate during the tournament).
+4. When trusted, set repo **variable** `CONTEXT_ENABLED=1` (Settings → Secrets and variables → Actions → Variables) to start applying adjustments.
+5. Only then may the site/voice mention that the bot weighs availability/news.
 
 ### Hard rule:
 **Never claim the bot reads news/injuries until it actually does** (false-advertising risk; undercuts THE AI's "I don't cheat" brand).
