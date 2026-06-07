@@ -86,6 +86,8 @@ injuries/suspensions per fixture → availability hit; news/RSS → crisis modif
   - Edge function **stripe-webhook** deployed: `https://ahznwacqwfqariiqmorb.supabase.co/functions/v1/stripe-webhook` (signature-verified, writes entitlement via service role).
   - Front-end: `#/account` (magic-link sign-in + opt-in consent), `#/knockouts` (entitlement-gated $5 paywall via Stripe Payment Link + client_reference_id).
 
+## ⭐ Stripe payment is unfinished — see **`STRIPE_BACKLOG.md`** (self-contained, for a fresh session). Stripe MCP wasn't reachable last session; verify it first.
+
 ## BLOCKING OWNER STEPS to make payment/login work (no Stripe MCP — owner must do in dashboards):
 1. **Stripe:** create a **$5 one-time Payment Link**. Add a **webhook** → the stripe-webhook URL above, event `checkout.session.completed`. Copy the **signing secret**.
 2. **Supabase secrets** (Edge Functions → Secrets): set `STRIPE_WEBHOOK_SECRET` (and optionally `STRIPE_SECRET_KEY`).
