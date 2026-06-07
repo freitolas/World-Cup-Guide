@@ -21,6 +21,12 @@ export default function Landing() {
     <div>
       {/* ABOVE THE FOLD */}
       <div className="hero">
+        {/* Utility nav */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 16, marginBottom: 12 }}>
+          <a className="tablink" href="#/warmups" style={{ fontSize: 12 }}>Warm-ups</a>
+          <a className="tablink" href="#/knockouts" style={{ fontSize: 12 }}>Knockouts — $5</a>
+          <a className="tablink" href="#/account" style={{ fontSize: 12 }}>Account</a>
+        </div>
         <AiMark />
         <h1>{HERO.headline}</h1>
         <p className="sub">{HERO.subhead}</p>
@@ -43,7 +49,10 @@ export default function Landing() {
 
         <Cta />
         <div className="micro">{HERO.microTrust}</div>
-        <div><a className="tablink" href="#/warmups">See THE AI's warm-up record →</a></div>
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a className="tablink" href="#/account">Create an account — save your picks →</a>
+          <a className="tablink" href="#/warmups">See THE AI's warm-up record →</a>
+        </div>
       </div>
 
       {/* BELOW THE FOLD */}

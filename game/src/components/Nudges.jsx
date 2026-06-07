@@ -19,8 +19,8 @@ export function UpgradeNudge() {
         Unlock the knockouts — <span className="price">$5</span>, good through the final
       </span>
       {NUDGE.upgrade}
-      <div className="dim" style={{ marginTop: 6, fontSize: 12 }}>
-        Coming soon — one-time payment, no subscription. (Not yet available.)
+      <div style={{ marginTop: 6 }}>
+        <a className="btn btn-primary" href="#/knockouts" style={{ fontSize: 13, padding: '8px 14px' }}>Unlock now →</a>
       </div>
     </div>
   );

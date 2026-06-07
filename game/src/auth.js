@@ -50,6 +50,21 @@ export async function applyPendingProfile(user) {
   }
 }
 
+// Read the user's profile (name + marketing consent).
+export function useProfile(user) {
+  const [profile, setProfile] = useState(null);
+  useEffect(() => {
+    if (!user) { setProfile(null); return; }
+    supabase.from('profiles').select('display_name,marketing_opt_in').eq('id', user.id).maybeSingle()
+      .then(({ data }) => setProfile(data));
+  }, [user?.id]);
+  return profile;
+}
+
+export async function setMarketingOptIn(userId, value) {
+  return supabase.from('profiles').upsert({ id: userId, marketing_opt_in: !!value });
+}
+
 // Live entitlement for the current user (paid pass valid while not expired).
 export function useEntitlement(user) {
   const [state, setState] = useState({ loading: true, entitled: false, expiresAt: null });
