@@ -1,11 +1,21 @@
 import { useMemo } from 'react';
-import { friendlies, team } from '../data.js';
+import { friendlies, groupMatches, results, botPicks, team, kickoff } from '../data.js';
 import { scorePick } from '../scoring.js';
 import { go, useNow } from '../hooks.js';
 import { HERO, TRUST, pick as choose } from '../voice.js';
 
 // The 2026 opener. The countdown to "the real humiliation".
 const OPENER = new Date('2026-06-11T16:00:00Z');
+
+// THE AI's prediction record over a set of finished games: a point to THE AI for
+// every result it called, a point to humanity for every one it missed. This is
+// THE AI vs the field (its public predictions vs reality) — NOT a score against
+// any individual visitor, whose personal duel only ever starts when they join.
+function recordOver(list, pickOf, resultOf) {
+  let ai = 0;
+  for (const item of list) if (scorePick(pickOf(item), resultOf(item)) >= 1) ai += 1;
+  return { ai, humans: list.length - ai, total: list.length };
+}
 
 function Cta({ children = 'Prove me wrong', className = 'btn btn-primary', to = '/play' }) {
   return (
@@ -25,32 +35,37 @@ function fmtCountdown(ms) {
 
 export default function Landing() {
   const now = useNow(1000);
+  const opened = now.getTime() >= OPENER.getTime();
 
-  // THE AI's real warm-up record (independent of the player). A point to THE AI
-  // for every friendly it called; a point to humanity for every one it missed.
-  // Real numbers only — never a fabricated figure (brief §0).
-  const rec = useMemo(() => {
-    const played = friendlies.filter((f) => f.result);
-    let ai = 0;
-    for (const f of played) if (scorePick(f.botPick, f.result) >= 1) ai += 1;
-    return { ai, humans: played.length - ai, total: played.length };
-  }, []);
-
-  // Today's target: the next friendly THE AI has already called but hasn't been
-  // played yet — a real fixture, the in-hero hook to "make picks".
-  const next = useMemo(
-    () =>
-      friendlies
-        .filter((f) => !f.result)
-        .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0] || null,
+  // The live record: warm-ups before the tournament, World Cup matches once it's
+  // live (and once there are real results to show — never a 0–0 placeholder).
+  const friendlyRec = useMemo(
+    () => recordOver(friendlies.filter((f) => f.result), (f) => f.botPick, (f) => f.result),
     [],
   );
+  const wcRec = useMemo(
+    () => recordOver(groupMatches.filter((m) => results[m.id]), (m) => botPicks[m.id] || null, (m) => results[m.id]),
+    [],
+  );
+  const live = opened && wcRec.total > 0;
+  const rec = live ? wcRec : friendlyRec;
+
+  // Next real fixture — the in-hero target + CTA hook. Friendly before the
+  // opener, World Cup match after.
+  const next = useMemo(() => {
+    if (opened) {
+      const m = groupMatches.filter((x) => !results[x.id]).sort((a, b) => kickoff(a) - kickoff(b))[0];
+      return m ? { home: m.home, away: m.away, homeName: team(m.home).name, awayName: team(m.away).name } : null;
+    }
+    const f = friendlies.filter((x) => !x.result).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
+    return f ? { home: f.home, away: f.away, homeName: f.homeName, awayName: f.awayName } : null;
+  }, [opened]);
 
   const countdown = fmtCountdown(OPENER.getTime() - now.getTime());
 
   // Before the opener the only real, playable games are the warm-up friendlies —
   // so every CTA points there. It flips to the World Cup game once it kicks off.
-  const playHref = now.getTime() < OPENER.getTime() ? '/warmups' : '/play';
+  const playHref = opened ? '/play' : '/warmups';
 
   return (
     <div className="has-sticky">
@@ -72,23 +87,25 @@ export default function Landing() {
             against the visitor). The personal duel starts 0–0 on first pick. */}
         <div className="glass hero-score">
           <span className="live-badge"><span className="dot" /><span className="lbl">Live feed</span></span>
-          <div className="phase">Warm-ups · my record so far</div>
+          <div className="phase">{live ? 'World Cup · my record so far' : 'Warm-ups · my record so far'}</div>
           {rec.total > 0 ? (
             <>
               <div className="record">
                 <span className="v">{rec.ai}</span>
                 <span className="of">/ {rec.total}</span>
               </div>
-              <div className="k">warm-up results I've already called</div>
+              <div className="k">{live ? "World Cup results I've already called" : "warm-up results I've already called"}</div>
               <div className="record-sub">Humanity has snuck <span className="you">{rec.humans}</span> past me. Savour them.</div>
             </>
           ) : (
-            <div className="phase" style={{ color: 'var(--text)' }}>Warm-up verdicts incoming.</div>
-          )}
-          {countdown && (
-            <div className="countdown">
-              The real humiliation begins in <b>{countdown}</b>
+            <div className="phase" style={{ color: 'var(--text)' }}>
+              {opened ? 'First verdicts incoming.' : 'Warm-up verdicts incoming.'}
             </div>
+          )}
+          {countdown ? (
+            <div className="countdown">The real humiliation begins in <b>{countdown}</b></div>
+          ) : (
+            <div className="countdown">The tournament is live. <b>Pick, or forfeit.</b></div>
           )}
           <div className="mechanic">Our duel starts <b>0–0</b> — the moment you make your first pick.</div>
         </div>
@@ -96,7 +113,7 @@ export default function Landing() {
         {/* In-hero target: a real upcoming friendly */}
         {next && (
           <div className="target">
-            <div className="lbl">Target Acquired: Next Friendly</div>
+            <div className="lbl">{opened ? 'Target Acquired: Next Match' : 'Target Acquired: Next Friendly'}</div>
             <div className="fixture">
               <span>{team(next.home).flag} {next.homeName}</span>
               <span className="vs">VS</span>
