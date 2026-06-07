@@ -5,8 +5,31 @@ import Warmups from './components/Warmups.jsx';
 import Account from './components/Account.jsx';
 import Knockouts from './components/Knockouts.jsx';
 import TeamDetail from './components/TeamDetail.jsx';
+import AiMark from './components/AiMark.jsx';
 import { useHashRoute, go } from './hooks.js';
+import { useAuth, signOut } from './auth.js';
 import { ERRORS } from './voice.js';
+
+// The single quiet affordance (brief §0/§3): no nav, no competing exits.
+// Logged out → "Sign in / Sign up". Logged in → "Account" + "Log off".
+function TopBar() {
+  const { user, ready } = useAuth();
+  return (
+    <header className="topbar">
+      <a href="#/" className="brand" aria-label="THE AI — home"><AiMark /></a>
+      <nav className="auth">
+        {ready && user ? (
+          <>
+            <a href="#/account" className="authbtn">Account</a>
+            <button className="authbtn" onClick={() => signOut()}>Log off</button>
+          </>
+        ) : (
+          <a href="#/account" className="authbtn primary">Sign in / Sign up</a>
+        )}
+      </nav>
+    </header>
+  );
+}
 
 export default function App() {
   const route = useHashRoute();
@@ -43,5 +66,10 @@ export default function App() {
     );
   }
 
-  return <div className="app">{view}</div>;
+  return (
+    <div className="app">
+      <TopBar />
+      {view}
+    </div>
+  );
 }
