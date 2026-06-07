@@ -77,10 +77,29 @@ injuries/suspensions per fixture → availability hit; news/RSS → crisis modif
 - **Per-fixture injuries probe** wired (`injuries?fixture=`); returns 0 now (no WC fixtures within 3 days) — activates at matchday 1. Re-check then.
 - **Friendlies (ISOLATED):** `scripts/lib/friendlies.mjs` → `src/data/friendlies.json`. League id **10**. **28 predictable** fixtures (23 played w/ results = instant bot track record, 5 upcoming). Friendly results NEVER touch WC data. Verified live.
 
-## IMMEDIATE NEXT STEPS
-1. **Surface friendlies in the Game** (front-end, `game/`) — a "Warm-ups" view consuming `friendlies.json`: show the bot's record on the 23 played + let users play the 5 upcoming. This is what turns the data into marketable live content. (Isolated localStorage scoreboard, reuse MatchCard/scoring.)
-2. **Matchday 1–2:** run the activation checkpoint (above) — validate suspensions/news/injuries-probe on real data, then set `CONTEXT_ENABLED=1`.
-3. When ready: Guide Phase 2 paywall + Game Milestone 2 (accounts/Stripe/X/global scoreboard).
+## DONE later 2026-06-07
+- **Warm-ups surface** + **Wes Anderson redesign** shipped (game/).
+- **Milestone 2 backend + front-end (accounts + paywall):**
+  - Supabase project **Humans Are Inferior** = `ahznwacqwfqariiqmorb` (eu-west-1).
+    URL `https://ahznwacqwfqariiqmorb.supabase.co`; publishable key in `game/src/supabaseClient.js` (public, safe).
+  - Tables (RLS clean): `profiles` (name + opt-in consent), `entitlements` (paid, expires 2026-07-19), `picks` (sync).
+  - Edge function **stripe-webhook** deployed: `https://ahznwacqwfqariiqmorb.supabase.co/functions/v1/stripe-webhook` (signature-verified, writes entitlement via service role).
+  - Front-end: `#/account` (magic-link sign-in + opt-in consent), `#/knockouts` (entitlement-gated $5 paywall via Stripe Payment Link + client_reference_id).
+
+## BLOCKING OWNER STEPS to make payment/login work (no Stripe MCP — owner must do in dashboards):
+1. **Stripe:** create a **$5 one-time Payment Link**. Add a **webhook** → the stripe-webhook URL above, event `checkout.session.completed`. Copy the **signing secret**.
+2. **Supabase secrets** (Edge Functions → Secrets): set `STRIPE_WEBHOOK_SECRET` (and optionally `STRIPE_SECRET_KEY`).
+3. Give me the **Payment Link URL** → set `VITE_STRIPE_PAYMENT_LINK` (build env). Public, safe.
+4. **Publish the game** to its own Netlify site (base dir `game`) → get the live URL.
+5. **Supabase Auth → URL Configuration:** add the live site URL as Site URL + Redirect URL (magic links need this).
+
+## TODO / not done
+- **Publish** the Game (own Netlify site/domain) — not yet deployed anywhere public.
+- **Verify auth live** (magic-link redirect + hash router may need a small tweak; untested without a live URL + email).
+- **Pick sync** to the `picks` table (free-account benefit) — table exists, front-end wiring TODO.
+- **Matchday 1–2:** context-layer activation checkpoint (above); set `CONTEXT_ENABLED=1` once validated.
+- X auto-posting, global "Humanity vs THE AI" scoreboard, leaderboard (rest of M2).
+- Guide Phase 2 paywall (separate product).
 
 ## Identity / brand locks (for the Game)
 THE AI · handle **@inferiorhumans** · **humansareinferior.com**. Voice = `game/src/voice.js` + the uploaded VOICE_GUIDE. Not gambling; unofficial; not affiliated with FIFA.
