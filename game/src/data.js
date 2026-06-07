@@ -10,8 +10,16 @@ import { venues } from '../../src/data/venues.js';
 import predictions from '../../src/data/predictions.json';
 import results from '../../src/data/results.json';
 import botPicks from '../../src/data/botPicks.json';
+import friendliesData from '../../src/data/friendlies.json';
 
 export { teams, players, matches, groups, venues, predictions, results, botPicks };
+
+// Warm-up friendlies — an ISOLATED surface (own predictions, own scoreboard).
+export const friendlies = friendliesData.fixtures || [];
+export const friendliesUpdated = friendliesData.updated || null;
+export const friendlyKickoff = (f) => new Date(f.kickoff || `${f.date}T00:00:00Z`);
+export const friendlyLocked = (f, now = new Date()) =>
+  now.getTime() >= friendlyKickoff(f).getTime();
 
 export const teamById = Object.fromEntries(teams.map((t) => [t.id, t]));
 export const playersByTeam = players.reduce((acc, p) => {

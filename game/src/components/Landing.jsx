@@ -43,6 +43,7 @@ export default function Landing() {
 
         <Cta />
         <div className="micro">{HERO.microTrust}</div>
+        <div><a className="tablink" href="#/warmups">See THE AI's warm-up record →</a></div>
       </div>
 
       {/* BELOW THE FOLD */}

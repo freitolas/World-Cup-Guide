@@ -1,31 +1,31 @@
-// localStorage-only pick storage. No server, no account (Milestone 1). Picks are
-// migrated into an account on signup in M2.
-const KEY = 'hai_picks_v1';
+// localStorage pick storage, namespaced so the World Cup game and the warm-up
+// (friendlies) game keep entirely separate scoreboards. No server (Milestone 1).
+const KEY = (ns) => `hai_picks_${ns}`;
 const EVENT = 'hai:picks-changed';
 
-export function getPicks() {
+export function getPicks(ns = 'wc') {
   try {
-    return JSON.parse(localStorage.getItem(KEY)) || {};
+    return JSON.parse(localStorage.getItem(KEY(ns))) || {};
   } catch {
     return {};
   }
 }
 
-function write(picks) {
-  localStorage.setItem(KEY, JSON.stringify(picks));
+function write(ns, picks) {
+  localStorage.setItem(KEY(ns), JSON.stringify(picks));
   window.dispatchEvent(new Event(EVENT));
 }
 
-export function setPick(matchId, score) {
-  const picks = getPicks();
+export function setPick(matchId, score, ns = 'wc') {
+  const picks = getPicks(ns);
   picks[matchId] = score;
-  write(picks);
+  write(ns, picks);
 }
 
-export function clearPick(matchId) {
-  const picks = getPicks();
+export function clearPick(matchId, ns = 'wc') {
+  const picks = getPicks(ns);
   delete picks[matchId];
-  write(picks);
+  write(ns, picks);
 }
 
 export const PICKS_EVENT = EVENT;

@@ -1,5 +1,6 @@
 import Landing from './components/Landing.jsx';
 import Game from './components/Game.jsx';
+import Warmups from './components/Warmups.jsx';
 import TeamDetail from './components/TeamDetail.jsx';
 import { useHashRoute, go } from './hooks.js';
 import { ERRORS } from './voice.js';
@@ -12,6 +13,8 @@ export default function App() {
     view = <Landing />;
   } else if (route === '/play') {
     view = <Game />;
+  } else if (route === '/warmups') {
+    view = <Warmups />;
   } else if (route.startsWith('/team/')) {
     view = <TeamDetail id={decodeURIComponent(route.slice('/team/'.length))} />;
   } else {

@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { getPicks, PICKS_EVENT } from './storage.js';
 
 // Live view of the localStorage picks (updates on change, and across tabs).
-export function usePicks() {
-  const [picks, setPicks] = useState(getPicks);
+// `ns` namespaces the store: 'wc' (default) vs 'friendly'.
+export function usePicks(ns = 'wc') {
+  const [picks, setPicks] = useState(() => getPicks(ns));
   useEffect(() => {
-    const refresh = () => setPicks(getPicks());
+    const refresh = () => setPicks(getPicks(ns));
     window.addEventListener(PICKS_EVENT, refresh);
     window.addEventListener('storage', refresh);
     return () => {
