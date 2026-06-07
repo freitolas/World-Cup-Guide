@@ -1,0 +1,20 @@
+/* Shared styling for the Game's static legal pages — parchment + brass. */
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: #e7dcc4; color: #3b2e21;
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  line-height: 1.6; font-size: 16px;
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 32px 20px 80px; }
+a { color: #2f6e6b; }
+h1 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 34px; color: #3b2e21; margin: 6px 0 4px; }
+h2 { font-size: 20px; margin: 26px 0 8px; color: #3b2e21; }
+.muted { color: #7c6a51; font-size: 13px; }
+.back { display: inline-block; margin-bottom: 14px; font-weight: 600; text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase; font-size: 12px; }
+.draft {
+  border: 1px solid #b8902f; background: rgba(184,144,47,0.1); border-radius: 4px;
+  padding: 12px 14px; font-size: 13px; color: #6e5410; margin: 16px 0 8px;
+}
+.ph { color: #b1432c; font-weight: 700; }
+hr { border: none; border-top: 1px solid #cdb589; margin: 28px 0; }

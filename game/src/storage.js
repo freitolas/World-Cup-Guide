@@ -29,3 +29,16 @@ export function clearPick(matchId, ns = 'wc') {
 }
 
 export const PICKS_EVENT = EVENT;
+
+// When the player first arrived. The personal You-vs-THE AI duel only counts
+// matches kicking off at/after this — you can't "forfeit" games that finished
+// before you ever showed up. Set lazily on first read.
+const STARTED_KEY = 'hai_started_at';
+export function getStartedAt() {
+  let v = localStorage.getItem(STARTED_KEY);
+  if (!v) {
+    v = String(Date.now());
+    localStorage.setItem(STARTED_KEY, v);
+  }
+  return Number(v);
+}

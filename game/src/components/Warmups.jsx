@@ -2,9 +2,10 @@ import { useMemo } from 'react';
 import AiMark from './AiMark.jsx';
 import Scoreboard from './Scoreboard.jsx';
 import FriendlyCard from './FriendlyCard.jsx';
-import { friendlies } from '../data.js';
+import { friendlies, friendlyKickoff } from '../data.js';
 import { scorePick } from '../scoring.js';
 import { usePicks, useNow } from '../hooks.js';
+import { getStartedAt } from '../storage.js';
 
 // The Warm-ups dossier: THE AI's record on pre-tournament friendlies (live
 // marketing content) + the playable upcoming ones. Fully isolated from the
@@ -19,25 +20,37 @@ export default function Warmups() {
     .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
   const recent = played.slice().sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)));
 
+  // THE AI's all-time warm-up record (independent of the player).
   const rec = useMemo(() => {
-    let exact = 0, correct = 0, you = 0, ai = 0, forfeits = 0;
+    let exact = 0, correct = 0;
     for (const f of played) {
       const s = scorePick(f.botPick, f.result);
       if (s === 5) exact++;
       if (s >= 1) correct++;
-      ai += s;
+    }
+    return { exact, correct, total: played.length };
+  }, [played]);
+
+  // The personal duel: only matches that kicked off after the player arrived.
+  const duel = useMemo(() => {
+    const startedAt = getStartedAt();
+    let you = 0, ai = 0, n = 0, forfeits = 0;
+    for (const f of played) {
+      if (friendlyKickoff(f).getTime() < startedAt) continue; // before you showed up — not yours to forfeit
+      n++;
       const hp = picks[f.id];
       if (!hp) forfeits++;
       you += scorePick(hp || null, f.result);
+      ai += scorePick(f.botPick, f.result);
     }
-    return { exact, correct, total: played.length, you, ai, forfeits };
+    return { you, ai, played: n, forfeits };
   }, [picks]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const hitRate = rec.total ? Math.round((rec.correct / rec.total) * 100) : 0;
 
   return (
     <div>
-      <Scoreboard tally={{ you: rec.you, ai: rec.ai, played: rec.total, forfeits: rec.forfeits }} />
+      <Scoreboard tally={duel} />
       <div className="pad">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <a href="#/" className="dim" style={{ fontSize: 12 }}>← home</a>

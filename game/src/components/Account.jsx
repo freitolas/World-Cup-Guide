@@ -70,7 +70,10 @@ export default function Account() {
           </label>
           {err && <div style={{ color: 'var(--danger)', fontSize: 13 }}>{err}</div>}
           <button className="btn btn-primary" type="submit">Send me a sign-in link</button>
-          <div className="dim" style={{ fontSize: 11 }}>No password. We email you a one-time link.</div>
+          <div className="dim" style={{ fontSize: 11 }}>
+            No password — we email you a one-time link. By continuing you agree to our{' '}
+            <a href="/terms.html">Terms</a> and <a href="/privacy.html">Privacy &amp; Data Policy</a>.
+          </div>
         </form>
       )}
     </div>

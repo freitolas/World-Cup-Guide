@@ -3,9 +3,10 @@ import Scoreboard from './Scoreboard.jsx';
 import MatchCard from './MatchCard.jsx';
 import AiMark from './AiMark.jsx';
 import { DeviceNudge, UpgradeNudge } from './Nudges.jsx';
-import { groupMatches, matchesByDate, results, botPicks } from '../data.js';
+import { groupMatches, matchesByDate, results, botPicks, kickoff } from '../data.js';
 import { tally } from '../scoring.js';
 import { usePicks, useNow } from '../hooks.js';
+import { getStartedAt } from '../storage.js';
 
 const dateLabel = (iso) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString(undefined, {
@@ -17,7 +18,13 @@ const dateLabel = (iso) =>
 export default function Game() {
   const picks = usePicks();
   const now = useNow();
-  const t = useMemo(() => tally(groupMatches, picks, results, botPicks), [picks]);
+  // Only matches kicking off after the player arrived count toward the duel —
+  // no forfeits for games that finished before they started playing.
+  const t = useMemo(() => {
+    const startedAt = getStartedAt();
+    const scope = groupMatches.filter((m) => kickoff(m).getTime() >= startedAt);
+    return tally(scope, picks, results, botPicks);
+  }, [picks]); // eslint-disable-line react-hooks/exhaustive-deps
   const byDate = matchesByDate();
   const madeAnyPick = Object.keys(picks).length > 0;
 

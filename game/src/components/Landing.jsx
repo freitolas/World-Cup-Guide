@@ -91,16 +91,16 @@ export default function Landing() {
             estimates, not advice.
           </p>
           <p>
+            <a href="/terms.html">Terms</a>{'  ·  '}
+            <a href="/privacy.html">Privacy &amp; Data</a>{'  ·  '}
+            <a href="/cookies.html">Cookies</a>
+          </p>
+          <p>
             <a href="https://worldcupguide.netlify.app" target="_blank" rel="noopener">The Guide</a>
             {'  ·  '}
             <a href="https://x.com/inferiorhumans" target="_blank" rel="noopener">@inferiorhumans</a>
           </p>
         </div>
-      </div>
-
-      {/* Sticky mobile CTA */}
-      <div className="sticky-cta">
-        <Cta />
       </div>
     </div>
   );
