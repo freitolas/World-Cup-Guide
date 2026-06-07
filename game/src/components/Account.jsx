@@ -51,8 +51,12 @@ export default function Account() {
           <button className="btn btn-ghost" onClick={() => signOut()}>Sign out</button>
         </div>
       ) : sent ? (
-        <div className="card center">
+        <div className="card stack center">
           <p>Check your email. I've sent a link. Following instructions — your first test, and an easy one.</p>
+          <p className="dim" style={{ fontSize: 12 }}>
+            The link arrives from <strong>Supabase</strong> (<span style={{ whiteSpace: 'nowrap' }}>noreply@mail.app.supabase.io</span>) —
+            my filing clerk. If it's not in your inbox within a minute, check spam.
+          </p>
         </div>
       ) : (
         <form className="card stack" onSubmit={submit}>
