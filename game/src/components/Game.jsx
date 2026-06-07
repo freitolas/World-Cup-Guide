@@ -27,7 +27,11 @@ export default function Game() {
       <div className="pad">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <AiMark />
-          <a href="#/warmups" className="dim" style={{ fontSize: 12 }}>warm-ups</a>
+          <span style={{ display: 'flex', gap: 12, fontSize: 12 }}>
+            <a href="#/warmups" className="dim">warm-ups</a>
+            <a href="#/knockouts" className="dim">$5 pass</a>
+            <a href="#/account" className="dim">account</a>
+          </span>
         </div>
 
         <div style={{ marginTop: 12 }}>
