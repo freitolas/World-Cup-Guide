@@ -1,0 +1,88 @@
+name: Post picks to X
+
+# THE AI posts its frozen pick shortly before kickoff (public, timestamped, no
+# edits). This is PRE-BOOKED, not constantly running: there's one scheduled run
+# ~10 minutes before each distinct kickoff slot in the fixture list (UTC). Each
+# run posts only the fixtures kicking off in the next ~15 min that haven't been
+# posted yet (idempotent via src/data/posted.json), then exits.
+#
+# Distinct WC kickoff slots (UTC) → cron at slot − 10 min:
+#   00:00→23:50 00:30→00:20 01:00→00:50 01:30→01:20 02:00→01:50 03:00→02:50
+#   04:00→03:50 05:00→04:50 17:00→16:50 18:00→17:50 20:00→19:50 21:00→20:50
+#   22:00→21:50 23:00→22:50
+# If kickoff times are refined or knockout rounds add new slots, add crons here.
+#
+# IMPORTANT: GitHub only runs scheduled workflows from the repo's DEFAULT branch,
+# so this file must live on the default branch to fire. Set the X_* secrets in
+# repo Settings → Secrets and variables → Actions. Without them it dry-runs.
+on:
+  schedule:
+    - cron: '50 23 * * *'
+    - cron: '20 0 * * *'
+    - cron: '50 0 * * *'
+    - cron: '20 1 * * *'
+    - cron: '50 1 * * *'
+    - cron: '50 2 * * *'
+    - cron: '50 3 * * *'
+    - cron: '50 4 * * *'
+    - cron: '50 16 * * *'
+    - cron: '50 17 * * *'
+    - cron: '50 19 * * *'
+    - cron: '50 20 * * *'
+    - cron: '50 21 * * *'
+    - cron: '50 22 * * *'
+  workflow_dispatch: {} # manual run (always proceeds; dry-run if no secrets)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: post-picks
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Active-window gate (warm-ups + tournament only)
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=yes" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          TODAY=$(date -u +%Y-%m-%d)
+          if [[ "$TODAY" > "2026-05-19" && "$TODAY" < "2026-07-20" ]]; then
+            echo "run=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=no" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.run == 'yes'
+
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.run == 'yes'
+        with:
+          node-version: '22'
+
+      - name: Post imminent picks
+        if: steps.gate.outputs.run == 'yes'
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: node scripts/post-picks.mjs
+
+      - name: Persist posted-state
+        if: steps.gate.outputs.run == 'yes'
+        run: |
+          if ! git diff --quiet -- src/data/posted.json; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/data/posted.json
+            git commit -m "chore: record posted picks [skip ci]"
+            git push
+          else
+            echo "no new posts to persist"
+          fi
