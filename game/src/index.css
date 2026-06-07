@@ -282,6 +282,23 @@ button { font-family: inherit; }
 .proof .n.you { color: var(--you); }
 .proof .k { color: var(--muted); font-size: 13px; }
 
+/* Live X feed — stylized timeline (posts built from real picks) */
+.xfeed { display: flex; flex-direction: column; gap: 12px; }
+.xpost { display: block; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 14px 16px; color: var(--text); transition: border-color 0.15s, background 0.15s; }
+.xpost:hover { border-color: var(--line-strong); background: var(--panel-2); }
+.xpin { font-size: 10px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.xhead { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.xavatar { width: 30px; height: 30px; border-radius: 50%; background: #050505; border: 1px solid var(--line-strong); color: var(--ai); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.xavatar svg { width: 16px; height: 16px; }
+.xname { font-weight: 700; color: var(--text); }
+.xcheck { width: 14px; height: 14px; color: var(--ai); flex: none; }
+.xhandle { color: var(--muted); }
+.xtime { color: var(--muted); }
+.xlogo { width: 15px; height: 15px; color: var(--muted); margin-left: auto; flex: none; }
+.xbody { margin-top: 10px; font-size: 15px; line-height: 1.5; color: var(--text); }
+.xmeta { display: flex; gap: 22px; margin-top: 12px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.xfollow { display: inline-block; margin-top: 4px; font-family: var(--mono); font-size: 12px; color: var(--ai); letter-spacing: 0.05em; }
+
 /* FAQ */
 .faq dt { font-weight: 700; margin-top: 16px; color: var(--text); }
 .faq dd { margin: 6px 0 0; color: var(--muted); }

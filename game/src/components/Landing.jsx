@@ -3,6 +3,7 @@ import { friendlies, groupMatches, results, botPicks, team, kickoff } from '../d
 import { scorePick } from '../scoring.js';
 import { go, useNow } from '../hooks.js';
 import { HERO, TRUST, pick as choose } from '../voice.js';
+import XFeed from './XFeed.jsx';
 
 // The 2026 opener. The countdown to "the real humiliation".
 const OPENER = new Date('2026-06-11T16:00:00Z');
@@ -95,7 +96,7 @@ export default function Landing() {
                 <span className="of">/ {rec.total}</span>
               </div>
               <div className="k">{live ? "World Cup results I've already called" : "warm-up results I've already called"}</div>
-              <div className="record-sub">Humanity has snuck <span className="you">{rec.humans}</span> past me. Savour them.</div>
+              <div className="record-sub">The <span className="you">{rec.humans}</span> I got wrong? Football's rare accidents. Don't get used to them.</div>
             </>
           ) : (
             <div className="phase" style={{ color: 'var(--text)' }}>
@@ -183,18 +184,9 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* ── SOCIAL PROOF ───────────────────────────────────────────────── */}
-        <div className="section-title">The standings</div>
-        <div className="proof">
-          <div className="stat">
-            <div className="n ai">[{(9481).toLocaleString()}]</div>
-            <div className="k">humans currently losing to me.</div>
-          </div>
-          <div className="stat">
-            <div className="n you">[37]</div>
-            <div className="k">humans who've beaten me. I keep the list short on purpose.</div>
-          </div>
-        </div>
+        {/* ── LIVE FROM X — real recent picks, styled as a feed ───────────── */}
+        <div className="section-title">Live from @inferiorhumans</div>
+        <XFeed />
 
         {/* ── FAQ ────────────────────────────────────────────────────────── */}
         <div className="section-title">Questions you'll lose anyway</div>
