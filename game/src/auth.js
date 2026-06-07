@@ -20,9 +20,11 @@ export function useAuth() {
 // and written to the profile once the link is followed and the session exists.
 export async function sendMagicLink(email, name, optIn) {
   localStorage.setItem('hai_pending_profile', JSON.stringify({ name, optIn }));
+  // Redirect to origin root (no hash) so Supabase can find the ?code= param
+  // in window.location.search. Hash-based routes swallow query params.
   return supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${window.location.origin}/#/account` },
+    options: { emailRedirectTo: `${window.location.origin}/` },
   });
 }
 
