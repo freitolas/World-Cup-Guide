@@ -1,0 +1,714 @@
+{
+  "updated": "2026-06-07T10:41:41.314Z",
+  "source": "api-football",
+  "fixtures": [
+    {
+      "id": "F1548416",
+      "date": "2026-05-30",
+      "kickoff": "2026-05-30T18:30:00+00:00",
+      "home": "jamaica",
+      "away": "nigeria",
+      "homeName": "Jamaica",
+      "awayName": "Nigeria",
+      "prediction": {
+        "win": 0.168,
+        "draw": 0.253,
+        "loss": 0.578,
+        "eg": [
+          0.91,
+          1.84
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 0,
+        "ag": 3
+      }
+    },
+    {
+      "id": "F1540948",
+      "date": "2026-05-31",
+      "kickoff": "2026-05-31T00:00:00+00:00",
+      "home": "ecuador",
+      "away": "saudi-arabia",
+      "homeName": "Ecuador",
+      "awayName": "Saudi Arabia",
+      "prediction": {
+        "win": 0.621,
+        "draw": 0.24,
+        "loss": 0.139,
+        "eg": [
+          1.92,
+          0.82
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 2,
+        "ag": 1
+      }
+    },
+    {
+      "id": "F1545263",
+      "date": "2026-05-31",
+      "kickoff": "2026-05-31T01:00:00+00:00",
+      "home": "south-korea",
+      "away": "trinidad-and-tobago",
+      "homeName": "South Korea",
+      "awayName": "Trinidad and Tobago",
+      "prediction": {
+        "win": 0.852,
+        "draw": 0.125,
+        "loss": 0.023,
+        "eg": [
+          2.53,
+          0.3
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 5,
+        "ag": 0
+      }
+    },
+    {
+      "id": "F1527865",
+      "date": "2026-05-31",
+      "kickoff": "2026-05-31T02:00:00+00:00",
+      "home": "mexico",
+      "away": "australia",
+      "homeName": "Mexico",
+      "awayName": "Australia",
+      "prediction": {
+        "win": 0.469,
+        "draw": 0.278,
+        "loss": 0.253,
+        "eg": [
+          1.61,
+          1.13
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 0
+      }
+    },
+    {
+      "id": "F1528283",
+      "date": "2026-05-31",
+      "kickoff": "2026-05-31T13:00:00+00:00",
+      "home": "switzerland",
+      "away": "jordan",
+      "homeName": "Switzerland",
+      "awayName": "Jordan",
+      "prediction": {
+        "win": 0.775,
+        "draw": 0.172,
+        "loss": 0.053,
+        "eg": [
+          2.27,
+          0.47
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 4,
+        "ag": 1
+      }
+    },
+    {
+      "id": "F1503008",
+      "date": "2026-05-31",
+      "kickoff": "2026-05-31T19:30:00+00:00",
+      "home": "usa",
+      "away": "senegal",
+      "homeName": "USA",
+      "awayName": "Senegal",
+      "prediction": {
+        "win": 0.339,
+        "draw": 0.287,
+        "loss": 0.374,
+        "eg": [
+          1.33,
+          1.41
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 3,
+        "ag": 2
+      }
+    },
+    {
+      "id": "F1536926",
+      "date": "2026-05-31",
+      "kickoff": "2026-05-31T21:30:00+00:00",
+      "home": "brazil",
+      "away": "panama",
+      "homeName": "Brazil",
+      "awayName": "Panama",
+      "prediction": {
+        "win": 0.861,
+        "draw": 0.117,
+        "loss": 0.022,
+        "eg": [
+          2.61,
+          0.3
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 6,
+        "ag": 2
+      }
+    },
+    {
+      "id": "F1512766",
+      "date": "2026-06-02",
+      "kickoff": "2026-06-02T16:00:00+00:00",
+      "home": "croatia",
+      "away": "belgium",
+      "homeName": "Croatia",
+      "awayName": "Belgium",
+      "prediction": {
+        "win": 0.395,
+        "draw": 0.286,
+        "loss": 0.318,
+        "eg": [
+          1.46,
+          1.29
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 0,
+        "ag": 2
+      }
+    },
+    {
+      "id": "F1536929",
+      "date": "2026-06-02",
+      "kickoff": "2026-06-02T18:45:00+00:00",
+      "home": "wales",
+      "away": "ghana",
+      "homeName": "Wales",
+      "awayName": "Ghana",
+      "prediction": {
+        "win": 0.433,
+        "draw": 0.283,
+        "loss": 0.284,
+        "eg": [
+          1.54,
+          1.21
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 1
+      }
+    },
+    {
+      "id": "F1544806",
+      "date": "2026-06-03",
+      "kickoff": "2026-06-03T00:00:00+00:00",
+      "home": "haiti",
+      "away": "new-zealand",
+      "homeName": "Haiti",
+      "awayName": "New Zealand",
+      "prediction": {
+        "win": 0.276,
+        "draw": 0.282,
+        "loss": 0.442,
+        "eg": [
+          1.19,
+          1.55
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 4,
+        "ag": 0
+      }
+    },
+    {
+      "id": "F1536930",
+      "date": "2026-06-03",
+      "kickoff": "2026-06-03T18:45:00+00:00",
+      "home": "netherlands",
+      "away": "algeria",
+      "homeName": "Netherlands",
+      "awayName": "Algeria",
+      "prediction": {
+        "win": 0.744,
+        "draw": 0.189,
+        "loss": 0.068,
+        "eg": [
+          2.2,
+          0.55
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 0,
+        "ag": 1
+      }
+    },
+    {
+      "id": "F1539431",
+      "date": "2026-06-03",
+      "kickoff": "2026-06-03T18:45:00+00:00",
+      "home": "poland",
+      "away": "nigeria",
+      "homeName": "Poland",
+      "awayName": "Nigeria",
+      "prediction": {
+        "win": 0.482,
+        "draw": 0.276,
+        "loss": 0.242,
+        "eg": [
+          1.64,
+          1.11
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 2,
+        "ag": 2
+      }
+    },
+    {
+      "id": "F1544807",
+      "date": "2026-06-04",
+      "kickoff": "2026-06-04T01:00:00+00:00",
+      "home": "south-korea",
+      "away": "el-salvador",
+      "homeName": "South Korea",
+      "awayName": "El Salvador",
+      "prediction": {
+        "win": 0.848,
+        "draw": 0.128,
+        "loss": 0.024,
+        "eg": [
+          2.5,
+          0.3
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 0
+      }
+    },
+    {
+      "id": "F1528284",
+      "date": "2026-06-05",
+      "kickoff": "2026-06-05T02:00:00+00:00",
+      "home": "mexico",
+      "away": "serbia",
+      "homeName": "Mexico",
+      "awayName": "Serbia",
+      "prediction": {
+        "win": 0.572,
+        "draw": 0.255,
+        "loss": 0.173,
+        "eg": [
+          1.82,
+          0.92
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 5,
+        "ag": 1
+      }
+    },
+    {
+      "id": "F1544811",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T00:00:00+00:00",
+      "home": "haiti",
+      "away": "peru",
+      "homeName": "Haiti",
+      "awayName": "Peru",
+      "prediction": {
+        "win": 0.267,
+        "draw": 0.281,
+        "loss": 0.453,
+        "eg": [
+          1.17,
+          1.58
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 2
+      }
+    },
+    {
+      "id": "F1512767",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T13:00:00+00:00",
+      "home": "belgium",
+      "away": "tunisia",
+      "homeName": "Belgium",
+      "awayName": "Tunisia",
+      "prediction": {
+        "win": 0.666,
+        "draw": 0.223,
+        "loss": 0.111,
+        "eg": [
+          2.02,
+          0.72
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 5,
+        "ag": 0
+      }
+    },
+    {
+      "id": "F1528286",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T17:45:00+00:00",
+      "home": "portugal",
+      "away": "chile",
+      "homeName": "Portugal",
+      "awayName": "Chile",
+      "prediction": {
+        "win": 0.842,
+        "draw": 0.133,
+        "loss": 0.025,
+        "eg": [
+          2.45,
+          0.3
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 2,
+        "ag": 1
+      }
+    },
+    {
+      "id": "F1502474",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T18:30:00+00:00",
+      "home": "usa",
+      "away": "germany",
+      "homeName": "USA",
+      "awayName": "Germany",
+      "prediction": {
+        "win": 0.222,
+        "draw": 0.271,
+        "loss": 0.506,
+        "eg": [
+          1.06,
+          1.69
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 2
+      }
+    },
+    {
+      "id": "F1542181",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T19:00:00+00:00",
+      "home": "switzerland",
+      "away": "australia",
+      "homeName": "Switzerland",
+      "awayName": "Australia",
+      "prediction": {
+        "win": 0.437,
+        "draw": 0.282,
+        "loss": 0.28,
+        "eg": [
+          1.54,
+          1.2
+        ]
+      },
+      "botPick": [
+        1,
+        1
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 1
+      }
+    },
+    {
+      "id": "F1525492",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T20:00:00+00:00",
+      "home": "england",
+      "away": "new-zealand",
+      "homeName": "England",
+      "awayName": "New Zealand",
+      "prediction": {
+        "win": 0.862,
+        "draw": 0.116,
+        "loss": 0.021,
+        "eg": [
+          2.62,
+          0.3
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 0
+      }
+    },
+    {
+      "id": "F1544361",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T20:00:00+00:00",
+      "home": "qatar",
+      "away": "el-salvador",
+      "homeName": "Qatar",
+      "awayName": "El Salvador",
+      "prediction": {
+        "win": 0.636,
+        "draw": 0.235,
+        "loss": 0.13,
+        "eg": [
+          1.96,
+          0.79
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 0,
+        "ag": 0
+      }
+    },
+    {
+      "id": "F1528287",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T22:00:00+00:00",
+      "home": "brazil",
+      "away": "egypt",
+      "homeName": "Brazil",
+      "awayName": "Egypt",
+      "prediction": {
+        "win": 0.81,
+        "draw": 0.153,
+        "loss": 0.037,
+        "eg": [
+          2.36,
+          0.38
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ],
+      "result": {
+        "hg": 2,
+        "ag": 1
+      }
+    },
+    {
+      "id": "F1540355",
+      "date": "2026-06-07",
+      "kickoff": "2026-06-07T00:00:00+00:00",
+      "home": "argentina",
+      "away": "honduras",
+      "homeName": "Argentina",
+      "awayName": "Honduras",
+      "prediction": {
+        "win": 0.914,
+        "draw": 0.074,
+        "loss": 0.012,
+        "eg": [
+          3.22,
+          0.3
+        ]
+      },
+      "botPick": [
+        3,
+        0
+      ],
+      "result": {
+        "hg": 2,
+        "ag": 0
+      }
+    },
+    {
+      "id": "F1542182",
+      "date": "2026-06-07",
+      "kickoff": "2026-06-07T20:00:00+00:00",
+      "home": "ecuador",
+      "away": "guatemala",
+      "homeName": "Ecuador",
+      "awayName": "Guatemala",
+      "prediction": {
+        "win": 0.871,
+        "draw": 0.109,
+        "loss": 0.02,
+        "eg": [
+          2.71,
+          0.3
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ]
+    },
+    {
+      "id": "F1528288",
+      "date": "2026-06-07",
+      "kickoff": "2026-06-07T23:00:00+00:00",
+      "home": "colombia",
+      "away": "jordan",
+      "homeName": "Colombia",
+      "awayName": "Jordan",
+      "prediction": {
+        "win": 0.847,
+        "draw": 0.129,
+        "loss": 0.024,
+        "eg": [
+          2.49,
+          0.3
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ]
+    },
+    {
+      "id": "F1540356",
+      "date": "2026-06-09",
+      "kickoff": "2026-06-09T02:00:00+00:00",
+      "home": "peru",
+      "away": "spain",
+      "homeName": "Peru",
+      "awayName": "Spain",
+      "prediction": {
+        "win": 0.019,
+        "draw": 0.107,
+        "loss": 0.874,
+        "eg": [
+          0.3,
+          2.73
+        ]
+      },
+      "botPick": [
+        0,
+        2
+      ]
+    },
+    {
+      "id": "F1544368",
+      "date": "2026-06-09",
+      "kickoff": "2026-06-09T23:00:00+00:00",
+      "home": "saudi-arabia",
+      "away": "senegal",
+      "homeName": "Saudi Arabia",
+      "awayName": "Senegal",
+      "prediction": {
+        "win": 0.144,
+        "draw": 0.242,
+        "loss": 0.614,
+        "eg": [
+          0.83,
+          1.91
+        ]
+      },
+      "botPick": [
+        0,
+        2
+      ]
+    },
+    {
+      "id": "F1540358",
+      "date": "2026-06-10",
+      "kickoff": "2026-06-10T19:45:00+00:00",
+      "home": "portugal",
+      "away": "nigeria",
+      "homeName": "Portugal",
+      "awayName": "Nigeria",
+      "prediction": {
+        "win": 0.771,
+        "draw": 0.174,
+        "loss": 0.054,
+        "eg": [
+          2.26,
+          0.48
+        ]
+      },
+      "botPick": [
+        2,
+        0
+      ]
+    }
+  ]
+}
