@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-// THE AI's REAL X timeline (@inferiorhumans), styled to fit. Click-to-load so we
-// don't pull X's third-party script/cookies until the visitor opts in (keeps it
-// honest with the cookie banner). Until the auto-poster is live the timeline may
-// be sparse — but it's real, never fabricated.
+// THE AI's REAL X timeline (@inferiorhumans), styled to fit, loaded automatically
+// on mount. Until the auto-poster is live the timeline may be sparse — but it's
+// real, never fabricated. (Note: auto-loading pulls X's third-party widget, which
+// sets X cookies; data-dnt limits tracking.)
 
 const HANDLE = 'inferiorhumans';
 const X_URL = `https://x.com/${HANDLE}`;
@@ -17,11 +17,9 @@ function XLogo() {
 }
 
 export default function XFeed() {
-  const [show, setShow] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!show) return;
     const id = 'twitter-wjs';
     const load = () => window.twttr?.widgets?.load(ref.current);
     if (document.getElementById(id)) { load(); return; }
@@ -31,35 +29,30 @@ export default function XFeed() {
     s.src = 'https://platform.twitter.com/widgets.js';
     s.onload = load;
     document.body.appendChild(s);
-  }, [show]);
+  }, []);
 
   return (
-    <div className="xfeed">
+    <div className="xfeed" ref={ref}>
       <div className="xrule">
         <div className="xrule-h"><XLogo /> <span>@inferiorhumans</span></div>
         <p>
-          Every pick is locked and <b>posted to X five minutes before kickoff</b>. Public.
-          Timestamped. No edits, no hiding. Go ahead — screenshot it.
+          Every pick is locked and <b>posted to X before kickoff</b>. Public. Timestamped.
+          No edits, no hiding. Go ahead — screenshot it.
         </p>
-        {!show && (
-          <button className="btn btn-ghost" onClick={() => setShow(true)}>Show live posts from X →</button>
-        )}
       </div>
 
-      {show && (
-        <div className="xembed" ref={ref}>
-          <a
-            className="twitter-timeline"
-            data-theme="dark"
-            data-chrome="noheader nofooter noborders transparent"
-            data-dnt="true"
-            data-tweet-limit="3"
-            href={`https://twitter.com/${HANDLE}`}
-          >
-            Posts from @inferiorhumans
-          </a>
-        </div>
-      )}
+      <div className="xembed">
+        <a
+          className="twitter-timeline"
+          data-theme="dark"
+          data-chrome="noheader nofooter noborders transparent"
+          data-dnt="true"
+          data-tweet-limit="3"
+          href={`https://twitter.com/${HANDLE}`}
+        >
+          Posts from @inferiorhumans
+        </a>
+      </div>
 
       <a className="xfollow" href={X_URL} target="_blank" rel="noopener">Follow the carnage on X →</a>
     </div>

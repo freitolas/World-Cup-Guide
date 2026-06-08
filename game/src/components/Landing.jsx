@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { friendlies, groupMatches, results, botPicks, team, kickoff } from '../data.js';
 import { scorePick } from '../scoring.js';
 import { go, useNow } from '../hooks.js';
-import { HERO, TRUST, pick as choose } from '../voice.js';
+import { HERO } from '../voice.js';
 import XFeed from './XFeed.jsx';
 
 // The 2026 opener. The countdown to "the real humiliation".
@@ -139,14 +139,7 @@ export default function Landing() {
               </ul>
             </div>
 
-            <div className="receipt">
-              <div className="head">system@the-ai:~$ cat proof.log</div>
-              <div className="line"><span className="t">[18:45:02 UTC]</span> &gt; MATCH: FRA vs GER</div>
-              <div className="line"><span className="t">[18:45:03 UTC]</span> &gt; AI_PREDICTION: FRA 2 - 1 GER</div>
-              <div className="line"><span className="t">[18:45:05 UTC]</span> &gt; POSTING TO X...</div>
-              <div className="quote">{choose(TRUST, 'landing')}</div>
-              <div className="line"><span className="t">[18:45:06 UTC]</span> &gt; LOCK SECURED.</div>
-            </div>
+            <XFeed />
           </div>
           <div className="cta-wrap" style={{ marginTop: 20 }}><Cta to={playHref} /></div>
         </div>
@@ -183,10 +176,6 @@ export default function Landing() {
             </p>
           </div>
         </div>
-
-        {/* ── LIVE FROM X — real recent picks, styled as a feed ───────────── */}
-        <div className="section-title">Live from @inferiorhumans</div>
-        <XFeed />
 
         {/* ── FAQ ────────────────────────────────────────────────────────── */}
         <div className="section-title">Questions you'll lose anyway</div>
