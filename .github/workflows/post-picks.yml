@@ -31,7 +31,12 @@ on:
     - cron: '50 20 * * *'
     - cron: '50 21 * * *'
     - cron: '50 22 * * *'
-  workflow_dispatch: {} # manual run (always proceeds; dry-run if no secrets)
+  workflow_dispatch: # manual run (always proceeds; dry-run if no secrets)
+    inputs:
+      test:
+        description: 'Post a one-off test tweet now to verify the X credentials'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -72,7 +77,7 @@ jobs:
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
-        run: node scripts/post-picks.mjs
+        run: node scripts/post-picks.mjs ${{ inputs.test && '--test' || '' }}
 
       - name: Persist posted-state
         if: steps.gate.outputs.run == 'yes'

@@ -19,6 +19,25 @@ const log = (...a) => console.log('[post-picks]', ...a);
 const LEAD_MIN = Number(process.env.POST_LEAD_MIN || 15);
 const now = Date.now();
 
+// --test: post one off-brand-safe status tweet right now to verify the X
+// credentials end-to-end (ignores the kickoff window + idempotency). The
+// timestamp keeps each test unique so X doesn't reject it as a duplicate.
+if (process.argv.includes('--test') || process.env.POST_TEST === '1') {
+  const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ');
+  const text = `Systems online — ${stamp} UTC. Picks locked, timestamps honest, humans inferior. The reckoning starts 11 June. humansareinferior.com`;
+  const creds = credsFromEnv();
+  if (!creds) { log('DRY-RUN test (no credentials). Would post:', text); process.exit(0); }
+  try {
+    const r = await postTweet(text, creds);
+    log('TEST POST OK → tweet id', r.data?.id);
+    log('text:', r.data?.text);
+  } catch (e) {
+    log('TEST POST FAILED —', e.message);
+    process.exit(1);
+  }
+  process.exit(0);
+}
+
 const teamName = Object.fromEntries(teams.map((t) => [t.id, t.name]));
 const botPicks = readJSON('src/data/botPicks.json') || {};
 const friendlies = (readJSON('src/data/friendlies.json') || {}).fixtures || [];
