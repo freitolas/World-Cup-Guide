@@ -17,6 +17,11 @@ name: Post picks to X
 # repo Settings → Secrets and variables → Actions. Without them it dry-runs.
 on:
   schedule:
+    # Every run processes all three beats for every fixture, so these just need to
+    # cover the day. The kickoff-slot crons (−10 min) give Beat 2 its tight
+    # pre-kickoff timing; the 2-hourly run staggers Beat 1 (dare, up to 6h before)
+    # and catches Beat 3 (result) once it lands in results.json.
+    - cron: '0 */2 * * *'
     - cron: '50 23 * * *'
     - cron: '20 0 * * *'
     - cron: '50 0 * * *'
