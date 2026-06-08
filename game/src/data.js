@@ -11,8 +11,19 @@ import predictions from '../../src/data/predictions.json';
 import results from '../../src/data/results.json';
 import botPicks from '../../src/data/botPicks.json';
 import friendliesData from '../../src/data/friendlies.json';
+import leaderboardData from '../../src/data/leaderboard.json';
 
 export { teams, players, matches, groups, venues, predictions, results, botPicks };
+
+// Global leaderboard — humans who've actually beaten THE AI. Populated by the
+// (M2) pick-sync backend; empty until then, which is exactly the honest default
+// state. Each entry: { name, you, ai }. A human "beats" THE AI when you > ai.
+export const leaders = leaderboardData.leaders || [];
+export const leadersUpdated = leaderboardData.updated || null;
+// Those actually ahead of THE AI, biggest margin first.
+export const humansAhead = leaders
+  .filter((l) => l.you > l.ai)
+  .sort((a, b) => (b.you - b.ai) - (a.you - a.ai));
 
 // Warm-up friendlies — an ISOLATED surface (own predictions, own scoreboard).
 export const friendlies = friendliesData.fixtures || [];

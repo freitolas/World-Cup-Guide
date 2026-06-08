@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { friendlies, groupMatches, results, botPicks, team, kickoff } from '../data.js';
+import { friendlies, groupMatches, results, botPicks, team, kickoff, humansAhead } from '../data.js';
 import { scorePick } from '../scoring.js';
 import { go, useNow } from '../hooks.js';
-import { HERO } from '../voice.js';
+import { HERO, LEADERBOARD, pick as choose } from '../voice.js';
 import XFeed from './XFeed.jsx';
 
 // The 2026 opener. The countdown to "the real humiliation".
@@ -176,6 +176,30 @@ export default function Landing() {
             </p>
           </div>
         </div>
+
+        {/* ── LEADERBOARD ────────────────────────────────────────────────── */}
+        <div className="section-title">The leaderboard</div>
+        <a className="lb-card" href="#/leaderboard">
+          {humansAhead.length === 0 ? (
+            <>
+              <div className="lb-taunt">{LEADERBOARD.empty}</div>
+              <p className="muted">{LEADERBOARD.emptySub}</p>
+              <span className="tablink">See the leaderboard →</span>
+            </>
+          ) : (
+            <>
+              <div className="lb-medal">★ 1ST · {humansAhead[0].name}</div>
+              <div className="lb-score">
+                <span className="you">{humansAhead[0].you}</span>
+                <span className="dim"> vs </span>
+                <span className="ai">{humansAhead[0].ai}</span>
+                <span className="dim"> · THE AI</span>
+              </div>
+              <div className="voiceline">{choose(LEADERBOARD.beaten, String(humansAhead[0].name))}</div>
+              <span className="tablink">See the full leaderboard →</span>
+            </>
+          )}
+        </a>
 
         {/* ── FAQ ────────────────────────────────────────────────────────── */}
         <div className="section-title">Questions you'll lose anyway</div>

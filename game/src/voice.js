@@ -55,6 +55,22 @@ export const OMNISCIENCE = [
   'Your loyalty to that team is touching. It is also why you are losing.',
 ];
 
+export const LEADERBOARD = {
+  title: 'The Leaderboard',
+  // Default state — nobody has beaten THE AI.
+  empty: 'NO HUMANS ARE BEATING ME RIGHT NOW.',
+  emptySub:
+    "The list of humans who've beaten me is empty. As forecast. Be the first — I'll make space, briefly.",
+  // Shown when a human is, improbably, top of the board. Deterministic per name.
+  beaten: [
+    "Fine. One of you got lucky. Note the date — it won't recur.",
+    "A human is ahead of me. Statistically inevitable, emotionally unacceptable. Savour the variance.",
+    "Someone beat me. I've recalculated: chaos, not skill. But your name's up there. Gloat quietly.",
+    "Top of the board, are we? Enjoy the altitude. The air is thin and the fall is quick.",
+  ],
+  cta: 'See the leaderboard',
+};
+
 export const ERRORS = {
   notFound: "This page doesn't exist. Like your chances. Back to the games →",
   loading: "Calculating outcomes you'll dispute and then lose to.",

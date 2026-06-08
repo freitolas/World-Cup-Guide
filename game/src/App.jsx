@@ -4,6 +4,7 @@ import Game from './components/Game.jsx';
 import Warmups from './components/Warmups.jsx';
 import Account from './components/Account.jsx';
 import Knockouts from './components/Knockouts.jsx';
+import Leaderboard from './components/Leaderboard.jsx';
 import TeamDetail from './components/TeamDetail.jsx';
 import AiMark from './components/AiMark.jsx';
 import { useHashRoute, go } from './hooks.js';
@@ -55,6 +56,8 @@ export default function App() {
     view = <Account />;
   } else if (route === '/knockouts') {
     view = <Knockouts />;
+  } else if (route === '/leaderboard') {
+    view = <Leaderboard />;
   } else if (route.startsWith('/team/')) {
     view = <TeamDetail id={decodeURIComponent(route.slice('/team/'.length))} />;
   } else {
