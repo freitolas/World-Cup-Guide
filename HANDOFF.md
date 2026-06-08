@@ -127,5 +127,32 @@ posting real:
    With API access we could later swap the embed for our own styled render of
    fetched posts for a fully on-brand feed.
 
+## Marketing attribution — leads & conversions (first-party)
+First-touch source is captured on landing (`game/src/attribution.js`, called from
+`main.jsx`) from `utm_*` params + referrer, and written to `profiles.attribution`
+(jsonb) at signup (`auth.js`). The X auto-posts tag links with
+`utm_source=x&utm_medium=social&utm_campaign=ai_picks&utm_content=<matchId>`.
+No cookies, no third-party scripts.
+
+**Leads (signups) & conversions (paid) by source** — run in the Supabase SQL editor:
+```sql
+select
+  coalesce(p.attribution->>'utm_source', '(direct)')   as source,
+  coalesce(p.attribution->>'utm_campaign', '(none)')   as campaign,
+  count(*)                                              as leads,
+  count(e.user_id)                                      as conversions,
+  round(100.0 * count(e.user_id) / nullif(count(*),0), 1) as conv_pct
+from public.profiles p
+left join public.entitlements e on e.user_id = p.id
+group by 1, 2
+order by leads desc;
+```
+For the link A/B specifically: the link-on weeks carry `utm_source=x`; the
+link-off week (from 2026-07-06, `LINKS_OFF_FROM` in `scripts/post-picks.mjs`)
+will mostly show up as `(direct)` — compare lead/conversion volume across the
+two periods (filter by `p.created_at`). Top-of-funnel click volume (visitors who
+don't sign up) is NOT captured by design — add a cookieless pageview tool
+(Plausible/Umami) later if you want that layer.
+
 ## Identity / brand locks (for the Game)
 THE AI · handle **@inferiorhumans** · **humansareinferior.com**. Voice = `game/src/voice.js` + the uploaded VOICE_GUIDE. Not gambling; unofficial; not affiliated with FIFA.

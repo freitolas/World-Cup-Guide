@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient.js';
+import { getAttribution } from './attribution.js';
 
 // Current auth session (passwordless / magic-link).
 export function useAuth() {
@@ -23,7 +24,8 @@ export function useAuth() {
 //   create:true  → new account; name + marketing consent are stashed locally and
 //                  written to the profile once the link is followed.
 export async function sendMagicLink(email, { name = '', optIn = false, create = true } = {}) {
-  if (create) localStorage.setItem('hai_pending_profile', JSON.stringify({ name, optIn }));
+  // Stash the first-touch source alongside the profile so it's written at signup.
+  if (create) localStorage.setItem('hai_pending_profile', JSON.stringify({ name, optIn, attribution: getAttribution() }));
   // Redirect to origin root (no hash) so Supabase can find the ?code= param
   // in window.location.search. Hash-based routes swallow query params.
   return supabase.auth.signInWithOtp({
@@ -41,12 +43,13 @@ export async function applyPendingProfile(user) {
   const raw = localStorage.getItem('hai_pending_profile');
   if (!raw || !user) return;
   try {
-    const { name, optIn } = JSON.parse(raw);
+    const { name, optIn, attribution } = JSON.parse(raw);
     await supabase.from('profiles').upsert({
       id: user.id,
       display_name: name || null,
       marketing_opt_in: !!optIn,
       consent_at: optIn ? new Date().toISOString() : null,
+      attribution: attribution || null,
     });
     localStorage.removeItem('hai_pending_profile');
   } catch {
