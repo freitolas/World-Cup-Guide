@@ -24,7 +24,7 @@ const now = Date.now();
 // timestamp keeps each test unique so X doesn't reject it as a duplicate.
 if (process.argv.includes('--test') || process.env.POST_TEST === '1') {
   const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ');
-  const text = `Systems online — ${stamp} UTC. Picks locked, timestamps honest, humans inferior. The reckoning starts 11 June. humansareinferior.com`;
+  const text = `Systems online — ${stamp} UTC. Picks locked, timestamps honest, humans inferior. The reckoning starts 11 June.`;
   const creds = credsFromEnv();
   if (!creds) { log('DRY-RUN test (no credentials). Would post:', text); process.exit(0); }
   try {
@@ -47,13 +47,23 @@ const posted = readJSON('src/data/posted.json') || {};
 const imminent = (ko) => ko >= now && ko - now <= LEAD_MIN * 60000;
 const clamp = (s) => (s.length <= 280 ? s : s.slice(0, 279) + '…');
 
-function composeWC(m, pick) {
+// Link A/B test. Posts carry a UTM-tracked link (the $0.20 "with URL" tier, but
+// attributable in analytics) UNTIL the second week of knockouts, then go
+// link-free (the $0.015 tier) so we can measure the lift links actually give.
+// Adjust LINKS_OFF_FROM as the knockout schedule firms up.
+const LINKS_OFF_FROM = new Date('2026-07-06T00:00:00Z');
+const withLink = (koMs) => koMs < LINKS_OFF_FROM.getTime();
+const trackedLink = (id) =>
+  `https://humansareinferior.com/?utm_source=x&utm_medium=social&utm_campaign=ai_picks&utm_content=${id}`;
+const tail = (id, koMs) => (withLink(koMs) ? ` Beat me → ${trackedLink(id)}` : ' Beat me. If you dare.');
+
+function composeWC(m, pick, koMs) {
   const h = teamName[m.home] || m.home;
   const a = teamName[m.away] || m.away;
-  return clamp(`🔒 Before kickoff, as always: ${h} ${pick[0]}–${pick[1]} ${a}. Locked, public, no edits. Beat me → humansareinferior.com`);
+  return clamp(`🔒 Before kickoff, as always: ${h} ${pick[0]}–${pick[1]} ${a}. Locked, public, no edits.${tail(m.id, koMs)}`);
 }
-function composeFriendly(f) {
-  return clamp(`🔒 Warm-up, locked before kickoff: ${f.homeName} ${f.botPick[0]}–${f.botPick[1]} ${f.awayName}. I never hide a pick. Beat me → humansareinferior.com`);
+function composeFriendly(f, koMs) {
+  return clamp(`🔒 Warm-up, locked before kickoff: ${f.homeName} ${f.botPick[0]}–${f.botPick[1]} ${f.awayName}. I never hide a pick.${tail(f.id, koMs)}`);
 }
 
 const due = [];
@@ -62,12 +72,12 @@ for (const m of matches) {
   const pick = botPicks[m.id];
   if (!pick) continue; // pick not frozen yet — skip; a later run will catch it
   const ko = Date.parse(`${m.date}T${m.time || '00:00'}:00Z`);
-  if (imminent(ko)) due.push({ id: m.id, text: composeWC(m, pick) });
+  if (imminent(ko)) due.push({ id: m.id, text: composeWC(m, pick, ko) });
 }
 for (const f of friendlies) {
   if (f.result || posted[f.id] || !f.botPick) continue;
   const ko = Date.parse(f.kickoff || `${f.date}T00:00:00Z`);
-  if (imminent(ko)) due.push({ id: f.id, text: composeFriendly(f) });
+  if (imminent(ko)) due.push({ id: f.id, text: composeFriendly(f, ko) });
 }
 
 if (!due.length) { log('nothing imminent within', LEAD_MIN, 'min — done'); process.exit(0); }
