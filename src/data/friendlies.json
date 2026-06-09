@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-07T10:41:41.314Z",
+  "updated": "2026-06-09T08:24:58.158Z",
   "source": "api-football",
   "fixtures": [
     {
@@ -549,6 +549,32 @@
       }
     },
     {
+      "id": "F1550809",
+      "date": "2026-06-06",
+      "kickoff": "2026-06-06T21:00:00+00:00",
+      "home": "jamaica",
+      "away": "south-africa",
+      "homeName": "Jamaica",
+      "awayName": "South Africa",
+      "prediction": {
+        "win": 0.257,
+        "draw": 0.279,
+        "loss": 0.464,
+        "eg": [
+          1.14,
+          1.6
+        ]
+      },
+      "botPick": [
+        1,
+        2
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 1
+      }
+    },
+    {
       "id": "F1528287",
       "date": "2026-06-06",
       "kickoff": "2026-06-06T22:00:00+00:00",
@@ -620,7 +646,11 @@
       "botPick": [
         3,
         0
-      ]
+      ],
+      "result": {
+        "hg": 3,
+        "ag": 0
+      }
     },
     {
       "id": "F1528288",
@@ -642,7 +672,11 @@
       "botPick": [
         2,
         0
-      ]
+      ],
+      "result": {
+        "hg": 2,
+        "ag": 0
+      }
     },
     {
       "id": "F1540356",
@@ -664,7 +698,11 @@
       "botPick": [
         0,
         3
-      ]
+      ],
+      "result": {
+        "hg": 1,
+        "ag": 3
+      }
     },
     {
       "id": "F1544368",
