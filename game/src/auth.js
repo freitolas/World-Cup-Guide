@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from './supabaseClient.js';
+import { supabase, SITE_URL } from './supabaseClient.js';
 import { getAttribution } from './attribution.js';
 
 // Current auth session (passwordless / magic-link).
@@ -26,11 +26,11 @@ export function useAuth() {
 export async function sendMagicLink(email, { name = '', optIn = false, create = true } = {}) {
   // Stash the first-touch source alongside the profile so it's written at signup.
   if (create) localStorage.setItem('hai_pending_profile', JSON.stringify({ name, optIn, attribution: getAttribution() }));
-  // Redirect to origin root (no hash) so Supabase can find the ?code= param
-  // in window.location.search. Hash-based routes swallow query params.
+  // Redirect to the canonical domain root (no hash) so Supabase can find the
+  // ?code= param in window.location.search. Hash-based routes swallow query params.
   return supabase.auth.signInWithOtp({
     email,
-    options: { shouldCreateUser: create, emailRedirectTo: `${window.location.origin}/` },
+    options: { shouldCreateUser: create, emailRedirectTo: `${SITE_URL}/` },
   });
 }
 

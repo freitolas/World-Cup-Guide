@@ -11,6 +11,11 @@ export const supabase = createClient(url, key, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
 });
 
+// Canonical site URL for auth redirects (magic links). Must also be set as the
+// Site URL + allow-listed under Redirect URLs in Supabase Auth → URL config,
+// or Supabase ignores it and falls back to its own Site URL.
+export const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://humansareinferior.com';
+
 // The Stripe Payment Link ($5 one-time). Set once it exists in Stripe; until
 // then the upgrade button shows "not yet available".
 export const STRIPE_PAYMENT_LINK =
