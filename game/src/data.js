@@ -12,6 +12,10 @@ import results from '../../src/data/results.json';
 import botPicks from '../../src/data/botPicks.json';
 import friendliesData from '../../src/data/friendlies.json';
 import leaderboardData from '../../src/data/leaderboard.json';
+import xFeedData from '../../src/data/x-feed.json';
+
+// THE AI's recent X posts — our own feed (X's embed widget is unreliable).
+export const xFeed = xFeedData || [];
 
 export { teams, players, matches, groups, venues, predictions, results, botPicks };
 

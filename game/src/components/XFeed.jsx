@@ -1,12 +1,21 @@
-import { useEffect, useRef } from 'react';
+import { xFeed } from '../data.js';
 
-// THE AI's REAL X timeline (@inferiorhumans), styled to fit, loaded automatically
-// on mount. Until the auto-poster is live the timeline may be sparse — but it's
-// real, never fabricated. (Note: auto-loading pulls X's third-party widget, which
-// sets X cookies; data-dnt limits tracking.)
+// THE AI's recent X posts, rendered from our OWN data (src/data/x-feed.json,
+// written by the poster). X's official embed widget renders empty/unreliably, so
+// we control the timeline ourselves — real posts, on-brand, always works. Each
+// links to the actual tweet.
 
 const HANDLE = 'inferiorhumans';
 const X_URL = `https://x.com/${HANDLE}`;
+
+function rel(iso) {
+  const ms = Date.now() - new Date(iso).getTime();
+  if (ms < 0 || Number.isNaN(ms)) return '';
+  const h = Math.floor(ms / 3600000);
+  if (h < 1) return `${Math.max(1, Math.floor(ms / 60000))}m`;
+  if (h < 24) return `${h}h`;
+  return `${Math.floor(h / 24)}d`;
+}
 
 function XLogo() {
   return (
@@ -16,23 +25,21 @@ function XLogo() {
   );
 }
 
-export default function XFeed() {
-  const ref = useRef(null);
+function Eye() {
+  return (
+    <span className="xavatar" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+      </svg>
+    </span>
+  );
+}
 
-  useEffect(() => {
-    const id = 'twitter-wjs';
-    const load = () => window.twttr?.widgets?.load(ref.current);
-    if (document.getElementById(id)) { load(); return; }
-    const s = document.createElement('script');
-    s.id = id;
-    s.async = true;
-    s.src = 'https://platform.twitter.com/widgets.js';
-    s.onload = load;
-    document.body.appendChild(s);
-  }, []);
+export default function XFeed() {
+  const posts = (xFeed || []).slice(0, 6);
 
   return (
-    <div className="xfeed" ref={ref}>
+    <div className="xfeed">
       <div className="xrule">
         <div className="xrule-h"><XLogo /> <span>@inferiorhumans</span></div>
         <p>
@@ -41,18 +48,19 @@ export default function XFeed() {
         </p>
       </div>
 
-      <div className="xembed">
-        <a
-          className="twitter-timeline"
-          data-theme="dark"
-          data-chrome="noheader nofooter noborders transparent"
-          data-dnt="true"
-          data-tweet-limit="3"
-          href={`https://twitter.com/${HANDLE}`}
-        >
-          Posts from @inferiorhumans
+      {posts.map((p) => (
+        <a key={p.id} className="xpost" href={`${X_URL}/status/${p.id}`} target="_blank" rel="noopener">
+          <div className="xhead">
+            <Eye />
+            <span className="xname">THE AI</span>
+            <svg className="xcheck" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l2.6 1.9 3.2-.1 1 3 2.6 1.9-1 3 1 3-2.6 1.9-1 3-3.2-.1L12 23l-2.6-1.9-3.2.1-1-3L2.6 16.3l1-3-1-3 2.6-1.9 1-3 3.2.1z" /></svg>
+            <span className="xhandle">@inferiorhumans</span>
+            {p.at && <span className="xtime">· {rel(p.at)}</span>}
+            <XLogo />
+          </div>
+          <div className="xbody">{p.text}</div>
         </a>
-      </div>
+      ))}
 
       <a className="xfollow" href={X_URL} target="_blank" rel="noopener">Follow the carnage on X →</a>
     </div>

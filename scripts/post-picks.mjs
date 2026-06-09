@@ -53,6 +53,11 @@ const store = readJSON('src/data/posted.json') || {};
 store.log ||= {};                                   // { [id]: { b1, b2, b3 } }
 store.used ||= { exact: [], right: [], wrong: [] }; // rotation state per pool
 
+// Public on-site feed (newest first) — we render our OWN timeline from real
+// posts because X's embed widget is unreliable.
+const FEED_PATH = root('src/data/x-feed.json');
+const feed = readJSON('src/data/x-feed.json') || [];
+
 // ── helpers ────────────────────────────────────────────────────────────────
 const hash = (s) => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return Math.abs(h); };
 const clamp = (s) => (s.length <= 280 ? s : s.slice(0, 279) + '…');
@@ -156,11 +161,15 @@ for (const d of due) {
     const stamp = { tweet: r.data?.id || null, at: new Date().toISOString() };
     if (d.beat === 'sched') store.sched[d.id] = stamp;
     else store.log[d.id][d.beat] = stamp;
+    if (r.data?.id) feed.unshift({ id: r.data.id, beat: d.beat, text: d.text, at: stamp.at });
     n++;
     log('posted', d.id, d.beat, '→', r.data?.id);
   } catch (e) {
     log('FAILED', d.id, d.beat, '—', e.message); // leave unposted; a later run retries
   }
 }
-if (n) writeFileSync(LOG_PATH, JSON.stringify(store, null, 2) + '\n');
+if (n) {
+  writeFileSync(LOG_PATH, JSON.stringify(store, null, 2) + '\n');
+  writeFileSync(FEED_PATH, JSON.stringify(feed.slice(0, 15), null, 2) + '\n');
+}
 log(`done — ${n}/${due.length} posted`);

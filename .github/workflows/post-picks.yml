@@ -1,41 +1,20 @@
 name: Post picks to X
 
 # THE AI posts its frozen pick shortly before kickoff (public, timestamped, no
-# edits). This is PRE-BOOKED, not constantly running: there's one scheduled run
-# ~10 minutes before each distinct kickoff slot in the fixture list (UTC). Each
-# run posts only the fixtures kicking off in the next ~15 min that haven't been
-# posted yet (idempotent via src/data/posted.json), then exits.
+# edits). It also runs the dare (Beat 1) and result (Beat 3) beats.
 #
-# Distinct WC kickoff slots (UTC) → cron at slot − 10 min:
-#   00:00→23:50 00:30→00:20 01:00→00:50 01:30→01:20 02:00→01:50 03:00→02:50
-#   04:00→03:50 05:00→04:50 17:00→16:50 18:00→17:50 20:00→19:50 21:00→20:50
-#   22:00→21:50 23:00→22:50
-# If kickoff times are refined or knockout rounds add new slots, add crons here.
+# RELIABILITY: GitHub's scheduled runs get delayed/SKIPPED under load (esp. at
+# :00/:50). Beat 2 MUST land in the 15-min pre-kickoff window, so we poll every
+# ~8 min at off-peak minutes during match hours (16:00–07:59 UTC) — multiple runs
+# fall in every window, surviving a skipped run. Each run is idempotent and exits
+# fast; the active-window gate limits it to the tournament. The script also writes
+# src/data/x-feed.json (the on-site feed).
 #
-# IMPORTANT: GitHub only runs scheduled workflows from the repo's DEFAULT branch,
-# so this file must live on the default branch to fire. Set the X_* secrets in
-# repo Settings → Secrets and variables → Actions. Without them it dry-runs.
+# ⚠️ DISABLE this workflow after 2026-07-19 (Actions tab → ⋯ → Disable workflow)
+# to stop the off-season runs. Default-branch-only; needs X_* secrets.
 on:
   schedule:
-    # Every run processes all three beats for every fixture, so these just need to
-    # cover the day. The kickoff-slot crons (−10 min) give Beat 2 its tight
-    # pre-kickoff timing; the 2-hourly run staggers Beat 1 (dare, up to 6h before)
-    # and catches Beat 3 (result) once it lands in results.json.
-    - cron: '0 */2 * * *'
-    - cron: '50 23 * * *'
-    - cron: '20 0 * * *'
-    - cron: '50 0 * * *'
-    - cron: '20 1 * * *'
-    - cron: '50 1 * * *'
-    - cron: '50 2 * * *'
-    - cron: '50 3 * * *'
-    - cron: '50 4 * * *'
-    - cron: '50 16 * * *'
-    - cron: '50 17 * * *'
-    - cron: '50 19 * * *'
-    - cron: '50 20 * * *'
-    - cron: '50 21 * * *'
-    - cron: '50 22 * * *'
+    - cron: '7,15,23,31,39,47,55 16-23,0-7 * * *'
   workflow_dispatch: # manual run (always proceeds; dry-run if no secrets)
     inputs:
       test:
@@ -84,14 +63,14 @@ jobs:
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         run: node scripts/post-picks.mjs ${{ inputs.test && '--test' || '' }}
 
-      - name: Persist posted-state
+      - name: Persist posted-state + feed
         if: steps.gate.outputs.run == 'yes'
         run: |
-          if ! git diff --quiet -- src/data/posted.json; then
+          if ! git diff --quiet -- src/data/posted.json src/data/x-feed.json; then
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/data/posted.json
-            git commit -m "chore: record posted picks [skip ci]"
+            git add src/data/posted.json src/data/x-feed.json
+            git commit -m "chore: record posted picks + feed [skip ci]"
             git push
           else
             echo "no new posts to persist"
