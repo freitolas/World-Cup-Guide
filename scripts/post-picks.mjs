@@ -131,6 +131,15 @@ for (const f of fixtures) {
   }
 }
 
+// ── scheduled one-off marketing posts (link-free, from an MD) ──────────────
+// src/data/scheduled-posts.json: [{ id, at (ISO), text }]. Posted once, when due.
+const scheduled = readJSON('src/data/scheduled-posts.json') || [];
+store.sched ||= {};
+for (const s of scheduled) {
+  if (!s.id || !s.text || !s.at || store.sched[s.id]) continue;
+  if (now >= Date.parse(s.at)) due.push({ id: s.id, beat: 'sched', text: clamp(s.text) });
+}
+
 if (!due.length) { log('nothing due — done'); process.exit(0); }
 
 if (DRY) {
@@ -144,7 +153,9 @@ let n = 0;
 for (const d of due) {
   try {
     const r = await postTweet(d.text, creds);
-    store.log[d.id][d.beat] = { tweet: r.data?.id || null, at: new Date().toISOString() };
+    const stamp = { tweet: r.data?.id || null, at: new Date().toISOString() };
+    if (d.beat === 'sched') store.sched[d.id] = stamp;
+    else store.log[d.id][d.beat] = stamp;
     n++;
     log('posted', d.id, d.beat, '→', r.data?.id);
   } catch (e) {
