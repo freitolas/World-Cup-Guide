@@ -1,21 +1,20 @@
 name: Daily update
 
-# Pulls results, refreshes predictions, applies the news/context layer, freezes
-# THE AI's pick for imminent fixtures, rebuilds, and commits. Netlify serves the
-# committed dist/, so the push deploys.
+# Pulls results, refreshes predictions, applies the star-weighted news/context
+# layer, freezes THE AI's pick for IMMINENT fixtures (within FREEZE_HORIZON_HOURS
+# of kickoff), rebuilds, and commits. Netlify serves the committed dist/, so the
+# push deploys.
 #
-# Timing is set a couple of hours before the day's earliest kickoff so the
-# latest injuries/suspensions/news are baked in, with a backup run for safety:
-#   • Group stage → Round of 16 (earliest 17:00 BST): 14:00 + 15:00 BST
-#   • Quarter-finals → Final     (earliest 20:00 BST): 17:00 BST
-# Cron is UTC (BST = UTC+1). All three are listed; the "phase gate" step below
-# runs only the right one(s) for the current tournament phase.
+# Runs every 3 hours so each match freezes ~2-3h before ITS OWN kickoff (not the
+# day's first) — fresh team news per match. Robust to the still-provisional
+# kickoff times. The news/football APIs are only called when a fixture is near
+# the freeze window (see update.mjs), so the off-peak runs are cheap. Commits
+# only happen when results/predictions/picks actually change, so deploys are not
+# spammed.
 on:
   schedule:
-    - cron: '0 13 * * *' # 14:00 BST — group→R16 primary
-    - cron: '0 14 * * *' # 15:00 BST — group→R16 backup
-    - cron: '0 16 * * *' # 17:00 BST — quarter-finals→final
-  workflow_dispatch: {} # manual runs always proceed
+    - cron: '0 */3 * * *'
+  workflow_dispatch: {}
 
 permissions:
   contents: write
@@ -24,49 +23,25 @@ concurrency:
   group: daily-update
   cancel-in-progress: false
 
-env:
-  # Date the late-rounds schedule takes over (quarter-finals begin ~this date).
-  PHASE_B_START: '2026-07-09'
-
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Phase gate (run only at the right time for the current phase)
-        id: gate
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "run=yes" >> "$GITHUB_OUTPUT"; exit 0
-          fi
-          HOUR=$(date -u +%H); TODAY=$(date -u +%Y-%m-%d)
-          if [[ "$TODAY" < "$PHASE_B_START" ]]; then
-            # Phase A: group → Round of 16
-            if [ "$HOUR" = "13" ] || [ "$HOUR" = "14" ]; then echo "run=yes" >> "$GITHUB_OUTPUT"; else echo "run=no" >> "$GITHUB_OUTPUT"; fi
-          else
-            # Phase B: quarter-finals → final
-            if [ "$HOUR" = "16" ]; then echo "run=yes" >> "$GITHUB_OUTPUT"; else echo "run=no" >> "$GITHUB_OUTPUT"; fi
-          fi
-
       - uses: actions/checkout@v4
-        if: steps.gate.outputs.run == 'yes'
 
       - uses: actions/setup-node@v4
-        if: steps.gate.outputs.run == 'yes'
         with:
           node-version: '22'
           cache: npm
 
       - run: npm ci
-        if: steps.gate.outputs.run == 'yes'
 
       - name: Configure git
-        if: steps.gate.outputs.run == 'yes'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Update results, predictions, context, bot picks, and rebuild
-        if: steps.gate.outputs.run == 'yes'
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           NEWSDATA_KEY: ${{ secrets.NEWSDATA_KEY }}

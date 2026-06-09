@@ -108,12 +108,11 @@ const round1 = (x) => Math.round(x * 100) / 100;
 // official per-venue timezones are confirmed).
 const kickoffMs = (m) => new Date(`${m.date}T${m.time || '00:00'}:00Z`).getTime();
 
-// How close to kickoff a pick is frozen. Picks are deliberately frozen LATE —
-// only within this many hours of kickoff — so the latest injuries/suspensions/
-// news are baked in. The daily run happens a couple of hours before the day's
-// first match, so this window (24h) captures the whole day's slate at that run
-// while still excluding future days. Override with FREEZE_HORIZON_HOURS.
-const FREEZE_HORIZON_HOURS = Number(process.env.FREEZE_HORIZON_HOURS || 24);
+// How close to kickoff a pick is frozen. Picks are frozen LATE — only within
+// this many hours of kickoff — so the freshest injuries/suspensions/news are
+// baked in. The pipeline runs every ~3h, so each match freezes ~2-3h before ITS
+// kickoff (not the day's first). Override with FREEZE_HORIZON_HOURS.
+const FREEZE_HORIZON_HOURS = Number(process.env.FREEZE_HORIZON_HOURS || 5);
 const FREEZE_QA_HOURS = 4; // a fixture this close with no pick = something broke
 
 // Freeze THE AI's pick per fixture, LATE (near kickoff) so context is included.
@@ -190,14 +189,24 @@ async function main() {
     if (built.gapFilled.length) log(`rank-filled ratings for: ${built.gapFilled.join(', ')}`);
 
     // News & context layer: injuries/suspensions/crisis → rating adjustments.
-    // No-op without keys; only applied when CONTEXT_ENABLED=1 (else diagnostic).
-    const ctx = await fetchContext();
-    if (ctx.applied) {
-      let n = 0;
-      for (const [slug, penalty] of Object.entries(ctx.adjustments)) {
-        if (ratings[slug] != null) { ratings[slug] -= penalty; n++; }
+    // Only spend the (rate-limited) news/football APIs when a fixture is actually
+    // near the freeze window — most of the every-3h runs skip it.
+    const ctxWindowMs = (FREEZE_HORIZON_HOURS + 1) * 3.6e6;
+    const imminent = matches.some(
+      (m) => !results[m.id] && ratings[m.home] != null && ratings[m.away] != null
+        && kickoffMs(m) - Date.now() > 0 && kickoffMs(m) - Date.now() <= ctxWindowMs,
+    );
+    if (imminent) {
+      const ctx = await fetchContext();
+      if (ctx.applied) {
+        let n = 0;
+        for (const [slug, penalty] of Object.entries(ctx.adjustments)) {
+          if (ratings[slug] != null) { ratings[slug] -= penalty; n++; }
+        }
+        log(`context APPLIED — adjusted ${n} team rating(s)`);
       }
-      log(`context APPLIED — adjusted ${n} team rating(s)`);
+    } else {
+      log('no fixture within the freeze window — skipping context APIs this run');
     }
 
     predictions = predictionsFor(ratings, 'model');
