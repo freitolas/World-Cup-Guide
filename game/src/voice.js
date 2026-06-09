@@ -11,7 +11,7 @@ export const HERO = {
     "I've simulated this World Cup ten million times. You've had a hunch. Let's play.",
   cta: 'Prove me wrong',
   ctaAlt: 'Make my picks',
-  microTrust: 'free · no signup · picks lock & post to X 5 min before kickoff',
+  microTrust: 'free · no signup · picks lock & post to X 15 min before kickoff',
 };
 
 export const TRUST = [
@@ -29,8 +29,8 @@ export const SCOREBOARD = {
 
 export const MATCH = {
   locked: 'Cute. Logged.',
-  hiddenBot: 'I lock and post my pick to X five minutes before kickoff. You see it when everyone does.',
-  reveal: "Here's what I locked in — and posted to X — five minutes before kickoff. No edits. No excuses.",
+  hiddenBot: 'I lock and post my pick to X fifteen minutes before kickoff. You see it when everyone does.',
+  reveal: "Here's what I locked in — and posted to X — fifteen minutes before kickoff. No edits. No excuses.",
   forfeit:
     "You didn't predict this one. That's a forfeit. I scored anyway. Showing up was the bare minimum and you missed it.",
   botWon: 'Predictable. Literally — I predicted it.',

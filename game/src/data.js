@@ -48,10 +48,11 @@ export function kickoff(m) {
   return new Date(`${m.date}T${m.time || '00:00'}:00Z`);
 }
 
-// Picks lock 5 minutes before kickoff — the moment THE AI's pick freezes, is
-// revealed, and (once wired up) is posted to X. Before lock you can edit; at/
-// after lock the pick freezes (Game brief §4). One shared rule for both sides.
-export const LOCK_LEAD_MS = 5 * 60 * 1000;
+// Picks lock 15 minutes before kickoff — your pick freezes and THE AI's is
+// revealed. Must be ≥ the X-post lead so THE AI's pick can never go public on X
+// while you can still edit yours. Before lock you can edit; at/after lock it
+// freezes (Game brief §4). One shared rule for both sides.
+export const LOCK_LEAD_MS = 15 * 60 * 1000;
 export function isLocked(m, now = new Date()) {
   return now.getTime() >= kickoff(m).getTime() - LOCK_LEAD_MS;
 }

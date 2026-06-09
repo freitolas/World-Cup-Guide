@@ -23,7 +23,7 @@ const readJSON = (p) => (existsSync(root(p)) ? JSON.parse(readFileSync(root(p), 
 const log = (...a) => console.log('[post-picks]', ...a);
 
 const BEAT1_LEAD_MS = 6 * 3600 * 1000;   // dare up to 6h before kickoff
-const BEAT2_WINDOW_MS = 20 * 60 * 1000;  // locked pick within 20 min before kickoff
+const BEAT2_WINDOW_MS = 15 * 60 * 1000;  // post the locked pick within 15 min of kickoff (== in-app lock, so it's never public while users can still edit)
 const now = Date.now();
 const creds = credsFromEnv();
 const DRY = !creds;
