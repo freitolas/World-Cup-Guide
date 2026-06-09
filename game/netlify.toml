@@ -12,6 +12,18 @@
   command = "npm run build"
   publish = "dist"
 
+# Canonicalise to the custom domain. Supabase's Site URL still points at the
+# .netlify.app host, so magic links land there first; this 301s them (with the
+# ?code= query preserved) onto humansareinferior.com so sign-in completes on the
+# real domain. Branch-preview hosts (claude-*--humansareinferior.netlify.app) are
+# not matched, so previews still work. (Cleaner long-term fix: set the Supabase
+# Auth Site URL to https://humansareinferior.com.)
+[[redirects]]
+  from = "https://humansareinferior.netlify.app/*"
+  to = "https://humansareinferior.com/:splat"
+  status = 301
+  force = true
+
 # SPA: serve index.html for client-side (hash) routes and unknown paths.
 [[redirects]]
   from = "/*"
