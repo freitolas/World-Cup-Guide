@@ -56,3 +56,26 @@
 - **Data already available (committed each pipeline run):** `src/data/predictions.json` (win/draw/loss + eg per fixture), `src/data/botPicks.json` (frozen picks), `src/data/results.json`, `src/data/friendlies.json`.
 - **Recommended enhancement:** persist the context layer's diagnostics each run (currently only logged) to a committed file e.g. `src/data/context-latest.json` (which teams were docked, by how much, why — suspensions/injuries/crisis), so the admin panel can show WHY a pick is an upset. Small change in `update.mjs` (write `ctx` summary) — do this when building the panel.
 - **Access (owner-only):** simplest = `/admin` hash route in the game that requires the logged-in Supabase user to match an allowlist (owner email `rafael4sites@gmail.com` or an `is_admin` flag / `app_metadata`). Render the JSON above as tables (predictions, picks, context reasons, warm-up record). Keep it read-only. Don't expose via public nav.
+
+## PARKED IDEA — "AI vs AI" rival-LLM takedowns (content pillar)
+Concept: after a match THE AI won the prediction on, find tweets where a rival LLM
+(OpenAI/ChatGPT, Gemini, Claude, Perplexity) predicted it WRONG, surface a
+candidate list for owner approval, then post timely replies ("Gemini said 2-1. I
+said 1-2. Final: 1-2."). Owner parked it 2026-06-09 to think it over. Considerations
+captured for when it's revisited:
+- **Needs X API READ / recent-search** — unverified whether this account's tier
+  allows it; under the credit model it's ~$0.005 per post returned. Test cheaply
+  before committing.
+- **Extraction is noisy** — parsing a rival's predicted score from free-text tweets
+  is fuzzy (paraphrase, sarcasm, screenshots) → false positives. This is exactly
+  why the human-confirm gate is right (and it matches the build brief §7 guardrail:
+  no automated replies; takedowns stay human-in-the-loop).
+- **Surfacing the list:** an autonomous GitHub job can't message a chat — options
+  were (a) write `src/data/reply-candidates.json` + open a GitHub issue, or (b)
+  owner pings a session and Claude runs it live. Undecided.
+- **Safer complement:** a proactive "AI vs AI scoreboard" — owner seeds each LLM's
+  pre-match prediction for marquee games, THE AI posts the comparison after FT.
+  Fully controllable, no X-search dependency. Could pair with or replace the
+  reactive version.
+- Reply/quote-tweet carries more spam/conflict risk than standalone posts; keep
+  volume low and human-approved.
