@@ -14,6 +14,8 @@
 // low-confidence and weighted lightly so they nudge, never dominate.
 
 import { teams } from '../../src/data/teams.js';
+import { players } from '../../src/data/players.js';
+import { featured } from '../../src/data/featured.js';
 
 const API_FOOTBALL_KEY = process.env.API_FOOTBALL_KEY || '';
 const NEWSDATA_KEY = process.env.NEWSDATA_KEY || '';
@@ -30,7 +32,30 @@ const SUSPENSION_WEIGHT = 18;
 const STRUCT_INJURY_WEIGHT = 16; // structured (per-fixture) injury — higher confidence than news
 const NEWS_INJURY_WEIGHT = 8; // hedged — news is noisy
 const CRISIS_PENALTY = 12;
-const MAX_TEAM_PENALTY = 70;
+const MAX_TEAM_PENALTY = 120; // raised so a depleted spine (2+ key absences) can stack into a real collapse
+
+// Player importance multiplier — losing a star (Mbappé) hurts far more than a
+// squad player. Featured elite ×3, curated/notable squad ×2, anonymous ×1.
+const FEATURED = new Set(featured);
+const normName = (s) =>
+  (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+const tierFull = new Map();
+const tierLast = new Map();
+const starsByTeam = {};
+for (const p of players) {
+  const tier = FEATURED.has(p.id) ? 3 : (p.desc ? 2 : 1);
+  const nm = normName(p.name);
+  tierFull.set(nm, Math.max(tierFull.get(nm) || 0, tier));
+  const last = nm.split(' ').pop();
+  if (last && last.length >= 4) tierLast.set(last, Math.max(tierLast.get(last) || 0, tier));
+  if (FEATURED.has(p.id) && last) (starsByTeam[p.team] ||= []).push(last);
+}
+const importance = (name) => {
+  const nm = normName(name);
+  if (tierFull.has(nm)) return tierFull.get(nm);
+  const last = nm.split(' ').pop();
+  return (last && tierLast.get(last)) || 1;
+};
 
 const norm = (s) =>
   (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z]/g, '');
@@ -106,9 +131,10 @@ async function fetchSuspensions() {
   const add = (meta, why) => {
     const slug = toSlug(meta.team);
     if (!slug) return;
+    const mult = importance(meta.name);
     (byTeam[slug] ||= { penalty: 0, out: [] });
-    byTeam[slug].penalty = Math.min(MAX_TEAM_PENALTY, byTeam[slug].penalty + SUSPENSION_WEIGHT);
-    byTeam[slug].out.push(`${meta.name} (${why})`);
+    byTeam[slug].penalty = Math.min(MAX_TEAM_PENALTY, byTeam[slug].penalty + SUSPENSION_WEIGHT * mult);
+    byTeam[slug].out.push(`${meta.name} (${why}${mult > 1 ? `, ×${mult}` : ''})`);
   };
   for (const m of Object.values(sentOff)) add(m, 'sent off');
   for (const y of Object.values(yellows)) if (y.count % 2 === 0 && y.count > 0) add(y, `${y.count} yellows`);
@@ -146,9 +172,14 @@ async function fetchNews() {
         const inj = INJURY.test(text);
         const cri = CRISIS.test(text);
         if (!inj && !cri) continue;
+        const nt = ` ${normName(text)} `;
         for (const t of teams) {
           if (!new RegExp(`\\b${t.name}\\b`, 'i').test(text)) continue;
-          if (inj) injuryTeams[t.id] = (injuryTeams[t.id] || 0) + 1;
+          if (inj) {
+            // tier 3 if one of this team's featured stars is named in the article
+            const star = (starsByTeam[t.id] || []).some((last) => nt.includes(` ${last} `));
+            injuryTeams[t.id] = Math.max(injuryTeams[t.id] || 0, star ? 3 : 1);
+          }
           if (cri) crisisTeams[t.id] = true;
         }
       }
@@ -191,7 +222,7 @@ export async function fetchContext() {
           const inj = await afFetch(`injuries?fixture=${f.fixture?.id}`);
           probe.fixtures++;
           probe.rows += inj.length;
-          for (const row of inj) bump(toSlug(row.team?.name), STRUCT_INJURY_WEIGHT);
+          for (const row of inj) bump(toSlug(row.team?.name), STRUCT_INJURY_WEIGHT * importance(row.player?.name));
         }
       } catch (e) {
         log(`injuries probe failed: ${e.message}`);
@@ -200,7 +231,7 @@ export async function fetchContext() {
     }
 
     const news = await fetchNews();
-    for (const slug of Object.keys(news.injuryTeams)) bump(slug, NEWS_INJURY_WEIGHT);
+    for (const [slug, tier] of Object.entries(news.injuryTeams)) bump(slug, NEWS_INJURY_WEIGHT * tier);
     for (const slug of Object.keys(news.crisisTeams)) bump(slug, CRISIS_PENALTY);
 
     // --- coverage diagnostics (read from run logs) ---

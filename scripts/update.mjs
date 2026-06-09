@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { matches } from '../src/data/matches.js';
 import { teams } from '../src/data/teams.js';
-import { matchProb, expectedScore, expectedGoals, poissonPmf, DC_RHO } from '../vendor/wc-model/elo.mjs';
+import { matchProb, expectedScore, pickScore } from '../vendor/wc-model/elo.mjs';
 import { buildRatings, HOSTS, HOME_ADV } from './lib/ratings.mjs';
 import { nameToSlug, isPlaceholder, unmapped } from './lib/teamMap.mjs';
 import { fetchContext } from './lib/context.mjs';
@@ -104,34 +104,6 @@ function predictionsFor(ratings, source) {
 const round = (x) => Math.round(x * 1000) / 1000;
 const round1 = (x) => Math.round(x * 100) / 100;
 
-// Dixon-Coles low-score correction (mirrors vendor/wc-model/elo.mjs, which keeps
-// it private). Used to find THE AI's modal scoreline for the Game's bot picks.
-function dcTau(a, b, lambda, mu, rho) {
-  if (a === 0 && b === 0) return 1 - lambda * mu * rho;
-  if (a === 0 && b === 1) return 1 + lambda * rho;
-  if (a === 1 && b === 0) return 1 + mu * rho;
-  if (a === 1 && b === 1) return 1 - rho;
-  return 1;
-}
-
-// Most probable scoreline = mode of the DC bivariate-Poisson grid (0–8 each side).
-function modalScore(ratingA, ratingB, homeBonusA = 0) {
-  const lambda = expectedGoals(ratingA, ratingB, homeBonusA);
-  const mu = expectedGoals(ratingB, ratingA, -homeBonusA / 2);
-  let best = [0, 0];
-  let bestP = -1;
-  for (let a = 0; a <= 8; a++) {
-    for (let b = 0; b <= 8; b++) {
-      const p = poissonPmf(a, lambda) * poissonPmf(b, mu) * dcTau(a, b, lambda, mu, DC_RHO);
-      if (p > bestP) {
-        bestP = p;
-        best = [a, b];
-      }
-    }
-  }
-  return best;
-}
-
 // Kickoff time. Stored date+time are treated as UTC for now (refine when the
 // official per-venue timezones are confirmed).
 const kickoffMs = (m) => new Date(`${m.date}T${m.time || '00:00'}:00Z`).getTime();
@@ -147,7 +119,8 @@ const FREEZE_QA_HOURS = 4; // a fixture this close with no pick = something brok
 // Freeze THE AI's pick per fixture, LATE (near kickoff) so context is included.
 // Once a fixture has a pick it is NEVER regenerated — that immutability is what
 // lets the bot honestly claim it never changes its mind (Game brief §3). The
-// pick is the modal scoreline computed from ratings already adjusted for context.
+// pick is pickScore() from ratings already adjusted for context (suspensions/
+// injuries/crisis), so an upset shows up as a flipped scoreline.
 function freezeBotPicks(ratings, results, now = Date.now()) {
   const picks = existsSync(BOTPICKS_FILE)
     ? JSON.parse(readFileSync(BOTPICKS_FILE, 'utf8'))
@@ -168,7 +141,7 @@ function freezeBotPicks(ratings, results, now = Date.now()) {
         continue;
       }
       const hb = HOSTS.has(m.home) ? HOME_ADV : 0;
-      picks[m.id] = modalScore(rh, ra, hb);
+      picks[m.id] = pickScore(rh, ra, hb);
       added++;
     }
   }

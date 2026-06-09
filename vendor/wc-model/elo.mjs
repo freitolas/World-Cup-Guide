@@ -57,6 +57,22 @@ export function matchProb(ratingA, ratingB, homeBonusA = 0) {
   return { winA: winA / total, draw: draw / total, winB: winB / total, expectedGoalsA: lambda, expectedGoalsB: mu };
 }
 
+// THE AI's single committed scoreline. Round each side's expected goals, then —
+// if that lands on a draw — break it toward a clear favourite (|P(win)−P(loss)|
+// past drawThresh). Keeps round-eg accuracy but commits to a winner unless the
+// game is a genuine coin-flip, so context/upset rating shifts actually move the
+// pick. A draw survives only when neither side is favoured.
+export function pickScore(ratingA, ratingB, homeBonusA = 0, drawThresh = 0.05) {
+  let a = Math.round(expectedGoals(ratingA, ratingB, homeBonusA));
+  let b = Math.round(expectedGoals(ratingB, ratingA, -homeBonusA / 2));
+  if (a === b) {
+    const p = matchProb(ratingA, ratingB, homeBonusA);
+    if (p.winA - p.winB > drawThresh) a += 1;
+    else if (p.winB - p.winA > drawThresh) b += 1;
+  }
+  return [a, b];
+}
+
 // Sample a scoreline (for Monte Carlo). allowDraw=false → penalty shootout nudge toward higher Elo.
 export function sampleMatch(ratingA, ratingB, homeBonusA = 0, allowDraw = true, rng = Math.random) {
   const eA = expectedGoals(ratingA, ratingB, homeBonusA);

@@ -70,6 +70,7 @@ jobs:
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           NEWSDATA_KEY: ${{ secrets.NEWSDATA_KEY }}
-          # Adjustments stay OFF until coverage is verified; flip to '1' to apply.
-          CONTEXT_ENABLED: ${{ vars.CONTEXT_ENABLED }}
+          # Upset/context layer ON: star-weighted suspensions/injuries/crisis adjust
+          # ratings before picks freeze. Set repo var CONTEXT_ENABLED=0 to disable.
+          CONTEXT_ENABLED: ${{ vars.CONTEXT_ENABLED || '1' }}
         run: npm run update:commit
