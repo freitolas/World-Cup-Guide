@@ -39,7 +39,9 @@ if (process.argv.includes('--test') || process.env.POST_TEST === '1') {
 }
 
 // ── data ───────────────────────────────────────────────────────────────────
-const C = readJSON('src/data/x-content.json') || { beat1: [], beat2: [], beat3: {}, handles: {} };
+const C = readJSON('src/data/x-content.json') || { beat1Bank: [], beat1Deck: {}, beat2: [], beat3: {}, handles: {} };
+const beat1Deck = C.beat1Deck || {};
+const beat1Bank = C.beat1Bank || [];
 const botPicks = readJSON('src/data/botPicks.json') || {};
 const results = readJSON('src/data/results.json') || {};
 const friendlies = (readJSON('src/data/friendlies.json') || {}).fixtures || [];
@@ -101,13 +103,19 @@ for (const f of fixtures) {
   const st = store.log[f.id] ||= {};
   const tags = tagsFor(f.home, f.away);
 
-  // Beat 1 — dare (before kickoff only)
-  if (!st.b1 && now >= f.ko - BEAT1_LEAD_MS && now < f.ko && C.beat1.length) {
-    const tpl = C.beat1[hash(f.id) % C.beat1.length];
-    let text = fillTokens(tpl, { a: f.a, b: f.b, tags: '' });
-    if (f.linkBeat1) text += ` ${tracked(f.id)}`;
-    if (tags) text += ` ${tags}`;
-    due.push({ id: f.id, beat: 'b1', text: clamp(text) });
+  // Beat 1 — dare (before kickoff only). Verbatim deck string for group fixtures
+  // (links + tags already authored in); generated from the bank for warm-ups /
+  // knockouts not in the deck.
+  if (!st.b1 && now >= f.ko - BEAT1_LEAD_MS && now < f.ko) {
+    let text = null;
+    if (beat1Deck[f.id]) {
+      text = beat1Deck[f.id];
+    } else if (beat1Bank.length) {
+      text = fillTokens(beat1Bank[hash(f.id) % beat1Bank.length], { a: f.a, b: f.b, tags: '' });
+      if (f.linkBeat1) text += ` ${tracked(f.id)}`;
+      if (tags) text += ` ${tags}`;
+    }
+    if (text) due.push({ id: f.id, beat: 'b1', text: clamp(text) });
   }
 
   // Beat 2 — locked frozen pick, link-free, before kickoff
