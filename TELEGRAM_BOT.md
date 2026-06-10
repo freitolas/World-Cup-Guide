@@ -47,7 +47,26 @@
   webhook end-to-end, temporarily widen `WINDOW_MS` or point a fixture's kickoff
   near now, and watch Make receive the payload.
 
-## Status
-Repo side complete (webhook firer + workflow, dry-runs without the secret).
-Pending: the Make scenarios + Telegram bot + `MAKE_WEBHOOK_URL` + merge-to-default
-to activate.
+## DONE this session
+- **Stripe (live):** product `prod_UgEfZxz9EcwZCs`, price `price_1TgsyaLKlGUdOcGM8GHlV2CD`
+  ($5 USD one-time), **payment link `https://buy.stripe.com/dRmbJ25Z84p714C8EodAk05`**.
+- **Landing page:** `game/public/predictions.html` → live at
+  `humansareinferior.com/predictions.html` once merged to the deploy branch.
+  Uses the Stripe link above. On-brand, mobile-first.
+- **Repo webhook firer + workflow:** `scripts/notify-make.mjs` +
+  `.github/workflows/notify-make.yml` (dry-runs without `MAKE_WEBHOOK_URL`).
+
+## STILL NEEDED (blocked on you)
+1. **Telegram bot** — create via @BotFather, get the token + bot username. Only
+   you can do this; the Make Telegram send needs the token/connection.
+2. **Make team ID** — the Make connector can't list teams, so I can't create the
+   webhook/data store via API without it (it's in your Make URL, e.g.
+   `make.com/.../team/123456`). Give me that and I'll create the incoming webhook
+   (→ `MAKE_WEBHOOK_URL`) + the subscribers data store.
+3. **Build the 3 Make scenarios** (visual editor, ~15 min — see above) using the
+   webhook + data store + your Telegram connection.
+4. **Add repo secret `MAKE_WEBHOOK_URL`** + set the Stripe payment link's
+   after-payment redirect to your bot deep-link (`t.me/YourBot?start={CHECKOUT_SESSION_ID}`)
+   in the Stripe dashboard.
+5. **Merge this branch to the deploy/default branch** to make the landing page
+   live + activate the `notify-make` schedule. Disable the workflow after July 19.
