@@ -1,0 +1,62 @@
+name: Notify Make (paid Telegram predictions)
+
+# At the 15-min lock, fire a Make.com webhook per imminent fixture with THE AI's
+# frozen pick. Make handles Stripe → subscribers → Telegram. Same dense off-peak
+# schedule as the X poster so the 15-min window is reliably hit despite GitHub
+# cron jitter. Needs MAKE_WEBHOOK_URL secret. Default-branch-only (merge to the
+# deploy/default branch to activate). ⚠️ Disable after 2026-07-19.
+on:
+  schedule:
+    - cron: '7,15,23,31,39,47,55 16-23,0-7 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: notify-make
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Active-window gate
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=yes" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          TODAY=$(date -u +%Y-%m-%d)
+          if [[ "$TODAY" > "2026-05-19" && "$TODAY" < "2026-07-20" ]]; then
+            echo "run=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=no" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.run == 'yes'
+
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.run == 'yes'
+        with:
+          node-version: '22'
+
+      - name: Fire Make webhooks for imminent picks
+        if: steps.gate.outputs.run == 'yes'
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: node scripts/notify-make.mjs
+
+      - name: Persist sent-state
+        if: steps.gate.outputs.run == 'yes'
+        run: |
+          if ! git diff --quiet -- src/data/make-sent.json; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/data/make-sent.json
+            git commit -m "chore: record Make notifications [skip ci]"
+            git push
+          else
+            echo "nothing fired"
+          fi
