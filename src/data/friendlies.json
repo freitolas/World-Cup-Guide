@@ -1,33 +1,7 @@
 {
-  "updated": "2026-06-09T22:17:27.923Z",
+  "updated": "2026-06-10T02:09:28.809Z",
   "source": "api-football",
   "fixtures": [
-    {
-      "id": "F1548416",
-      "date": "2026-05-30",
-      "kickoff": "2026-05-30T18:30:00+00:00",
-      "home": "jamaica",
-      "away": "nigeria",
-      "homeName": "Jamaica",
-      "awayName": "Nigeria",
-      "prediction": {
-        "win": 0.168,
-        "draw": 0.253,
-        "loss": 0.578,
-        "eg": [
-          0.91,
-          1.84
-        ]
-      },
-      "botPick": [
-        1,
-        2
-      ],
-      "result": {
-        "hg": 0,
-        "ag": 3
-      }
-    },
     {
       "id": "F1540948",
       "date": "2026-05-31",
@@ -724,7 +698,11 @@
       "botPick": [
         1,
         2
-      ]
+      ],
+      "result": {
+        "hg": 0,
+        "ag": 0
+      }
     },
     {
       "id": "F1540358",
