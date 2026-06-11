@@ -5,8 +5,10 @@ import { go, useNow } from '../hooks.js';
 import { HERO, LEADERBOARD, pick as choose } from '../voice.js';
 import XFeed from './XFeed.jsx';
 
-// The 2026 opener. The countdown to "the real humiliation".
-const OPENER = new Date('2026-06-11T16:00:00Z');
+// The 2026 opener — derived from the schedule (the first World Cup kickoff), so
+// the countdown and the warm-up→tournament flip track the real fixture instead of
+// a hardcoded clock time. All stored times are UTC.
+const OPENER = groupMatches.length ? kickoff(groupMatches[0]) : new Date('2026-06-11T20:00:00Z');
 
 // THE AI's prediction record over a set of finished games: a point to THE AI for
 // every result it called, a point to humanity for every one it missed. This is
@@ -51,22 +53,35 @@ export default function Landing() {
   const live = opened && wcRec.total > 0;
   const rec = live ? wcRec : friendlyRec;
 
-  // Next real fixture — the in-hero target + CTA hook. Friendly before the
-  // opener, World Cup match after.
+  // Every unplayed fixture — warm-ups AND World Cup — ordered by kickoff. Built
+  // once; the live "next" is sliced from it against the clock below.
+  const upcoming = useMemo(() => [
+    ...friendlies.filter((f) => !f.result).map((f) => ({
+      type: 'friendly', home: f.home, away: f.away, homeName: f.homeName, awayName: f.awayName,
+      ko: new Date(f.kickoff || `${f.date}T00:00:00Z`).getTime(),
+    })),
+    ...groupMatches.filter((m) => !results[m.id]).map((m) => ({
+      type: 'wc', home: m.home, away: m.away, homeName: team(m.home).name, awayName: team(m.away).name,
+      ko: kickoff(m).getTime(),
+    })),
+  ].sort((a, b) => a.ko - b.ko), []);
+
+  // The in-hero target + CTA hook: the soonest fixture that hasn't kicked off yet,
+  // whether warm-up or World Cup. On opener day the warm-ups are done, so this
+  // naturally surfaces tonight's first World Cup match (and routes to /play) — no
+  // stale past game, no hardcoded time gate. Falls back to the soonest unfinished
+  // fixture if nothing is strictly upcoming.
   const next = useMemo(() => {
-    if (opened) {
-      const m = groupMatches.filter((x) => !results[x.id]).sort((a, b) => kickoff(a) - kickoff(b))[0];
-      return m ? { home: m.home, away: m.away, homeName: team(m.home).name, awayName: team(m.away).name } : null;
-    }
-    const f = friendlies.filter((x) => !x.result).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
-    return f ? { home: f.home, away: f.away, homeName: f.homeName, awayName: f.awayName } : null;
-  }, [opened]);
+    const nowMs = now.getTime();
+    return upcoming.find((x) => x.ko >= nowMs) || upcoming[0] || null;
+  }, [now, upcoming]);
 
   const countdown = fmtCountdown(OPENER.getTime() - now.getTime());
 
-  // Before the opener the only real, playable games are the warm-up friendlies —
-  // so every CTA points there. It flips to the World Cup game once it kicks off.
-  const playHref = opened ? '/play' : '/warmups';
+  // Route the CTA to wherever the next real fixture lives: warm-ups while the
+  // soonest game is still a friendly, the World Cup game once it's a WC match
+  // (or once the tournament's running and there's nothing left to warm up).
+  const playHref = next && next.type === 'friendly' ? '/warmups' : '/play';
 
   return (
     <div className="has-sticky">
@@ -114,7 +129,7 @@ export default function Landing() {
         {/* In-hero target: a real upcoming friendly */}
         {next && (
           <div className="target">
-            <div className="lbl">{opened ? 'Target Acquired: Next Match' : 'Target Acquired: Next Friendly'}</div>
+            <div className="lbl">{next.type === 'friendly' ? 'Target Acquired: Next Friendly' : 'Target Acquired: Next Match'}</div>
             <div className="fixture">
               <span>{team(next.home).flag} {next.homeName}</span>
               <span className="vs">VS</span>
