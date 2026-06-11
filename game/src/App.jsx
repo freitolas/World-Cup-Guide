@@ -11,13 +11,21 @@ import { useHashRoute, go } from './hooks.js';
 import { useAuth, signOut } from './auth.js';
 import { ERRORS } from './voice.js';
 
-// The single quiet affordance (brief §0/§3): no nav, no competing exits.
-// Logged out → "Sign in / Sign up". Logged in → "Account" + "Log off".
+// Brand + a lean fixtures nav + the single auth affordance. Logged out → "Sign in
+// / Sign up". Logged in → "Account" + "Log off".
 function TopBar() {
   const { user, ready } = useAuth();
+  const route = useHashRoute();
+  const on = (r) => (route === r ? 'authbtn active' : 'authbtn');
   return (
     <header className="topbar">
-      <a href="#/" className="brand" aria-label="THE AI — home"><AiMark /></a>
+      <div className="topbar-left">
+        <a href="#/" className="brand" aria-label="THE AI — home"><AiMark /></a>
+        <nav className="navlinks">
+          <a href="#/play" className={on('/play')}>Fixtures</a>
+          <a href="#/warmups" className={on('/warmups')}>Warm-ups</a>
+        </nav>
+      </div>
       <nav className="auth">
         {ready && user ? (
           <>
