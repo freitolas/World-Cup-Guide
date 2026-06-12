@@ -1,1 +1,18 @@
-{}
+{
+  "M001": {
+    "status": "played",
+    "home": "mexico",
+    "away": "south-africa",
+    "hg": 2,
+    "ag": 0,
+    "date": "2026-06-11"
+  },
+  "M002": {
+    "status": "played",
+    "home": "south-korea",
+    "away": "czechia",
+    "hg": 2,
+    "ag": 1,
+    "date": "2026-06-11"
+  }
+}
