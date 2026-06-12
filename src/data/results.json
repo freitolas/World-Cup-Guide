@@ -14,5 +14,13 @@
     "hg": 2,
     "ag": 1,
     "date": "2026-06-11"
+  },
+  "M003": {
+    "status": "played",
+    "home": "canada",
+    "away": "bosnia",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-12"
   }
 }
