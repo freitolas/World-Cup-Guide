@@ -1,59 +1,7 @@
 {
-  "updated": "2026-06-12T22:17:20.350Z",
+  "updated": "2026-06-13T01:59:16.207Z",
   "source": "api-football",
   "fixtures": [
-    {
-      "id": "F1512766",
-      "date": "2026-06-02",
-      "kickoff": "2026-06-02T16:00:00+00:00",
-      "home": "croatia",
-      "away": "belgium",
-      "homeName": "Croatia",
-      "awayName": "Belgium",
-      "prediction": {
-        "win": 0.395,
-        "draw": 0.286,
-        "loss": 0.318,
-        "eg": [
-          1.46,
-          1.29
-        ]
-      },
-      "botPick": [
-        2,
-        1
-      ],
-      "result": {
-        "hg": 0,
-        "ag": 2
-      }
-    },
-    {
-      "id": "F1536929",
-      "date": "2026-06-02",
-      "kickoff": "2026-06-02T18:45:00+00:00",
-      "home": "wales",
-      "away": "ghana",
-      "homeName": "Wales",
-      "awayName": "Ghana",
-      "prediction": {
-        "win": 0.433,
-        "draw": 0.283,
-        "loss": 0.284,
-        "eg": [
-          1.54,
-          1.21
-        ]
-      },
-      "botPick": [
-        2,
-        1
-      ],
-      "result": {
-        "hg": 1,
-        "ag": 1
-      }
-    },
     {
       "id": "F1544806",
       "date": "2026-06-03",
@@ -81,32 +29,6 @@
       }
     },
     {
-      "id": "F1536930",
-      "date": "2026-06-03",
-      "kickoff": "2026-06-03T18:45:00+00:00",
-      "home": "netherlands",
-      "away": "algeria",
-      "homeName": "Netherlands",
-      "awayName": "Algeria",
-      "prediction": {
-        "win": 0.744,
-        "draw": 0.189,
-        "loss": 0.068,
-        "eg": [
-          2.2,
-          0.55
-        ]
-      },
-      "botPick": [
-        2,
-        1
-      ],
-      "result": {
-        "hg": 0,
-        "ag": 1
-      }
-    },
-    {
       "id": "F1539431",
       "date": "2026-06-03",
       "kickoff": "2026-06-03T18:45:00+00:00",
@@ -130,6 +52,32 @@
       "result": {
         "hg": 2,
         "ag": 2
+      }
+    },
+    {
+      "id": "F1536930",
+      "date": "2026-06-03",
+      "kickoff": "2026-06-03T18:45:00+00:00",
+      "home": "netherlands",
+      "away": "algeria",
+      "homeName": "Netherlands",
+      "awayName": "Algeria",
+      "prediction": {
+        "win": 0.744,
+        "draw": 0.189,
+        "loss": 0.068,
+        "eg": [
+          2.2,
+          0.55
+        ]
+      },
+      "botPick": [
+        2,
+        1
+      ],
+      "result": {
+        "hg": 0,
+        "ag": 1
       }
     },
     {
