@@ -22,5 +22,13 @@
     "hg": 1,
     "ag": 1,
     "date": "2026-06-12"
+  },
+  "M004": {
+    "status": "played",
+    "home": "usa",
+    "away": "paraguay",
+    "hg": 4,
+    "ag": 1,
+    "date": "2026-06-12"
   }
 }

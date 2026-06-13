@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-13T01:59:16.207Z",
+  "updated": "2026-06-13T06:43:52.791Z",
   "source": "api-football",
   "fixtures": [
     {
@@ -29,32 +29,6 @@
       }
     },
     {
-      "id": "F1539431",
-      "date": "2026-06-03",
-      "kickoff": "2026-06-03T18:45:00+00:00",
-      "home": "poland",
-      "away": "nigeria",
-      "homeName": "Poland",
-      "awayName": "Nigeria",
-      "prediction": {
-        "win": 0.482,
-        "draw": 0.276,
-        "loss": 0.242,
-        "eg": [
-          1.64,
-          1.11
-        ]
-      },
-      "botPick": [
-        2,
-        1
-      ],
-      "result": {
-        "hg": 2,
-        "ag": 2
-      }
-    },
-    {
       "id": "F1536930",
       "date": "2026-06-03",
       "kickoff": "2026-06-03T18:45:00+00:00",
@@ -78,6 +52,32 @@
       "result": {
         "hg": 0,
         "ag": 1
+      }
+    },
+    {
+      "id": "F1539431",
+      "date": "2026-06-03",
+      "kickoff": "2026-06-03T18:45:00+00:00",
+      "home": "poland",
+      "away": "nigeria",
+      "homeName": "Poland",
+      "awayName": "Nigeria",
+      "prediction": {
+        "win": 0.482,
+        "draw": 0.276,
+        "loss": 0.242,
+        "eg": [
+          1.64,
+          1.11
+        ]
+      },
+      "botPick": [
+        2,
+        1
+      ],
+      "result": {
+        "hg": 2,
+        "ag": 2
       }
     },
     {
