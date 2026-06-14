@@ -62,5 +62,13 @@
     "hg": 2,
     "ag": 0,
     "date": "2026-06-13"
+  },
+  "M010": {
+    "status": "played",
+    "home": "germany",
+    "away": "curacao",
+    "hg": 7,
+    "ag": 1,
+    "date": "2026-06-14"
   }
 }
