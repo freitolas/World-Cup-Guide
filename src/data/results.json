@@ -23,6 +23,22 @@
     "ag": 1,
     "date": "2026-06-12"
   },
+  "M005": {
+    "status": "played",
+    "home": "qatar",
+    "away": "switzerland",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-13"
+  },
+  "M007": {
+    "status": "played",
+    "home": "brazil",
+    "away": "morocco",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-13"
+  },
   "M004": {
     "status": "played",
     "home": "usa",
