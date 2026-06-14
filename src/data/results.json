@@ -54,5 +54,13 @@
     "hg": 4,
     "ag": 1,
     "date": "2026-06-12"
+  },
+  "M006": {
+    "status": "played",
+    "home": "australia",
+    "away": "turkey",
+    "hg": 2,
+    "ag": 0,
+    "date": "2026-06-13"
   }
 }
