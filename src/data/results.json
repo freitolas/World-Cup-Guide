@@ -86,5 +86,13 @@
     "hg": 2,
     "ag": 2,
     "date": "2026-06-14"
+  },
+  "M012": {
+    "status": "played",
+    "home": "sweden",
+    "away": "tunisia",
+    "hg": 5,
+    "ag": 1,
+    "date": "2026-06-14"
   }
 }
