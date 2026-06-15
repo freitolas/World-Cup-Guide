@@ -94,5 +94,13 @@
     "hg": 5,
     "ag": 1,
     "date": "2026-06-14"
+  },
+  "M014": {
+    "status": "played",
+    "home": "spain",
+    "away": "cape-verde",
+    "hg": 0,
+    "ag": 0,
+    "date": "2026-06-15"
   }
 }
