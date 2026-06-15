@@ -70,5 +70,21 @@
     "hg": 7,
     "ag": 1,
     "date": "2026-06-14"
+  },
+  "M009": {
+    "status": "played",
+    "home": "cote-divoire",
+    "away": "ecuador",
+    "hg": 1,
+    "ag": 0,
+    "date": "2026-06-14"
+  },
+  "M011": {
+    "status": "played",
+    "home": "netherlands",
+    "away": "japan",
+    "hg": 2,
+    "ag": 2,
+    "date": "2026-06-14"
   }
 }

@@ -1,33 +1,7 @@
 {
-  "updated": "2026-06-14T22:01:09.106Z",
+  "updated": "2026-06-15T02:12:43.023Z",
   "source": "api-football",
   "fixtures": [
-    {
-      "id": "F1544807",
-      "date": "2026-06-04",
-      "kickoff": "2026-06-04T01:00:00+00:00",
-      "home": "south-korea",
-      "away": "el-salvador",
-      "homeName": "South Korea",
-      "awayName": "El Salvador",
-      "prediction": {
-        "win": 0.848,
-        "draw": 0.128,
-        "loss": 0.024,
-        "eg": [
-          2.5,
-          0.3
-        ]
-      },
-      "botPick": [
-        2,
-        0
-      ],
-      "result": {
-        "hg": 1,
-        "ag": 0
-      }
-    },
     {
       "id": "F1528284",
       "date": "2026-06-05",
