@@ -35,6 +35,7 @@ const log = (...a) => console.log('[update]', ...a);
 const pairToId = new Map();
 for (const m of matches) pairToId.set([m.home, m.away].sort().join('|'), m.id);
 const byId = new Map(matches.map((m) => [m.id, m]));
+const teamLabel = new Map(teams.map((t) => [t.id, t.name]));
 
 async function fetchFixtures() {
   for (let attempt = 1; attempt <= 4; attempt++) {
@@ -115,15 +116,79 @@ const kickoffMs = (m) => new Date(`${m.date}T${m.time || '00:00'}:00Z`).getTime(
 const FREEZE_HORIZON_HOURS = Number(process.env.FREEZE_HORIZON_HOURS || 5);
 const FREEZE_QA_HOURS = 4; // a fixture this close with no pick = something broke
 
+// Build a one-shot "pick locked" event for a newly frozen fixture, carrying the
+// context REASON (suspensions/injuries/crisis) that shaped the pick — currently
+// only visible in run logs. Consumed by the Make.com lock-notification scenario.
+function summarizeReason(home, away, context) {
+  const parts = [];
+  if (home.signals.length) parts.push(`${home.label} −${home.penalty}: ${home.signals.join('; ')}`);
+  if (away.signals.length) parts.push(`${away.label} −${away.penalty}: ${away.signals.join('; ')}`);
+  if (parts.length) return `Context shaped the pick — ${parts.join(' | ')}.`;
+  return (context && context.applied)
+    ? 'No injury, suspension or crisis signals for either side — pick from base ratings (form & Elo).'
+    : 'Context layer inactive this run — pick from base ratings (form & Elo).';
+}
+
+function buildFreezeEvent(m, pick, context, now) {
+  const [hg, ag] = pick;
+  const adj = (context && context.adjustments) || {};
+  const rsn = (context && context.reasons) || {};
+  const homeLabel = teamLabel.get(m.home) || m.home;
+  const awayLabel = teamLabel.get(m.away) || m.away;
+  const home = { team: m.home, label: homeLabel, penalty: adj[m.home] || 0, signals: rsn[m.home] || [] };
+  const away = { team: m.away, label: awayLabel, penalty: adj[m.away] || 0, signals: rsn[m.away] || [] };
+  const summary = summarizeReason(home, away, context);
+  const kickoff = new Date(kickoffMs(m)).toISOString();
+  return {
+    type: 'pick_locked',
+    match: m.id,
+    fixture: `${homeLabel} v ${awayLabel}`,
+    kickoff,
+    pick: `${hg}-${ag}`,
+    pickHome: hg,
+    pickAway: ag,
+    frozenAt: new Date(now).toISOString(),
+    contextApplied: !!(context && context.applied),
+    reason: { home, away, summary },
+    text: `🔒 THE AI locked its pick: ${homeLabel} ${hg}–${ag} ${awayLabel} (kickoff ${kickoff.slice(11, 16)} UTC). ${summary}`,
+  };
+}
+
+// Fire one notification per NEWLY frozen pick (lock + the context reason) to a
+// Make.com webhook, if configured. Freezes are idempotent — a pick is added once
+// and never regenerated — so each lock notifies exactly once. Never throws.
+async function notifyFreezes(frozen) {
+  if (!frozen || !frozen.length) return;
+  const url = process.env.MAKE_FREEZE_WEBHOOK || '';
+  if (!url) {
+    log(`freeze notify: ${frozen.length} new lock(s), MAKE_FREEZE_WEBHOOK unset — skipping`);
+    return;
+  }
+  for (const ev of frozen) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ev),
+        signal: AbortSignal.timeout(15000),
+      });
+      log(`freeze notify ${ev.match}: HTTP ${res.status}`);
+    } catch (e) {
+      log(`freeze notify ${ev.match} failed: ${e.message}`);
+    }
+  }
+}
+
 // Freeze THE AI's pick per fixture, LATE (near kickoff) so context is included.
 // Once a fixture has a pick it is NEVER regenerated — that immutability is what
 // lets the bot honestly claim it never changes its mind (Game brief §3). The
 // pick is pickScore() from ratings already adjusted for context (suspensions/
 // injuries/crisis), so an upset shows up as a flipped scoreline.
-function freezeBotPicks(ratings, results, now = Date.now()) {
+function freezeBotPicks(ratings, results, context = null, now = Date.now()) {
   const picks = existsSync(BOTPICKS_FILE)
     ? JSON.parse(readFileSync(BOTPICKS_FILE, 'utf8'))
     : {};
+  const frozen = [];
   let added = 0;
   let pending = 0;
   if (ratings) {
@@ -142,6 +207,7 @@ function freezeBotPicks(ratings, results, now = Date.now()) {
       const hb = HOSTS.has(m.home) ? HOME_ADV : 0;
       picks[m.id] = pickScore(rh, ra, hb);
       added++;
+      frozen.push(buildFreezeEvent(m, picks[m.id], context, now));
     }
   }
   writeFileSync(BOTPICKS_FILE, JSON.stringify(picks, null, 2) + '\n');
@@ -159,6 +225,7 @@ function freezeBotPicks(ratings, results, now = Date.now()) {
     log(`ERROR: ${missing.length} imminent fixture(s) missing a bot pick: ${missing.map((m) => m.id).join(', ')}`);
     process.exitCode = 1;
   }
+  return { frozen };
 }
 
 async function main() {
@@ -183,6 +250,7 @@ async function main() {
   // --- predictions (with graceful fallback) ---
   let predictions;
   let ratings = null;
+  let context = null;
   try {
     const built = buildRatings(playedForModel);
     ratings = built.ratings;
@@ -197,10 +265,10 @@ async function main() {
         && kickoffMs(m) - Date.now() > 0 && kickoffMs(m) - Date.now() <= ctxWindowMs,
     );
     if (imminent) {
-      const ctx = await fetchContext();
-      if (ctx.applied) {
+      context = await fetchContext();
+      if (context.applied) {
         let n = 0;
-        for (const [slug, penalty] of Object.entries(ctx.adjustments)) {
+        for (const [slug, penalty] of Object.entries(context.adjustments)) {
           if (ratings[slug] != null) { ratings[slug] -= penalty; n++; }
         }
         log(`context APPLIED — adjusted ${n} team rating(s)`);
@@ -218,7 +286,8 @@ async function main() {
   writeFileSync(PREDICTIONS_FILE, JSON.stringify(predictions, null, 2) + '\n');
 
   // --- bot picks (THE AI's frozen scoreline, consumed by the Game) ---
-  freezeBotPicks(ratings, results);
+  const { frozen } = freezeBotPicks(ratings, results, context);
+  await notifyFreezes(frozen);
 
   // --- friendlies (ISOLATED warm-up predictions; never affects WC data) ---
   const friendlies = await buildFriendlies();
