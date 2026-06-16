@@ -14,5 +14,109 @@
     "hg": 2,
     "ag": 1,
     "date": "2026-06-11"
+  },
+  "M003": {
+    "status": "played",
+    "home": "canada",
+    "away": "bosnia",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-12"
+  },
+  "M005": {
+    "status": "played",
+    "home": "qatar",
+    "away": "switzerland",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-13"
+  },
+  "M007": {
+    "status": "played",
+    "home": "brazil",
+    "away": "morocco",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-13"
+  },
+  "M008": {
+    "status": "played",
+    "home": "haiti",
+    "away": "scotland",
+    "hg": 0,
+    "ag": 1,
+    "date": "2026-06-13"
+  },
+  "M004": {
+    "status": "played",
+    "home": "usa",
+    "away": "paraguay",
+    "hg": 4,
+    "ag": 1,
+    "date": "2026-06-12"
+  },
+  "M006": {
+    "status": "played",
+    "home": "australia",
+    "away": "turkey",
+    "hg": 2,
+    "ag": 0,
+    "date": "2026-06-13"
+  },
+  "M010": {
+    "status": "played",
+    "home": "germany",
+    "away": "curacao",
+    "hg": 7,
+    "ag": 1,
+    "date": "2026-06-14"
+  },
+  "M009": {
+    "status": "played",
+    "home": "cote-divoire",
+    "away": "ecuador",
+    "hg": 1,
+    "ag": 0,
+    "date": "2026-06-14"
+  },
+  "M011": {
+    "status": "played",
+    "home": "netherlands",
+    "away": "japan",
+    "hg": 2,
+    "ag": 2,
+    "date": "2026-06-14"
+  },
+  "M012": {
+    "status": "played",
+    "home": "sweden",
+    "away": "tunisia",
+    "hg": 5,
+    "ag": 1,
+    "date": "2026-06-14"
+  },
+  "M016": {
+    "status": "played",
+    "home": "belgium",
+    "away": "egypt",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-15"
+  },
+  "M014": {
+    "status": "played",
+    "home": "spain",
+    "away": "cape-verde",
+    "hg": 0,
+    "ag": 0,
+    "date": "2026-06-15"
+  },
+  "M013": {
+    "status": "played",
+    "home": "saudi-arabia",
+    "away": "uruguay",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-15"
   }
 }

@@ -48,4 +48,7 @@ jobs:
           # Upset/context layer ON: star-weighted suspensions/injuries/crisis adjust
           # ratings before picks freeze. Set repo var CONTEXT_ENABLED=0 to disable.
           CONTEXT_ENABLED: ${{ vars.CONTEXT_ENABLED || '1' }}
+          # Lock notifications: each newly frozen pick POSTs {fixture, pick, reason}
+          # to this Make.com webhook. Unset = silently skipped (no-op).
+          MAKE_FREEZE_WEBHOOK: ${{ secrets.MAKE_FREEZE_WEBHOOK }}
         run: npm run update:commit

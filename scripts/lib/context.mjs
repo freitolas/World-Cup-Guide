@@ -197,17 +197,22 @@ async function fetchNews() {
 export async function fetchContext() {
   if (!API_FOOTBALL_KEY && !NEWSDATA_KEY) {
     log('no keys — context layer inactive (no-op)');
-    return { enabled: false, applied: false, adjustments: {}, coverage: null };
+    return { enabled: false, applied: false, adjustments: {}, reasons: {}, coverage: null };
   }
   try {
     const adjustments = {};
+    const reasons = {}; // slug -> [human-readable signal strings], surfaced for lock notifications
     const bump = (slug, n) => { if (slug) adjustments[slug] = Math.min(MAX_TEAM_PENALTY, (adjustments[slug] || 0) + n); };
+    const addReason = (slug, s) => { if (slug && s) (reasons[slug] ||= []).push(s); };
 
     let susp = { byTeam: {}, finished: 0, cards: 0 };
     if (API_FOOTBALL_KEY) {
       await discoverLeague();
       try { susp = await fetchSuspensions(); } catch (e) { log(`suspensions failed: ${e.message}`); }
-      for (const [slug, info] of Object.entries(susp.byTeam)) bump(slug, info.penalty);
+      for (const [slug, info] of Object.entries(susp.byTeam)) {
+        bump(slug, info.penalty);
+        for (const o of info.out) addReason(slug, `suspended — ${o}`);
+      }
     }
 
     // Per-fixture injuries probe — national-team availability tends to appear on
@@ -222,7 +227,11 @@ export async function fetchContext() {
           const inj = await afFetch(`injuries?fixture=${f.fixture?.id}`);
           probe.fixtures++;
           probe.rows += inj.length;
-          for (const row of inj) bump(toSlug(row.team?.name), STRUCT_INJURY_WEIGHT * importance(row.player?.name));
+          for (const row of inj) {
+            const slug = toSlug(row.team?.name);
+            bump(slug, STRUCT_INJURY_WEIGHT * importance(row.player?.name));
+            addReason(slug, `injury — ${row.player?.name || 'unnamed player'}${row.player?.reason ? ` (${row.player.reason})` : ''}`);
+          }
         }
       } catch (e) {
         log(`injuries probe failed: ${e.message}`);
@@ -231,8 +240,14 @@ export async function fetchContext() {
     }
 
     const news = await fetchNews();
-    for (const [slug, tier] of Object.entries(news.injuryTeams)) bump(slug, NEWS_INJURY_WEIGHT * tier);
-    for (const slug of Object.keys(news.crisisTeams)) bump(slug, CRISIS_PENALTY);
+    for (const [slug, tier] of Object.entries(news.injuryTeams)) {
+      bump(slug, NEWS_INJURY_WEIGHT * tier);
+      addReason(slug, tier >= 3 ? 'injury reported in news (a key player named)' : 'injury reported in news');
+    }
+    for (const slug of Object.keys(news.crisisTeams)) {
+      bump(slug, CRISIS_PENALTY);
+      addReason(slug, 'camp crisis reported in news');
+    }
 
     // --- coverage diagnostics (read from run logs) ---
     log(`suspensions: ${Object.keys(susp.byTeam).length} team(s) from ${susp.finished} finished match(es), ${susp.cards} card(s)`);
@@ -245,10 +260,11 @@ export async function fetchContext() {
       enabled: true,
       applied: CONTEXT_ENABLED,
       adjustments,
+      reasons,
       coverage: { suspensions: Object.keys(susp.byTeam).length, finished: susp.finished, cards: susp.cards, newsResults: news.results },
     };
   } catch (e) {
     log(`context layer error — degrading to no-op: ${e.message}`);
-    return { enabled: true, applied: false, adjustments: {}, coverage: null };
+    return { enabled: true, applied: false, adjustments: {}, reasons: {}, coverage: null };
   }
 }
