@@ -41,8 +41,8 @@ export const matches = [
     },
     {
       id: `M005`,
-      date: `2026-06-14`,
-      time: `01:00`,
+      date: `2026-06-13`,
+      time: `19:00`,
       home: `qatar`,
       away: `switzerland`,
       group: `B`,
@@ -51,7 +51,7 @@ export const matches = [
     },
     {
       id: `M006`,
-      date: `2026-06-13`,
+      date: `2026-06-14`,
       time: `04:00`,
       home: `australia`,
       away: `turkey`,
@@ -72,7 +72,7 @@ export const matches = [
     {
       id: `M008`,
       date: `2026-06-14`,
-      time: `19:00`,
+      time: `01:00`,
       home: `haiti`,
       away: `scotland`,
       group: `C`,
@@ -191,7 +191,7 @@ export const matches = [
     },
     {
       id: `M020`,
-      date: `2026-06-16`,
+      date: `2026-06-17`,
       time: `04:00`,
       home: `austria`,
       away: `jordan`,
@@ -351,7 +351,7 @@ export const matches = [
     },
     {
       id: `M036`,
-      date: `2026-06-20`,
+      date: `2026-06-21`,
       time: `04:00`,
       home: `tunisia`,
       away: `japan`,
