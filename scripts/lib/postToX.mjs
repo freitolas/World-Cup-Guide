@@ -56,3 +56,18 @@ export async function postTweet(text, creds) {
   if (!res.ok) throw new Error(`X API ${res.status}: ${JSON.stringify(data)}`);
   return data; // { data: { id, text } }
 }
+
+// Delete a tweet by id (DELETE /2/tweets/:id), OAuth 1.0a user context. Used to
+// retract a mis-fired post (e.g. a Beat-2 that went out early on a bad kickoff
+// time). Returns { data: { deleted: true } }.
+export async function deleteTweet(id, creds) {
+  const url = `${ENDPOINT}/${id}`;
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: { Authorization: authHeader('DELETE', url, creds) },
+    signal: AbortSignal.timeout(15000),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(`X API ${res.status}: ${JSON.stringify(data)}`);
+  return data; // { data: { deleted: true|false } }
+}

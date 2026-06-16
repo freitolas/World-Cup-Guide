@@ -1,0 +1,33 @@
+name: Delete tweets (manual)
+
+# Manual-only retraction tool. Deletes specific tweets by id from THE AI's
+# account — use to pull a mis-fired post (e.g. a Beat-2 that went out early on a
+# bad kickoff time). Never scheduled; requires explicit ids. After deleting,
+# also clear the matching entry from src/data/posted.json so the poster re-posts.
+on:
+  workflow_dispatch:
+    inputs:
+      ids:
+        description: 'Comma-separated tweet ids to delete'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Delete tweets
+        env:
+          IDS: ${{ inputs.ids }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: node scripts/delete-tweets.mjs
