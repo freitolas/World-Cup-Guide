@@ -37,7 +37,7 @@ for (const m of matches) pairToId.set([m.home, m.away].sort().join('|'), m.id);
 const byId = new Map(matches.map((m) => [m.id, m]));
 const teamLabel = new Map(teams.map((t) => [t.id, t.name]));
 
-async function fetchFixtures() {
+export async function fetchFixtures() {
   for (let attempt = 1; attempt <= 4; attempt++) {
     try {
       const res = await fetch(OPENFOOTBALL, { signal: AbortSignal.timeout(15000) });
@@ -52,7 +52,7 @@ async function fetchFixtures() {
 }
 
 // Parse openfootball -> { results: {id: {...}}, playedForModel: [...] }.
-function parseResults(feed) {
+export function parseResults(feed) {
   const results = {};
   const playedForModel = [];
   const warnings = [];
@@ -107,7 +107,7 @@ const round1 = (x) => Math.round(x * 100) / 100;
 
 // Kickoff time. Stored date+time are treated as UTC for now (refine when the
 // official per-venue timezones are confirmed).
-const kickoffMs = (m) => new Date(`${m.date}T${m.time || '00:00'}:00Z`).getTime();
+export const kickoffMs = (m) => new Date(`${m.date}T${m.time || '00:00'}:00Z`).getTime();
 
 // How close to kickoff a pick is frozen. Picks are frozen LATE — only within
 // this many hours of kickoff — so the freshest injuries/suspensions/news are
@@ -335,4 +335,6 @@ function fallbackPredictions() {
   return out;
 }
 
-main();
+// Run the pipeline only when invoked directly (node scripts/update.mjs), not
+// when imported for its helpers (e.g. by scripts/preview-picks.mjs).
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) main();

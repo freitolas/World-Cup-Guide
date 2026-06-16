@@ -1,0 +1,35 @@
+name: Preview picks (manual)
+
+# On-demand, read-only preview of THE AI's picks for the next N hours, with the
+# news/context layer FORCE-checked. Never freezes, writes, commits, or posts —
+# results go to the run log only. Use it to sanity-check upcoming picks (incl.
+# fresh injuries/suspensions/crisis) without locking anything in.
+on:
+  workflow_dispatch:
+    inputs:
+      hours:
+        description: 'Look-ahead window in hours'
+        required: false
+        default: '20'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Preview picks (news checked, nothing frozen)
+        env:
+          PREVIEW_WINDOW_HOURS: ${{ inputs.hours }}
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          NEWSDATA_KEY: ${{ secrets.NEWSDATA_KEY }}
+          CONTEXT_ENABLED: ${{ vars.CONTEXT_ENABLED || '1' }}
+        run: node scripts/preview-picks.mjs
