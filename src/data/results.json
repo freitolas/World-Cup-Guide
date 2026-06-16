@@ -110,5 +110,13 @@
     "hg": 0,
     "ag": 0,
     "date": "2026-06-15"
+  },
+  "M013": {
+    "status": "played",
+    "home": "saudi-arabia",
+    "away": "uruguay",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-15"
   }
 }
