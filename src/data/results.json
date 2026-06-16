@@ -126,5 +126,13 @@
     "hg": 1,
     "ag": 1,
     "date": "2026-06-15"
+  },
+  "M017": {
+    "status": "played",
+    "home": "france",
+    "away": "senegal",
+    "hg": 3,
+    "ag": 1,
+    "date": "2026-06-16"
   }
 }
