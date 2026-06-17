@@ -20,9 +20,17 @@ export function expectedScore(ratingA, ratingB, homeBonusA = 0) {
 
 // Rating difference → expected goals (Poisson λ). Flat denominator keeps single-match variance
 // near real football upset frequency.
+//
+// CALIBRATION (re-tuned 2026-06 against the played group games): the original
+// 1.35 base / 350 spread was over-confident — it predicted draws at ~22% while
+// ~30–40% of games actually drew, and over-spread blowouts. A lower base and
+// flatter slope lift draw mass and exact-score accuracy. See docs/PREDICTION_ENGINE.md
+// and scripts/calibrate-sweep.mjs for the evidence behind these two numbers.
+export const GOALS_BASE = 1.25;   // baseline goals for an evenly-matched side
+export const GOALS_SPREAD = 450;  // Elo points per +1.0 expected goal (higher = flatter / more draws)
 export function expectedGoals(rating, opponent, homeBonus = 0) {
   const diff = (rating + homeBonus) - opponent;
-  const lambda = 1.35 + diff / 350;
+  const lambda = GOALS_BASE + diff / GOALS_SPREAD;
   return Math.max(0.3, Math.min(3.5, lambda));
 }
 
@@ -57,20 +65,30 @@ export function matchProb(ratingA, ratingB, homeBonusA = 0) {
   return { winA: winA / total, draw: draw / total, winB: winB / total, expectedGoalsA: lambda, expectedGoalsB: mu };
 }
 
-// THE AI's single committed scoreline. Round each side's expected goals, then —
-// if that lands on a draw — break it toward a clear favourite (|P(win)−P(loss)|
-// past drawThresh). Keeps round-eg accuracy but commits to a winner unless the
-// game is a genuine coin-flip, so context/upset rating shifts actually move the
-// pick. A draw survives only when neither side is favoured.
-export function pickScore(ratingA, ratingB, homeBonusA = 0, drawThresh = 0.05) {
-  let a = Math.round(expectedGoals(ratingA, ratingB, homeBonusA));
-  let b = Math.round(expectedGoals(ratingB, ratingA, -homeBonusA / 2));
-  if (a === b) {
-    const p = matchProb(ratingA, ratingB, homeBonusA);
-    if (p.winA - p.winB > drawThresh) a += 1;
-    else if (p.winB - p.winA > drawThresh) b += 1;
+// The MOST LIKELY exact scoreline under the Dixon-Coles bivariate Poisson — the
+// argmax cell of the full grid. This is the "ten-million-simulation" pick the
+// brand talks about, made literal. Unlike the old round-the-mean approach it
+// commits to a draw (1–1 / 0–0) when that is genuinely the modal outcome, and it
+// lets news/morale rating shifts actually move the committed score (the old mean
+// rounding swallowed sub-0.5-goal shifts). See docs/PREDICTION_ENGINE.md.
+export function modalScore(ratingA, ratingB, homeBonusA = 0) {
+  const lambda = expectedGoals(ratingA, ratingB, homeBonusA);
+  const mu = expectedGoals(ratingB, ratingA, -homeBonusA / 2);
+  let best = { p: -1, a: 0, b: 0 };
+  for (let a = 0; a <= 8; a++) {
+    const pa = poissonPmf(a, lambda);
+    for (let b = 0; b <= 8; b++) {
+      const p = pa * poissonPmf(b, mu) * dcTau(a, b, lambda, mu, DC_RHO);
+      if (p > best.p) best = { p, a, b };
+    }
   }
-  return [a, b];
+  return [best.a, best.b];
+}
+
+// THE AI's single committed scoreline. Kept as a stable name for callers
+// (update.mjs, friendlies.mjs); delegates to the modal-scoreline pick.
+export function pickScore(ratingA, ratingB, homeBonusA = 0) {
+  return modalScore(ratingA, ratingB, homeBonusA);
 }
 
 // Sample a scoreline (for Monte Carlo). allowDraw=false → penalty shootout nudge toward higher Elo.

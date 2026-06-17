@@ -19,6 +19,7 @@ import { matchProb, expectedScore, pickScore } from '../vendor/wc-model/elo.mjs'
 import { buildRatings, HOSTS, HOME_ADV } from './lib/ratings.mjs';
 import { nameToSlug, isPlaceholder, unmapped } from './lib/teamMap.mjs';
 import { fetchContext } from './lib/context.mjs';
+import { computeMomentum } from './lib/momentum.mjs';
 import { buildFriendlies } from './lib/friendlies.mjs';
 
 const OPENFOOTBALL = 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
@@ -123,8 +124,8 @@ const FREEZE_QA_HOURS = 4; // a fixture this close with no pick = something brok
 // only visible in run logs. Consumed by the Make.com lock-notification scenario.
 function summarizeReason(home, away, context) {
   const parts = [];
-  if (home.signals.length) parts.push(`${home.label} −${home.penalty}: ${home.signals.join('; ')}`);
-  if (away.signals.length) parts.push(`${away.label} −${away.penalty}: ${away.signals.join('; ')}`);
+  if (home.signals.length) parts.push(`${home.label}${home.penalty ? ` −${home.penalty}` : ''}: ${home.signals.join('; ')}`);
+  if (away.signals.length) parts.push(`${away.label}${away.penalty ? ` −${away.penalty}` : ''}: ${away.signals.join('; ')}`);
   if (parts.length) return `Context shaped the pick — ${parts.join(' | ')}.`;
   return (context && context.applied)
     ? 'No injury, suspension or crisis signals for either side — pick from base ratings (form & Elo).'
@@ -277,6 +278,26 @@ async function main() {
       }
     } else {
       log('no fixture within the freeze window — skipping context APIs this run');
+    }
+
+    // Momentum & morale overlay — psychological state from recent form (WC results
+    // + run-up friendlies). Needs NO external APIs, so it runs EVERY time and is
+    // applied to the same ratings the picks freeze from. Signed: + = arrives
+    // confident, − = under pressure. See scripts/lib/momentum.mjs.
+    const priorFriendlies = existsSync(FRIENDLIES_FILE)
+      ? (JSON.parse(readFileSync(FRIENDLIES_FILE, 'utf8')).fixtures || [])
+      : [];
+    const momentum = computeMomentum(ratings, { wcResults: results, friendlies: priorFriendlies });
+    let moved = 0;
+    for (const [slug, delta] of Object.entries(momentum.morale)) {
+      if (ratings[slug] != null) { ratings[slug] += delta; moved++; }
+    }
+    log(`morale overlay — ${moved} team(s) adjusted (signed, capped ±50)`);
+    // Surface morale reasons through the same channel as news (lock notifications).
+    context = context || { applied: false, adjustments: {}, reasons: {} };
+    context.reasons = context.reasons || {};
+    for (const [slug, arr] of Object.entries(momentum.reasons)) {
+      context.reasons[slug] = [...(context.reasons[slug] || []), ...arr];
     }
 
     predictions = predictionsFor(ratings, 'model');

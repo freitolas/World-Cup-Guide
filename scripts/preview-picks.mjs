@@ -16,6 +16,7 @@ import { teams } from '../src/data/teams.js';
 import { matchProb, pickScore } from '../vendor/wc-model/elo.mjs';
 import { buildRatings, HOSTS, HOME_ADV } from './lib/ratings.mjs';
 import { fetchContext } from './lib/context.mjs';
+import { computeMomentum } from './lib/momentum.mjs';
 import { fetchFixtures, parseResults, kickoffMs } from './update.mjs';
 
 const root = (p) => fileURLToPath(new URL(`../${p}`, import.meta.url));
@@ -55,6 +56,20 @@ if (context.applied) {
   log('context checked but NOT applied (CONTEXT_ENABLED!=1) — showing signals only, ratings unchanged');
 } else {
   log('context inactive — NO news keys present, so news was NOT actually checked');
+}
+
+// --- momentum & morale overlay (needs no API keys; mirrors the live pipeline) ---
+let priorFriendlies = [];
+try { priorFriendlies = JSON.parse(readFileSync(root('src/data/friendlies.json'), 'utf8')).fixtures || []; } catch { /* none */ }
+const momentum = computeMomentum(ratings, { wcResults: results, friendlies: priorFriendlies });
+let moraleMoved = 0;
+for (const [slug, delta] of Object.entries(momentum.morale)) {
+  if (ratings[slug] != null) { ratings[slug] += delta; moraleMoved++; }
+}
+log(`morale overlay — ${moraleMoved} team(s) adjusted (signed)`);
+context.reasons = context.reasons || {};
+for (const [slug, arr] of Object.entries(momentum.reasons)) {
+  context.reasons[slug] = [...(context.reasons[slug] || []), ...arr];
 }
 
 // --- fixtures kicking off within the window ---
