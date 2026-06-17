@@ -134,5 +134,13 @@
     "hg": 3,
     "ag": 1,
     "date": "2026-06-16"
+  },
+  "M018": {
+    "status": "played",
+    "home": "iraq",
+    "away": "norway",
+    "hg": 1,
+    "ag": 4,
+    "date": "2026-06-16"
   }
 }
