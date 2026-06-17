@@ -16,12 +16,27 @@
 import { teams } from '../../src/data/teams.js';
 import { players } from '../../src/data/players.js';
 import { featured } from '../../src/data/featured.js';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 const API_FOOTBALL_KEY = process.env.API_FOOTBALL_KEY || '';
 const NEWSDATA_KEY = process.env.NEWSDATA_KEY || '';
 const WC_LEAGUE_ID = process.env.WC_LEAGUE_ID || '1'; // confirmed: World Cup
 const WC_SEASON = process.env.WC_SEASON || '2026';
 const CONTEXT_ENABLED = process.env.CONTEXT_ENABLED === '1';
+
+// News signals (NewsData) are VOLATILE — each query returns only the latest ~10
+// articles and that set churns, so a real injury story can be present one run and
+// gone the next. We persist detected NEWS signals in a small cache and keep them
+// "live" for this many hours, so a transient article still shapes a pick that
+// freezes hours later (and the preview + the lock stay consistent). Suspensions /
+// structured injuries come from API-Football and are NOT cached (they're stable).
+const NEWS_SIGNAL_TTL_MS = Number(process.env.NEWS_SIGNAL_TTL_HOURS || 36) * 3.6e6;
+const SIGNAL_CACHE_FILE = fileURLToPath(new URL('../../src/data/news-signals.json', import.meta.url));
+// A team is only flagged from news when the article is actually about football —
+// cuts cross-sport false positives ("England" injuries in cricket/rugby, etc.).
+const FOOTBALL_CTX = /(football|soccer|world cup|fifa|qualifier|friendly|national team|head coach|manager|striker|forward|midfield|defend|goalkeep|squad)/i;
+const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const log = (...a) => console.log('[context]', ...a);
 
@@ -172,9 +187,10 @@ async function fetchNews() {
         const inj = INJURY.test(text);
         const cri = CRISIS.test(text);
         if (!inj && !cri) continue;
+        if (!FOOTBALL_CTX.test(text)) continue; // drop cross-sport / off-topic articles
         const nt = ` ${normName(text)} `;
         for (const t of teams) {
-          if (!new RegExp(`\\b${t.name}\\b`, 'i').test(text)) continue;
+          if (!new RegExp(`\\b${reEsc(t.name)}\\b`, 'i').test(text)) continue;
           if (inj) {
             // tier 3 if one of this team's featured stars is named in the article
             const star = (starsByTeam[t.id] || []).some((last) => nt.includes(` ${last} `));
@@ -188,6 +204,49 @@ async function fetchNews() {
     }
   }
   return { injuryTeams, crisisTeams, results };
+}
+
+// ── rolling news-signal cache ────────────────────────────────────────────────
+export function loadSignalCache(path = SIGNAL_CACHE_FILE) {
+  try {
+    if (existsSync(path)) {
+      const c = JSON.parse(readFileSync(path, 'utf8'));
+      return { injury: c.injury || {}, crisis: c.crisis || {} };
+    }
+  } catch (e) { log(`signal cache unreadable — starting fresh: ${e.message}`); }
+  return { injury: {}, crisis: {} };
+}
+
+// Write the cache. ONLY the pipeline (update.mjs) and the preview persist it; the
+// runner is ephemeral so persistence is via the committed file.
+export function persistSignalCache(cache, path = SIGNAL_CACHE_FILE) {
+  try {
+    writeFileSync(path, JSON.stringify({ updated: new Date().toISOString(), injury: cache.injury || {}, crisis: cache.crisis || {} }, null, 2) + '\n');
+    return true;
+  } catch (e) { log(`signal cache write failed: ${e.message}`); return false; }
+}
+
+// Fold this run's fresh detections into the cache, prune anything older than the
+// TTL, and return the EFFECTIVE signals still live (fresh ∪ remembered). Mutates
+// `cache` in place; `freshInjury`/`freshCrisis` mark what was seen THIS run.
+// Exported for tests.
+export function mergeSignalCache(cache, fresh, now) {
+  const iso = new Date(now).toISOString();
+  const freshInjury = new Set(Object.keys(fresh.injuryTeams));
+  const freshCrisis = new Set(Object.keys(fresh.crisisTeams));
+  for (const [slug, tier] of Object.entries(fresh.injuryTeams)) {
+    const e = cache.injury[slug] || {};
+    cache.injury[slug] = { tier: Math.max(e.tier || 0, tier), firstSeen: e.firstSeen || iso, lastSeen: iso };
+  }
+  for (const slug of freshCrisis) {
+    const e = cache.crisis[slug] || {};
+    cache.crisis[slug] = { firstSeen: e.firstSeen || iso, lastSeen: iso };
+  }
+  const live = (e) => e && e.lastSeen && (now - Date.parse(e.lastSeen)) <= NEWS_SIGNAL_TTL_MS;
+  const injury = {}, crisis = {};
+  for (const [slug, e] of Object.entries(cache.injury)) { if (live(e)) injury[slug] = e.tier || 1; else delete cache.injury[slug]; }
+  for (const [slug, e] of Object.entries(cache.crisis)) { if (live(e)) crisis[slug] = true; else delete cache.crisis[slug]; }
+  return { injury, crisis, freshInjury, freshCrisis };
 }
 
 /**
@@ -239,24 +298,31 @@ export async function fetchContext() {
       log(`per-fixture injuries probe: ${probe.fixtures} upcoming fixture(s), ${probe.rows} injury row(s)`);
     }
 
+    // News signals, smoothed through the rolling TTL cache (fresh ∪ remembered).
+    const now = Date.now();
     const news = await fetchNews();
-    for (const [slug, tier] of Object.entries(news.injuryTeams)) {
+    const signalCache = loadSignalCache();
+    const eff = mergeSignalCache(signalCache, news, now);
+    for (const [slug, tier] of Object.entries(eff.injury)) {
       bump(slug, NEWS_INJURY_WEIGHT * tier);
-      addReason(slug, tier >= 3 ? 'injury reported in news (a key player named)' : 'injury reported in news');
+      const recent = eff.freshInjury.has(slug) ? '' : ' (recent)';
+      addReason(slug, (tier >= 3 ? 'injury reported in news (a key player named)' : 'injury reported in news') + recent);
     }
-    for (const slug of Object.keys(news.crisisTeams)) {
+    for (const slug of Object.keys(eff.crisis)) {
       bump(slug, CRISIS_PENALTY);
-      addReason(slug, 'camp crisis reported in news');
+      addReason(slug, 'camp crisis reported in news' + (eff.freshCrisis.has(slug) ? '' : ' (recent)'));
     }
 
     // --- coverage diagnostics (read from run logs) ---
     log(`suspensions: ${Object.keys(susp.byTeam).length} team(s) from ${susp.finished} finished match(es), ${susp.cards} card(s)`);
     if (Object.keys(susp.byTeam).length)
       log(`  ${Object.entries(susp.byTeam).map(([s, i]) => `${s}(-${i.penalty}: ${i.out.join(', ')})`).join(' | ')}`);
-    log(`news: ${news.results} article(s) | injury-flagged: ${Object.keys(news.injuryTeams).join(', ') || 'none'} | crisis-flagged: ${Object.keys(news.crisisTeams).join(', ') || 'none'}`);
+    log(`news: ${news.results} article(s) | fresh injury: ${[...eff.freshInjury].join(', ') || 'none'} | fresh crisis: ${[...eff.freshCrisis].join(', ') || 'none'}`);
+    log(`news EFFECTIVE (incl. cached ≤${NEWS_SIGNAL_TTL_MS / 3.6e6}h): injury: ${Object.keys(eff.injury).join(', ') || 'none'} | crisis: ${Object.keys(eff.crisis).join(', ') || 'none'}`);
     log(`CONTEXT_ENABLED=${CONTEXT_ENABLED ? '1 (adjustments WILL apply)' : '0 (diagnostic only — NOT applied)'}`);
 
     return {
+      signalCache,
       enabled: true,
       applied: CONTEXT_ENABLED,
       adjustments,

@@ -1,10 +1,12 @@
 name: Preview picks
 
 # Read-only preview of THE AI's picks for the next N hours, with the news/context
-# layer FORCE-checked. Never freezes, writes, or commits. Runs DAILY at 12:00 BST
-# and sends the digest to Telegram (via MAKE_FREEZE_WEBHOOK — same webhook/bot as
-# the freeze confirmations); can also be dispatched manually any time. Always logs
-# the full breakdown to the run output too.
+# layer FORCE-checked. Never freezes picks, writes data, or posts to X. Runs DAILY
+# at 12:00 BST and sends the digest to Telegram (via MAKE_FREEZE_WEBHOOK — same
+# webhook/bot as the freeze confirmations); can also be dispatched manually any
+# time. Always logs the full breakdown to the run output too.
+# It DOES commit ONE file — src/data/news-signals.json, the rolling news-signal
+# cache — best-effort, so its frequent samples are remembered for the lock too.
 #
 # Cron is UTC; the World Cup (Jun–Jul) is entirely in BST (UTC+1), so 11:00 UTC
 # = 12:00 BST.
@@ -20,7 +22,7 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write   # only to commit src/data/news-signals.json (see final step)
 
 jobs:
   preview:
@@ -42,3 +44,23 @@ jobs:
           CONTEXT_ENABLED: ${{ vars.CONTEXT_ENABLED || '1' }}
           MAKE_FREEZE_WEBHOOK: ${{ secrets.MAKE_FREEZE_WEBHOOK }}
         run: node scripts/preview-picks.mjs
+
+      # Persist ONLY the news-signal cache. Best-effort: rebase onto the branch and
+      # push the single file; never fail the job if it races the data pipeline.
+      - name: Commit news-signal cache (best-effort)
+        if: ${{ always() }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- src/data/news-signals.json; then
+            echo "news-signal cache unchanged — nothing to commit"; exit 0
+          fi
+          git add src/data/news-signals.json
+          git commit -m "chore: refresh news-signal cache [skip ci]" || exit 0
+          for i in 1 2 3 4; do
+            if git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              echo "cache pushed"; exit 0
+            fi
+            echo "push race, retrying…"; git rebase --abort 2>/dev/null || true; sleep $((2**i))
+          done
+          echo "could not push cache after retries — skipping (best-effort)"; exit 0

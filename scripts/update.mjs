@@ -18,7 +18,7 @@ import { teams } from '../src/data/teams.js';
 import { matchProb, expectedScore, pickScore } from '../vendor/wc-model/elo.mjs';
 import { buildRatings, HOSTS, HOME_ADV } from './lib/ratings.mjs';
 import { nameToSlug, isPlaceholder, unmapped } from './lib/teamMap.mjs';
-import { fetchContext } from './lib/context.mjs';
+import { fetchContext, persistSignalCache } from './lib/context.mjs';
 import { computeMomentum } from './lib/momentum.mjs';
 import { buildFriendlies } from './lib/friendlies.mjs';
 
@@ -276,6 +276,8 @@ async function main() {
         }
         log(`context APPLIED — adjusted ${n} team rating(s)`);
       }
+      // Persist the rolling news-signal cache (committed with the rest of src/data).
+      if (context.signalCache) persistSignalCache(context.signalCache);
     } else {
       log('no fixture within the freeze window — skipping context APIs this run');
     }

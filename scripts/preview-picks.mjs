@@ -15,7 +15,7 @@ import { matches } from '../src/data/matches.js';
 import { teams } from '../src/data/teams.js';
 import { matchProb, pickScore } from '../vendor/wc-model/elo.mjs';
 import { buildRatings, HOSTS, HOME_ADV } from './lib/ratings.mjs';
-import { fetchContext } from './lib/context.mjs';
+import { fetchContext, persistSignalCache } from './lib/context.mjs';
 import { computeMomentum } from './lib/momentum.mjs';
 import { fetchFixtures, parseResults, kickoffMs } from './update.mjs';
 
@@ -57,6 +57,9 @@ if (context.applied) {
 } else {
   log('context inactive — NO news keys present, so news was NOT actually checked');
 }
+// Persist the rolling news-signal cache so the preview's (frequent) samples are
+// remembered for the lock too. The workflow commits ONLY this file, best-effort.
+if (context.signalCache) persistSignalCache(context.signalCache);
 
 // --- momentum & morale overlay (needs no API keys; mirrors the live pipeline) ---
 let priorFriendlies = [];

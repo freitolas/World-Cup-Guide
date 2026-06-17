@@ -56,7 +56,7 @@ openfootball results ─┐
 | `scripts/lib/friendlies.mjs` | ISOLATED friendly-match predictions (marketing). Friendly *results* feed morale but **never** skill Elo. |
 | `scripts/lib/teamMap.mjs` | openfootball name ↔ our slug mapping, placeholder detection. |
 | `scripts/update.mjs` | **The pipeline.** Orchestrates results → ratings → news → morale → predictions → freeze → notify → friendlies → build/commit. Exports `fetchFixtures`, `parseResults`, `kickoffMs`. |
-| `scripts/preview-picks.mjs` | Read-only, no-freeze preview of upcoming picks (news + morale forced on). Posts a daily Telegram digest. Never writes data. |
+| `scripts/preview-picks.mjs` | No-freeze preview of upcoming picks (news + morale forced on). Posts a daily Telegram digest. Writes only the shared `news-signals.json` cache. |
 | `scripts/post-picks.mjs` | The X auto-poster (three-beat cycle). Idempotent via `posted.json`. |
 | `scripts/delete-tweets.mjs` | Manual tweet retraction by id. |
 | `scripts/backtest-picks.mjs` | Walk-forward mechanic comparison (chalk/draw-honor/sim-mode/chaos). |
@@ -77,6 +77,7 @@ All are written by the pipeline; do not hand-edit unless fixing corruption.
 - **`posted.json`** `{ log:{ [id]:{ b1,b2,b3 } }, used:{...}, sched:{...} }` — X poster idempotency + rotation state.
 - **`x-feed.json`** newest-first array of posted tweets rendered on-site.
 - **`x-content.json`** the tweet copy decks (beats 1/2/3, handles).
+- **`news-signals.json`** rolling cache of detected NEWS signals: `{ updated, injury:{slug:{tier,firstSeen,lastSeen}}, crisis:{slug:{firstSeen,lastSeen}} }`. Written by the pipeline (and best-effort by the preview). See §5.1.
 
 ---
 
@@ -144,7 +145,33 @@ Anticipates upsets from who's *available* and the mood around the camp.
     in workflows). Otherwise it's diagnostic-only (logs signals, changes nothing).
   - `update.mjs` only *calls* the news APIs when a fixture is within
     `FREEZE_HORIZON_HOURS + 1` of kickoff (cost control). The daily preview forces it on.
-- **Output:** `{ enabled, applied, adjustments:{slug:penalty}, reasons:{slug:[strings]}, coverage }`.
+- **Output:** `{ enabled, applied, adjustments:{slug:penalty}, reasons:{slug:[strings]}, coverage, signalCache }`.
+
+### 5.1 The rolling news-signal cache (why preview and lock used to disagree)
+
+NewsData is **volatile**: each query returns only the latest ~10 articles and that
+set churns constantly. So a real injury story could be flagged by the 16:24 preview
+and gone from the 18:41 freeze query — which is exactly the "preview said injury,
+lock said no news" bug. (Confirmed in run logs: 15:24 UTC flagged `argentina, england,
+jordan`; 17:41 UTC flagged `none`.)
+
+Fix: detected NEWS signals are cached in `news-signals.json` and kept **live for
+`NEWS_SIGNAL_TTL_HOURS` (default 36h)**. Each run folds its fresh detections into the
+cache, prunes anything past the TTL, and the **effective** signals applied to a pick
+are `fresh ∪ remembered`. So a signal seen once shapes every pick that freezes within
+the TTL, and the preview + the lock stay consistent. Cached-but-not-fresh signals are
+labelled `(recent)` in the reason text. Only NEWS is cached — suspensions/structured
+injuries come from API-Football and are already stable.
+
+- **Who writes it:** the pipeline (`update.mjs`, committed with the rest of
+  `src/data/`) **and** the preview (`preview-picks.mjs`), which commits *only* this one
+  file, **best-effort** (rebase + retry, never fails its job). The preview is the more
+  frequent news sampler, so letting it feed the cache matters when the pipeline cron is
+  sparse.
+- **Matching is football-gated:** a team is only flagged when the article also matches
+  a football-context regex (`football|world cup|fifa|striker|coach|…`), which kills
+  cross-sport false positives (e.g. an "England" cricket injury). Team names are
+  regex-escaped before matching.
 
 ---
 
@@ -231,8 +258,10 @@ Order of operations — **do not reorder casually**:
 
 Read-only. Rebuilds ratings, **forces news on** (so games hours out get a fresh read),
 applies morale, prints each upcoming pick with W/D/L, xG and reasons, and POSTs a
-daily digest to `MAKE_FREEZE_WEBHOOK`. **Never freezes, writes, commits, or posts to
-X.** It mirrors the live layer order (news → morale) so the preview matches what will
+daily digest to `MAKE_FREEZE_WEBHOOK`. **Never freezes picks, writes prediction data,
+or posts to X** — the sole exception is that it commits `news-signals.json` (the shared
+signal cache, best-effort; see §5.1) so its frequent samples are remembered for the
+lock. It mirrors the live layer order (news → morale) so the preview matches what will
 freeze. Env: `PREVIEW_WINDOW_HOURS` (default 20).
 
 ---
@@ -302,6 +331,7 @@ change, eyeball the distribution (the snippet in §6) and re-run `backtest-momen
 | `CONTEXT_ENABLED` | var (default 1) | context | `1` = news adjustments **applied**; else diagnostic-only. |
 | `MAKE_FREEZE_WEBHOOK` | secret | update, preview | Telegram lock + daily digest. Absent ⇒ skipped. |
 | `WC_LEAGUE_ID` / `WC_SEASON` | optional | context | API-Football league/season (default `1`/`2026`). |
+| `NEWS_SIGNAL_TTL_HOURS` | optional | context | How long a detected news signal stays "live" in `news-signals.json` (default 36). |
 | `FREEZE_HORIZON_HOURS` | optional | update | Freeze window (default 5). |
 | `PREVIEW_WINDOW_HOURS` | optional | preview | Look-ahead window (default 20). |
 
@@ -312,7 +342,7 @@ change, eyeball the distribution (the snippet in §6) and re-run `backtest-momen
 | File | Trigger | Does |
 |---|---|---|
 | `data-pipeline.yml` | cron `0 */3 * * *` + manual | `npm run update:commit` — full pipeline + deploy. Has all keys + `CONTEXT_ENABLED`. |
-| `preview-picks.yml` | cron `0 11 * * *` (12:00 BST) + manual | Read-only preview + Telegram digest. |
+| `preview-picks.yml` | cron `0 11 * * *` (12:00 BST) + manual | Preview + Telegram digest. `contents: write` — commits ONLY `news-signals.json` (best-effort). |
 | `x-poster.yml` | cron `7,15,…,55 16-23,0-7 * * *` + manual | `post-picks.mjs` three-beat poster (default-branch only). |
 | `x-delete.yml` | manual only | Retract tweets by id. |
 
