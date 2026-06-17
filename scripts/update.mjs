@@ -108,6 +108,8 @@ const round1 = (x) => Math.round(x * 100) / 100;
 // Kickoff time. Stored date+time are treated as UTC for now (refine when the
 // official per-venue timezones are confirmed).
 const kickoffMs = (m) => new Date(`${m.date}T${m.time || '00:00'}:00Z`).getTime();
+// Kickoff in UK local time (auto BST/GMT) — notifications go to the UK owner.
+const ukTime = (ms) => new Date(ms).toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
 
 // How close to kickoff a pick is frozen. Picks are frozen LATE — only within
 // this many hours of kickoff — so the freshest injuries/suspensions/news are
@@ -150,7 +152,7 @@ function buildFreezeEvent(m, pick, context, now) {
     frozenAt: new Date(now).toISOString(),
     contextApplied: !!(context && context.applied),
     reason: { home, away, summary },
-    text: `🔒 THE AI locked its pick: ${homeLabel} ${hg}–${ag} ${awayLabel} (kickoff ${kickoff.slice(11, 16)} UTC). ${summary}`,
+    text: `🔒 THE AI locked its pick: ${homeLabel} ${hg}–${ag} ${awayLabel} (kickoff ${ukTime(kickoffMs(m))} UK). ${summary}`,
   };
 }
 
@@ -176,6 +178,58 @@ async function notifyFreezes(frozen) {
     } catch (e) {
       log(`freeze notify ${ev.match} failed: ${e.message}`);
     }
+  }
+}
+
+// Daily preview: predict every fixture kicking off in the next
+// PREVIEW_WINDOW_HOURS (default 20 — "the day", allowing for UK-timezone spill)
+// WITH the news/context layer applied, and POST one digest to the SAME webhook
+// as the freeze notifications. DOES NOT freeze — these projections still move
+// until each pick locks near kickoff. 🔒 marks fixtures already frozen.
+async function sendDailyPreview(ratings, results, context, now = Date.now()) {
+  const windowH = Number(process.env.PREVIEW_WINDOW_HOURS || 20);
+  const picks = existsSync(BOTPICKS_FILE) ? JSON.parse(readFileSync(BOTPICKS_FILE, 'utf8')) : {};
+  const rsn = (context && context.reasons) || {};
+
+  const upcoming = matches
+    .filter((m) => !results[m.id] && ratings?.[m.home] != null && ratings?.[m.away] != null)
+    .map((m) => ({ m, hoursOut: (kickoffMs(m) - now) / 3.6e6 }))
+    .filter(({ hoursOut }) => hoursOut >= 0 && hoursOut <= windowH)
+    .sort((a, b) => kickoffMs(a.m) - kickoffMs(b.m));
+
+  const lines = upcoming.map(({ m }) => {
+    const hb = HOSTS.has(m.home) ? HOME_ADV : 0;
+    const frozen = picks[m.id];
+    const [hg, ag] = frozen || pickScore(ratings[m.home], ratings[m.away], hb);
+    const hl = teamLabel.get(m.home) || m.home;
+    const al = teamLabel.get(m.away) || m.away;
+    const sigs = [
+      ...(rsn[m.home] || []).map((s) => `${hl}: ${s}`),
+      ...(rsn[m.away] || []).map((s) => `${al}: ${s}`),
+    ];
+    const why = sigs.length ? `\n   ↳ ${sigs.join('; ')}` : '';
+    return `• ${ukTime(kickoffMs(m))}  ${hl} ${hg}–${ag} ${al}${frozen ? ' 🔒' : ''}${why}`;
+  });
+
+  const header = `📋 THE AI — next ${windowH}h of picks (as of ${ukTime(now)} UK)`;
+  const text = upcoming.length
+    ? `${header}\n\n${lines.join('\n')}\n\nProjections move until each game locks ~hours before kickoff. 🔒 = already locked.`
+    : `${header}\n\nNo matches kicking off in the next ${windowH}h.`;
+
+  const event = { type: 'daily_preview', generatedAt: new Date(now).toISOString(), windowHours: windowH, count: upcoming.length, text };
+
+  const url = process.env.MAKE_FREEZE_WEBHOOK || '';
+  if (!url) { log(`preview: ${upcoming.length} fixture(s), MAKE_FREEZE_WEBHOOK unset — skipping`); return; }
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(event),
+      signal: AbortSignal.timeout(15000),
+    });
+    log(`preview notify: HTTP ${res.status} (${upcoming.length} fixture(s) in next ${windowH}h)`);
+  } catch (e) {
+    log(`preview notify failed: ${e.message}`);
   }
 }
 
@@ -229,6 +283,7 @@ function freezeBotPicks(ratings, results, context = null, now = Date.now()) {
 }
 
 async function main() {
+  const preview = args.has('--preview'); // predict + send a daily digest; never freeze, write, or commit
   // --- results ---
   let results = {};
   let playedForModel = [];
@@ -245,7 +300,7 @@ async function main() {
   } else {
     log('feed unreachable and no cached results — predictions only');
   }
-  writeFileSync(RESULTS_FILE, JSON.stringify(results, null, 2) + '\n');
+  if (!preview) writeFileSync(RESULTS_FILE, JSON.stringify(results, null, 2) + '\n');
 
   // --- predictions (with graceful fallback) ---
   let predictions;
@@ -264,7 +319,7 @@ async function main() {
       (m) => !results[m.id] && ratings[m.home] != null && ratings[m.away] != null
         && kickoffMs(m) - Date.now() > 0 && kickoffMs(m) - Date.now() <= ctxWindowMs,
     );
-    if (imminent) {
+    if (imminent || preview) {
       context = await fetchContext();
       if (context.applied) {
         let n = 0;
@@ -283,6 +338,11 @@ async function main() {
     log(`MODEL FAILED (${err.message}) — falling back to rank estimate`);
     predictions = fallbackPredictions();
   }
+  if (preview) {
+    await sendDailyPreview(ratings, results, context);
+    return; // digest only — no freeze, no file writes, no commit
+  }
+
   writeFileSync(PREDICTIONS_FILE, JSON.stringify(predictions, null, 2) + '\n');
 
   // --- bot picks (THE AI's frozen scoreline, consumed by the Game) ---
