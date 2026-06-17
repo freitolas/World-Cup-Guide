@@ -1,5 +1,63 @@
 {
-  "updated": null,
-  "injury": {},
-  "crisis": {}
+  "updated": "2026-06-17T19:53:53.105Z",
+  "injury": {
+    "england": {
+      "tier": 3,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "croatia": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "argentina": {
+      "tier": 3,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "mexico": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "canada": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "algeria": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "portugal": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "dr-congo": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    }
+  },
+  "crisis": {
+    "tunisia": {
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "sweden": {
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "england": {
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "mexico": {
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    }
+  }
 }

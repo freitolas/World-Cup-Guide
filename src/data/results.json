@@ -158,5 +158,13 @@
     "hg": 3,
     "ag": 1,
     "date": "2026-06-16"
+  },
+  "M023": {
+    "status": "played",
+    "home": "portugal",
+    "away": "dr-congo",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-17"
   }
 }
