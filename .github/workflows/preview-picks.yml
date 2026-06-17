@@ -1,10 +1,16 @@
-name: Preview picks (manual)
+name: Preview picks
 
-# On-demand, read-only preview of THE AI's picks for the next N hours, with the
-# news/context layer FORCE-checked. Never freezes, writes, commits, or posts —
-# results go to the run log only. Use it to sanity-check upcoming picks (incl.
-# fresh injuries/suspensions/crisis) without locking anything in.
+# Read-only preview of THE AI's picks for the next N hours, with the news/context
+# layer FORCE-checked. Never freezes, writes, or commits. Runs DAILY at 12:00 BST
+# and sends the digest to Telegram (via MAKE_FREEZE_WEBHOOK — same webhook/bot as
+# the freeze confirmations); can also be dispatched manually any time. Always logs
+# the full breakdown to the run output too.
+#
+# Cron is UTC; the World Cup (Jun–Jul) is entirely in BST (UTC+1), so 11:00 UTC
+# = 12:00 BST.
 on:
+  schedule:
+    - cron: '0 11 * * *'
   workflow_dispatch:
     inputs:
       hours:
@@ -26,10 +32,13 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - name: Preview picks (news checked, nothing frozen)
+      - name: Preview picks (news checked, nothing frozen) + Telegram digest
         env:
+          # On manual runs use the chosen window; on the daily schedule inputs is
+          # empty, so the script falls back to 20h.
           PREVIEW_WINDOW_HOURS: ${{ inputs.hours }}
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           NEWSDATA_KEY: ${{ secrets.NEWSDATA_KEY }}
           CONTEXT_ENABLED: ${{ vars.CONTEXT_ENABLED || '1' }}
+          MAKE_FREEZE_WEBHOOK: ${{ secrets.MAKE_FREEZE_WEBHOOK }}
         run: node scripts/preview-picks.mjs
