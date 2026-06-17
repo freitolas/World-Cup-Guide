@@ -166,5 +166,13 @@
     "hg": 1,
     "ag": 1,
     "date": "2026-06-17"
+  },
+  "M022": {
+    "status": "played",
+    "home": "england",
+    "away": "croatia",
+    "hg": 4,
+    "ag": 2,
+    "date": "2026-06-17"
   }
 }
