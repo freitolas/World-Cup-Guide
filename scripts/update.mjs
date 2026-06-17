@@ -108,6 +108,8 @@ const round1 = (x) => Math.round(x * 100) / 100;
 // Kickoff time. Stored date+time are treated as UTC for now (refine when the
 // official per-venue timezones are confirmed).
 export const kickoffMs = (m) => new Date(`${m.date}T${m.time || '00:00'}:00Z`).getTime();
+// Kickoff in UK local time (auto BST/GMT) — notifications go to the UK owner.
+const ukTime = (ms) => new Date(ms).toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
 
 // How close to kickoff a pick is frozen. Picks are frozen LATE — only within
 // this many hours of kickoff — so the freshest injuries/suspensions/news are
@@ -150,7 +152,7 @@ function buildFreezeEvent(m, pick, context, now) {
     frozenAt: new Date(now).toISOString(),
     contextApplied: !!(context && context.applied),
     reason: { home, away, summary },
-    text: `🔒 THE AI locked its pick: ${homeLabel} ${hg}–${ag} ${awayLabel} (kickoff ${kickoff.slice(11, 16)} UTC). ${summary}`,
+    text: `🔒 THE AI locked its pick: ${homeLabel} ${hg}–${ag} ${awayLabel} (kickoff ${ukTime(kickoffMs(m))} UK). ${summary}`,
   };
 }
 

@@ -126,5 +126,37 @@
     "hg": 1,
     "ag": 1,
     "date": "2026-06-15"
+  },
+  "M017": {
+    "status": "played",
+    "home": "france",
+    "away": "senegal",
+    "hg": 3,
+    "ag": 1,
+    "date": "2026-06-16"
+  },
+  "M018": {
+    "status": "played",
+    "home": "iraq",
+    "away": "norway",
+    "hg": 1,
+    "ag": 4,
+    "date": "2026-06-16"
+  },
+  "M019": {
+    "status": "played",
+    "home": "argentina",
+    "away": "algeria",
+    "hg": 3,
+    "ag": 0,
+    "date": "2026-06-16"
+  },
+  "M020": {
+    "status": "played",
+    "home": "austria",
+    "away": "jordan",
+    "hg": 3,
+    "ag": 1,
+    "date": "2026-06-16"
   }
 }

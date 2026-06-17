@@ -86,4 +86,48 @@ for (const { m, ko, hoursOut } of upcoming) {
   if (rB.length) log(`  ${b} news: ${rB.join('; ')} (−${context.adjustments[m.away] || 0})`);
   if (!rA.length && !rB.length) log('  news: no injury/suspension/crisis signals for either side');
 }
-log('\n[preview] done — nothing was frozen, written, committed or posted.');
+// --- Telegram digest: build ONE message and POST it to the SAME webhook as the
+// freeze notifications (MAKE_FREEZE_WEBHOOK). Still never freezes/writes/commits.
+// 🔒 marks fixtures already locked by the pipeline. Kickoffs shown in UK time.
+const picks = existsSync(root('src/data/botPicks.json'))
+  ? JSON.parse(readFileSync(root('src/data/botPicks.json'), 'utf8'))
+  : {};
+const ukTime = (ms) => new Date(ms).toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
+
+const lines = upcoming.map(({ m, ko }) => {
+  const hb = HOSTS.has(m.home) ? HOME_ADV : 0;
+  const frozen = picks[m.id];
+  const [hg, ag] = frozen || pickScore(ratings[m.home], ratings[m.away], hb);
+  const a = name[m.home] || m.home;
+  const b = name[m.away] || m.away;
+  const sigs = [
+    ...reasonsFor(m.home).map((s) => `${a}: ${s}`),
+    ...reasonsFor(m.away).map((s) => `${b}: ${s}`),
+  ];
+  const why = sigs.length ? `\n   ↳ ${sigs.join('; ')}` : '';
+  return `• ${ukTime(ko)}  ${a} ${hg}–${ag} ${b}${frozen ? ' 🔒' : ''}${why}`;
+});
+
+const header = `📋 THE AI — next ${WINDOW_H}h of picks (as of ${ukTime(now)} UK)`;
+const text = upcoming.length
+  ? `${header}\n\n${lines.join('\n')}\n\nProjections move until each game locks ~hours before kickoff. 🔒 = already locked.`
+  : `${header}\n\nNo matches kicking off in the next ${WINDOW_H}h.`;
+
+const webhook = process.env.MAKE_FREEZE_WEBHOOK || '';
+if (!webhook) {
+  log('MAKE_FREEZE_WEBHOOK unset — digest printed above only, not sent to Telegram');
+} else {
+  try {
+    const res = await fetch(webhook, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'daily_preview', generatedAt: new Date(now).toISOString(), windowHours: WINDOW_H, count: upcoming.length, text }),
+      signal: AbortSignal.timeout(15000),
+    });
+    log(`Telegram digest POST: HTTP ${res.status} (${upcoming.length} fixture(s))`);
+  } catch (e) {
+    log(`Telegram digest POST failed: ${e.message}`);
+  }
+}
+
+log('\n[preview] done — nothing was frozen, written, or committed.');
