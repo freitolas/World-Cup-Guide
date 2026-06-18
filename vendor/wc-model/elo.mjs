@@ -65,19 +65,16 @@ export function matchProb(ratingA, ratingB, homeBonusA = 0) {
   return { winA: winA / total, draw: draw / total, winB: winB / total, expectedGoalsA: lambda, expectedGoalsB: mu };
 }
 
-// The MOST LIKELY exact scoreline under the Dixon-Coles bivariate Poisson — the
-// argmax cell of the full grid. This is the "ten-million-simulation" pick the
-// brand talks about, made literal. Unlike the old round-the-mean approach it
-// commits to a draw (1–1 / 0–0) when that is genuinely the modal outcome, and it
-// lets news/morale rating shifts actually move the committed score (the old mean
-// rounding swallowed sub-0.5-goal shifts). See docs/PREDICTION_ENGINE.md.
-export function modalScore(ratingA, ratingB, homeBonusA = 0) {
+// The most likely exact scoreline under the Dixon-Coles bivariate Poisson,
+// optionally restricted to cells matching `pred(a,b)` (e.g. only home wins).
+export function modalScore(ratingA, ratingB, homeBonusA = 0, pred = null) {
   const lambda = expectedGoals(ratingA, ratingB, homeBonusA);
   const mu = expectedGoals(ratingB, ratingA, -homeBonusA / 2);
   let best = { p: -1, a: 0, b: 0 };
   for (let a = 0; a <= 8; a++) {
     const pa = poissonPmf(a, lambda);
     for (let b = 0; b <= 8; b++) {
+      if (pred && !pred(a, b)) continue;
       const p = pa * poissonPmf(b, mu) * dcTau(a, b, lambda, mu, DC_RHO);
       if (p > best.p) best = { p, a, b };
     }
@@ -85,10 +82,24 @@ export function modalScore(ratingA, ratingB, homeBonusA = 0) {
   return [best.a, best.b];
 }
 
-// THE AI's single committed scoreline. Kept as a stable name for callers
-// (update.mjs, friendlies.mjs); delegates to the modal-scoreline pick.
-export function pickScore(ratingA, ratingB, homeBonusA = 0) {
-  return modalScore(ratingA, ratingB, homeBonusA);
+// How close the draw probability must be to the favourite's win probability for
+// THE AI to commit to a draw. The unrestricted modal CELL over-commits to 1–1
+// (goals cluster at 1 and DC ρ inflates the draw), so we instead pick the OUTCOME
+// from the 1X2 distribution — draw only when it's genuinely competitive — then the
+// most likely scoreline WITHIN that outcome. Tunable; see scripts/calibrate-sweep
+// and docs/PREDICTION_ENGINE.md §4.
+export const DRAW_MARGIN = Number(process.env.DRAW_MARGIN ?? 0.20);
+
+// THE AI's single committed scoreline. Stable name for callers (update.mjs,
+// friendlies.mjs). Outcome-first, then modal scoreline within the outcome.
+export function pickScore(ratingA, ratingB, homeBonusA = 0, drawMargin = DRAW_MARGIN) {
+  const p = matchProb(ratingA, ratingB, homeBonusA);
+  const favWin = Math.max(p.winA, p.winB);
+  // Commit to a draw only when it's the top outcome or within drawMargin of it.
+  if (p.draw >= favWin - drawMargin) return modalScore(ratingA, ratingB, homeBonusA, (a, b) => a === b);
+  return p.winA >= p.winB
+    ? modalScore(ratingA, ratingB, homeBonusA, (a, b) => a > b)
+    : modalScore(ratingA, ratingB, homeBonusA, (a, b) => a < b);
 }
 
 // Sample a scoreline (for Monte Carlo). allowDraw=false → penalty shootout nudge toward higher Elo.

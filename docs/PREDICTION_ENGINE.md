@@ -109,13 +109,17 @@ Elo update touches. Friendlies are **not** fed here.
     slope lifts draw mass. See §11 for the backtest that picked 1.25/450.
 - `matchProb(a,b,hb)` — Dixon-Coles bivariate Poisson over 0–8 goals each side,
   `DC_RHO=-0.13` corrects the 0-0/1-1 under-count. Returns `{winA,draw,winB,expectedGoalsA,expectedGoalsB}`.
-- **`modalScore(a,b,hb)` / `pickScore(a,b,hb)`** — THE committed pick = the **argmax
-  exact-scoreline cell** of that grid (the "ten-million simulation" made literal).
-  - This **commits to a draw** (1–1/0–0) when that's genuinely the modal cell, and
-    crucially lets news/morale rating shifts actually *move* the score — the old
-    `Math.round(mean)` swallowed any shift under 0.5 goals (so the whole news layer
-    was invisible at the scoreline). `pickScore` is just a stable alias kept for
-    callers (`update.mjs`, `friendlies.mjs`).
+- **`pickScore(a,b,hb,drawMargin?)`** — THE committed pick. **Outcome-first:** take the
+  1X2 outcome from `matchProb`, then the most likely scoreline *within* that outcome via
+  `modalScore(a,b,hb,pred)`. A draw is committed only when `draw% ≥ favouriteWin% −
+  DRAW_MARGIN` (default **0.20**); otherwise the favoured side's modal winning scoreline.
+  - **Why not the raw modal cell:** the single most-likely *cell* over-commits to 1–1
+    (goals cluster at 1 and DC ρ inflates the draw), so a 55%-win / 27%-draw game came
+    out 1–1 — wrong, since a *win* summed over all winning scorelines clearly dominates.
+    Choosing the outcome first fixes that: on the live slate it cut draws from 44% → ~31%
+    (historical ≈ 28–30%) while keeping clear favourites as wins.
+  - It still lets news/morale rating shifts *move* the score — the old `Math.round(mean)`
+    swallowed sub-0.5-goal shifts. `modalScore(a,b,hb,pred)` is exported for reuse/tests.
 - `sampleMatch`, `poissonSample` — Monte-Carlo helpers (used by experiments, not the
   live pick).
 
@@ -304,15 +308,18 @@ results — no leakage) and **write nothing**:
 | engine | exact | outcome% | points | draws hit (of 8) |
 |---|---|---|---|---|
 | OLD (1.35/350, round+break) | 2 | 50% | 14 | 0 |
-| **NEW (1.25/450 modal + morale)** | **5** | **60%** | **22** | **6** |
+| **NEW (1.25/450, outcome-first @ DRAW_MARGIN 0.20, + morale)** | **3** | **60%** | **18** | **2** |
 
-The gain is almost entirely **finally predicting draws**. Morale contributed
-positively at the chosen config (22 vs 19 pts without it).
+The gain over OLD comes from finally predicting draws *without* over-doing it: the raw
+modal-cell pick scored higher on this draw-heavy sample (22 pts, 6 draws) but predicted
+**44% draws on the live slate** — including 55%-favourites as 1–1 — which doesn't
+generalise. The outcome-first `DRAW_MARGIN=0.20` pick trades a little backtest score for
+a realistic **~31% live draw rate** and sane favourites.
 
 > **Overfitting caveat:** n=20 is tiny and the 40% draw rate is inflated by cagey
-> openers (history ≈ 28–30%). 1.25/450 is a *balanced* middle, not a corner. Re-run
-> `calibrate-sweep.mjs` as games accumulate and track **Brier over time** rather than
-> re-tuning to chase the current sample.
+> openers (history ≈ 28–30%). 1.25/450 + margin 0.20 is a *balanced* middle, tuned to
+> the live draw rate as much as the backtest. Re-run `calibrate-sweep.mjs` as games
+> accumulate and track **Brier over time** rather than chasing the current sample.
 
 ### Tuning the morale layer
 Knobs live at the top of `momentum.mjs`: `LAST_N`, `DECAY`, `WC_WEIGHT`,
@@ -332,6 +339,7 @@ change, eyeball the distribution (the snippet in §6) and re-run `backtest-momen
 | `MAKE_FREEZE_WEBHOOK` | secret | update, preview | Telegram lock + daily digest. Absent ⇒ skipped. |
 | `WC_LEAGUE_ID` / `WC_SEASON` | optional | context | API-Football league/season (default `1`/`2026`). |
 | `NEWS_SIGNAL_TTL_HOURS` | optional | context | How long a detected news signal stays "live" in `news-signals.json` (default 36). |
+| `DRAW_MARGIN` | optional | elo (pickScore) | How readily THE AI commits to a draw: draw if `draw% ≥ favWin% − margin` (default 0.20). Higher ⇒ more draws. |
 | `FREEZE_HORIZON_HOURS` | optional | update | Freeze window (default 5). |
 | `PREVIEW_WINDOW_HOURS` | optional | preview | Look-ahead window (default 20). |
 
