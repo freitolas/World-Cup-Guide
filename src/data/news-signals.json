@@ -1,5 +1,117 @@
 {
-  "updated": null,
-  "injury": {},
-  "crisis": {}
+  "updated": "2026-06-18T14:26:41.043Z",
+  "injury": {
+    "england": {
+      "tier": 3,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "croatia": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "argentina": {
+      "tier": 3,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "mexico": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "canada": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T22:28:08.510Z"
+    },
+    "algeria": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "portugal": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "dr-congo": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "iran": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T22:28:08.510Z",
+      "lastSeen": "2026-06-17T22:28:08.510Z"
+    },
+    "new-zealand": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T22:28:08.510Z",
+      "lastSeen": "2026-06-17T22:28:08.510Z"
+    },
+    "panama": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T22:28:08.510Z",
+      "lastSeen": "2026-06-18T14:26:39.826Z"
+    },
+    "ghana": {
+      "tier": 1,
+      "firstSeen": "2026-06-17T22:28:08.510Z",
+      "lastSeen": "2026-06-18T14:26:39.826Z"
+    },
+    "france": {
+      "tier": 1,
+      "firstSeen": "2026-06-18T12:15:38.905Z",
+      "lastSeen": "2026-06-18T12:15:38.905Z"
+    },
+    "ecuador": {
+      "tier": 1,
+      "firstSeen": "2026-06-18T14:13:16.427Z",
+      "lastSeen": "2026-06-18T14:13:16.427Z"
+    }
+  },
+  "crisis": {
+    "tunisia": {
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "sweden": {
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "england": {
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-18T14:26:39.826Z"
+    },
+    "mexico": {
+      "firstSeen": "2026-06-17T19:53:52.289Z",
+      "lastSeen": "2026-06-17T19:53:52.289Z"
+    },
+    "canada": {
+      "firstSeen": "2026-06-17T22:28:08.510Z",
+      "lastSeen": "2026-06-18T12:15:38.905Z"
+    },
+    "panama": {
+      "firstSeen": "2026-06-17T22:28:08.510Z",
+      "lastSeen": "2026-06-17T22:28:08.510Z"
+    },
+    "ghana": {
+      "firstSeen": "2026-06-17T22:28:08.510Z",
+      "lastSeen": "2026-06-17T22:28:08.510Z"
+    },
+    "switzerland": {
+      "firstSeen": "2026-06-18T12:15:38.905Z",
+      "lastSeen": "2026-06-18T12:15:38.905Z"
+    },
+    "qatar": {
+      "firstSeen": "2026-06-18T12:15:38.905Z",
+      "lastSeen": "2026-06-18T12:15:38.905Z"
+    },
+    "croatia": {
+      "firstSeen": "2026-06-18T14:26:39.826Z",
+      "lastSeen": "2026-06-18T14:26:39.826Z"
+    }
+  }
 }

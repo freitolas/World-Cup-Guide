@@ -158,5 +158,37 @@
     "hg": 3,
     "ag": 1,
     "date": "2026-06-16"
+  },
+  "M023": {
+    "status": "played",
+    "home": "portugal",
+    "away": "dr-congo",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-17"
+  },
+  "M024": {
+    "status": "played",
+    "home": "uzbekistan",
+    "away": "colombia",
+    "hg": 1,
+    "ag": 3,
+    "date": "2026-06-17"
+  },
+  "M022": {
+    "status": "played",
+    "home": "england",
+    "away": "croatia",
+    "hg": 4,
+    "ag": 2,
+    "date": "2026-06-17"
+  },
+  "M021": {
+    "status": "played",
+    "home": "ghana",
+    "away": "panama",
+    "hg": 1,
+    "ag": 0,
+    "date": "2026-06-17"
   }
 }
