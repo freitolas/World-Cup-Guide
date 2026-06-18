@@ -174,5 +174,13 @@
     "hg": 4,
     "ag": 2,
     "date": "2026-06-17"
+  },
+  "M021": {
+    "status": "played",
+    "home": "ghana",
+    "away": "panama",
+    "hg": 1,
+    "ag": 0,
+    "date": "2026-06-17"
   }
 }
