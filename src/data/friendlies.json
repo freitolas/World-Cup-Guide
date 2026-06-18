@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-18T12:15:40.812Z",
+  "updated": "2026-06-18T17:51:25.278Z",
   "source": "api-football",
   "fixtures": [
     {
@@ -46,7 +46,7 @@
         ]
       },
       "botPick": [
-        1,
+        0,
         1
       ],
       "result": {
