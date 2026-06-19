@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-19T11:00:46.571Z",
+  "updated": "2026-06-19T11:15:57.531Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -14,7 +14,7 @@
     "mexico": {
       "tier": 1,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-19T11:00:45.592Z"
+      "lastSeen": "2026-06-19T11:15:56.938Z"
     },
     "canada": {
       "tier": 1,
@@ -54,7 +54,7 @@
     "south-korea": {
       "tier": 1,
       "firstSeen": "2026-06-19T11:00:45.592Z",
-      "lastSeen": "2026-06-19T11:00:45.592Z"
+      "lastSeen": "2026-06-19T11:15:56.938Z"
     },
     "paraguay": {
       "tier": 1,
@@ -69,12 +69,22 @@
     "australia": {
       "tier": 1,
       "firstSeen": "2026-06-19T11:00:45.592Z",
-      "lastSeen": "2026-06-19T11:00:45.592Z"
+      "lastSeen": "2026-06-19T11:15:56.938Z"
     },
     "czechia": {
       "tier": 1,
       "firstSeen": "2026-06-19T11:00:45.592Z",
       "lastSeen": "2026-06-19T11:00:45.592Z"
+    },
+    "colombia": {
+      "tier": 1,
+      "firstSeen": "2026-06-19T11:15:56.938Z",
+      "lastSeen": "2026-06-19T11:15:56.938Z"
+    },
+    "uzbekistan": {
+      "tier": 1,
+      "firstSeen": "2026-06-19T11:15:56.938Z",
+      "lastSeen": "2026-06-19T11:15:56.938Z"
     }
   },
   "crisis": {
