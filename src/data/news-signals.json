@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-19T17:07:47.349Z",
+  "updated": "2026-06-19T19:21:00.195Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -14,7 +14,7 @@
     "mexico": {
       "tier": 1,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-19T17:07:46.302Z"
+      "lastSeen": "2026-06-19T19:20:59.180Z"
     },
     "canada": {
       "tier": 1,
@@ -54,7 +54,7 @@
     "south-korea": {
       "tier": 1,
       "firstSeen": "2026-06-19T11:00:45.592Z",
-      "lastSeen": "2026-06-19T17:07:46.302Z"
+      "lastSeen": "2026-06-19T19:20:59.180Z"
     },
     "paraguay": {
       "tier": 1,
