@@ -1,15 +1,10 @@
 {
-  "updated": "2026-06-20T01:59:11.279Z",
+  "updated": "2026-06-20T11:00:39.995Z",
   "injury": {
     "england": {
       "tier": 3,
       "firstSeen": "2026-06-17T19:53:52.289Z",
       "lastSeen": "2026-06-19T17:07:46.302Z"
-    },
-    "croatia": {
-      "tier": 3,
-      "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-18T20:03:40.471Z"
     },
     "mexico": {
       "tier": 1,
@@ -19,22 +14,12 @@
     "canada": {
       "tier": 1,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-20T01:59:10.717Z"
-    },
-    "panama": {
-      "tier": 1,
-      "firstSeen": "2026-06-17T22:28:08.510Z",
-      "lastSeen": "2026-06-18T22:48:35.810Z"
+      "lastSeen": "2026-06-20T11:00:39.058Z"
     },
     "ghana": {
       "tier": 1,
       "firstSeen": "2026-06-17T22:28:08.510Z",
       "lastSeen": "2026-06-19T17:07:46.302Z"
-    },
-    "ecuador": {
-      "tier": 1,
-      "firstSeen": "2026-06-18T14:13:16.427Z",
-      "lastSeen": "2026-06-18T14:13:16.427Z"
     },
     "qatar": {
       "tier": 1,
@@ -64,7 +49,7 @@
     "australia": {
       "tier": 1,
       "firstSeen": "2026-06-19T11:00:45.592Z",
-      "lastSeen": "2026-06-20T01:59:10.717Z"
+      "lastSeen": "2026-06-20T11:00:39.058Z"
     },
     "czechia": {
       "tier": 1,
@@ -89,23 +74,15 @@
     "brazil": {
       "tier": 1,
       "firstSeen": "2026-06-19T21:56:35.476Z",
-      "lastSeen": "2026-06-19T21:56:35.476Z"
+      "lastSeen": "2026-06-20T11:00:39.058Z"
     },
     "haiti": {
       "tier": 1,
       "firstSeen": "2026-06-19T21:56:35.476Z",
-      "lastSeen": "2026-06-19T21:56:35.476Z"
+      "lastSeen": "2026-06-20T11:00:39.058Z"
     }
   },
   "crisis": {
-    "england": {
-      "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-18T14:30:38.469Z"
-    },
-    "croatia": {
-      "firstSeen": "2026-06-18T14:26:39.826Z",
-      "lastSeen": "2026-06-18T14:30:38.469Z"
-    },
     "tunisia": {
       "firstSeen": "2026-06-19T21:56:35.476Z",
       "lastSeen": "2026-06-19T21:56:35.476Z"
