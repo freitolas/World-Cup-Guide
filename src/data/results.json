@@ -87,6 +87,14 @@
     "ag": 1,
     "date": "2026-06-19"
   },
+  "M029": {
+    "status": "played",
+    "home": "brazil",
+    "away": "haiti",
+    "hg": 3,
+    "ag": 0,
+    "date": "2026-06-19"
+  },
   "M004": {
     "status": "played",
     "home": "usa",
@@ -109,6 +117,14 @@
     "away": "australia",
     "hg": 2,
     "ag": 0,
+    "date": "2026-06-19"
+  },
+  "M031": {
+    "status": "played",
+    "home": "turkey",
+    "away": "paraguay",
+    "hg": 0,
+    "ag": 1,
     "date": "2026-06-19"
   },
   "M010": {
