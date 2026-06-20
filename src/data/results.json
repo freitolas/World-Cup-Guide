@@ -79,6 +79,14 @@
     "ag": 1,
     "date": "2026-06-13"
   },
+  "M030": {
+    "status": "played",
+    "home": "scotland",
+    "away": "morocco",
+    "hg": 0,
+    "ag": 1,
+    "date": "2026-06-19"
+  },
   "M004": {
     "status": "played",
     "home": "usa",

@@ -1,59 +1,7 @@
 {
-  "updated": "2026-06-19T21:56:36.732Z",
+  "updated": "2026-06-20T01:59:11.794Z",
   "source": "api-football",
   "fixtures": [
-    {
-      "id": "F1540356",
-      "date": "2026-06-09",
-      "kickoff": "2026-06-09T02:00:00+00:00",
-      "home": "peru",
-      "away": "spain",
-      "homeName": "Peru",
-      "awayName": "Spain",
-      "prediction": {
-        "win": 0.028,
-        "draw": 0.146,
-        "loss": 0.826,
-        "eg": [
-          0.3,
-          2.33
-        ]
-      },
-      "botPick": [
-        0,
-        2
-      ],
-      "result": {
-        "hg": 1,
-        "ag": 3
-      }
-    },
-    {
-      "id": "F1544368",
-      "date": "2026-06-09",
-      "kickoff": "2026-06-09T23:00:00+00:00",
-      "home": "saudi-arabia",
-      "away": "senegal",
-      "homeName": "Saudi Arabia",
-      "awayName": "Senegal",
-      "prediction": {
-        "win": 0.172,
-        "draw": 0.27,
-        "loss": 0.558,
-        "eg": [
-          0.85,
-          1.69
-        ]
-      },
-      "botPick": [
-        0,
-        1
-      ],
-      "result": {
-        "hg": 0,
-        "ag": 0
-      }
-    },
     {
       "id": "F1540358",
       "date": "2026-06-10",
