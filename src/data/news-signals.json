@@ -1,10 +1,10 @@
 {
-  "updated": "2026-06-21T02:11:18.955Z",
+  "updated": "2026-06-21T11:00:53.228Z",
   "injury": {
     "england": {
       "tier": 3,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-20T11:06:07.509Z"
+      "lastSeen": "2026-06-21T11:00:52.251Z"
     },
     "mexico": {
       "tier": 1,
@@ -19,7 +19,7 @@
     "ghana": {
       "tier": 1,
       "firstSeen": "2026-06-17T22:28:08.510Z",
-      "lastSeen": "2026-06-19T17:07:46.302Z"
+      "lastSeen": "2026-06-21T11:00:52.251Z"
     },
     "qatar": {
       "tier": 1,
@@ -44,27 +44,22 @@
     "australia": {
       "tier": 1,
       "firstSeen": "2026-06-19T11:00:45.592Z",
-      "lastSeen": "2026-06-20T11:15:33.914Z"
+      "lastSeen": "2026-06-21T11:00:52.251Z"
     },
     "colombia": {
       "tier": 1,
       "firstSeen": "2026-06-19T11:15:56.938Z",
       "lastSeen": "2026-06-20T21:57:54.553Z"
     },
-    "spain": {
-      "tier": 1,
-      "firstSeen": "2026-06-19T17:07:46.302Z",
-      "lastSeen": "2026-06-19T17:07:46.302Z"
-    },
     "brazil": {
       "tier": 3,
       "firstSeen": "2026-06-19T21:56:35.476Z",
-      "lastSeen": "2026-06-21T02:11:18.422Z"
+      "lastSeen": "2026-06-21T11:00:52.251Z"
     },
     "haiti": {
       "tier": 1,
       "firstSeen": "2026-06-19T21:56:35.476Z",
-      "lastSeen": "2026-06-20T19:04:37.833Z"
+      "lastSeen": "2026-06-21T11:00:52.251Z"
     },
     "croatia": {
       "tier": 1,
@@ -79,12 +74,12 @@
     "morocco": {
       "tier": 1,
       "firstSeen": "2026-06-20T13:18:56.940Z",
-      "lastSeen": "2026-06-21T02:11:18.422Z"
+      "lastSeen": "2026-06-21T11:00:52.251Z"
     },
     "scotland": {
       "tier": 1,
       "firstSeen": "2026-06-20T13:18:56.940Z",
-      "lastSeen": "2026-06-21T02:11:18.422Z"
+      "lastSeen": "2026-06-21T11:00:52.251Z"
     },
     "netherlands": {
       "tier": 1,
@@ -99,14 +94,15 @@
     "germany": {
       "tier": 1,
       "firstSeen": "2026-06-21T02:11:18.422Z",
-      "lastSeen": "2026-06-21T02:11:18.422Z"
+      "lastSeen": "2026-06-21T11:00:52.251Z"
+    },
+    "france": {
+      "tier": 1,
+      "firstSeen": "2026-06-21T11:00:52.251Z",
+      "lastSeen": "2026-06-21T11:00:52.251Z"
     }
   },
   "crisis": {
-    "tunisia": {
-      "firstSeen": "2026-06-19T21:56:35.476Z",
-      "lastSeen": "2026-06-19T21:56:35.476Z"
-    },
     "argentina": {
       "firstSeen": "2026-06-20T01:59:10.717Z",
       "lastSeen": "2026-06-20T01:59:10.717Z"
