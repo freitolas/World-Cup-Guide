@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-21T16:23:53.743Z",
+  "updated": "2026-06-21T19:08:37.989Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -9,12 +9,12 @@
     "mexico": {
       "tier": 1,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-21T11:37:07.290Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     },
     "canada": {
       "tier": 1,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-20T11:00:39.058Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     },
     "ghana": {
       "tier": 1,
@@ -49,7 +49,7 @@
     "brazil": {
       "tier": 3,
       "firstSeen": "2026-06-19T21:56:35.476Z",
-      "lastSeen": "2026-06-21T13:28:57.529Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     },
     "haiti": {
       "tier": 1,
@@ -79,7 +79,7 @@
     "netherlands": {
       "tier": 1,
       "firstSeen": "2026-06-20T21:57:54.553Z",
-      "lastSeen": "2026-06-21T16:23:52.809Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     },
     "dr-congo": {
       "tier": 1,
@@ -89,7 +89,7 @@
     "germany": {
       "tier": 1,
       "firstSeen": "2026-06-21T02:11:18.422Z",
-      "lastSeen": "2026-06-21T16:23:52.809Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     },
     "france": {
       "tier": 1,
@@ -99,7 +99,7 @@
     "ecuador": {
       "tier": 1,
       "firstSeen": "2026-06-21T11:37:07.290Z",
-      "lastSeen": "2026-06-21T16:23:52.809Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     },
     "spain": {
       "tier": 3,
@@ -114,17 +114,32 @@
     "tunisia": {
       "tier": 1,
       "firstSeen": "2026-06-21T13:28:57.529Z",
-      "lastSeen": "2026-06-21T13:28:57.529Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     },
     "japan": {
       "tier": 1,
       "firstSeen": "2026-06-21T13:28:57.529Z",
-      "lastSeen": "2026-06-21T13:28:57.529Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     },
     "sweden": {
       "tier": 1,
       "firstSeen": "2026-06-21T16:23:52.809Z",
-      "lastSeen": "2026-06-21T16:23:52.809Z"
+      "lastSeen": "2026-06-21T19:08:37.366Z"
+    },
+    "uruguay": {
+      "tier": 1,
+      "firstSeen": "2026-06-21T19:08:37.366Z",
+      "lastSeen": "2026-06-21T19:08:37.366Z"
+    },
+    "cape-verde": {
+      "tier": 1,
+      "firstSeen": "2026-06-21T19:08:37.366Z",
+      "lastSeen": "2026-06-21T19:08:37.366Z"
+    },
+    "egypt": {
+      "tier": 3,
+      "firstSeen": "2026-06-21T19:08:37.366Z",
+      "lastSeen": "2026-06-21T19:08:37.366Z"
     }
   },
   "crisis": {
