@@ -143,6 +143,22 @@
     "ag": 0,
     "date": "2026-06-14"
   },
+  "M033": {
+    "status": "played",
+    "home": "germany",
+    "away": "cote-divoire",
+    "hg": 2,
+    "ag": 1,
+    "date": "2026-06-20"
+  },
+  "M034": {
+    "status": "played",
+    "home": "ecuador",
+    "away": "curacao",
+    "hg": 0,
+    "ag": 0,
+    "date": "2026-06-20"
+  },
   "M011": {
     "status": "played",
     "home": "netherlands",

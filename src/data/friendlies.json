@@ -1,32 +1,5 @@
 {
-  "updated": "2026-06-20T21:57:55.872Z",
+  "updated": "2026-06-21T02:11:19.453Z",
   "source": "api-football",
-  "fixtures": [
-    {
-      "id": "F1540358",
-      "date": "2026-06-10",
-      "kickoff": "2026-06-10T19:45:00+00:00",
-      "home": "portugal",
-      "away": "nigeria",
-      "homeName": "Portugal",
-      "awayName": "Nigeria",
-      "prediction": {
-        "win": 0.692,
-        "draw": 0.221,
-        "loss": 0.088,
-        "eg": [
-          1.96,
-          0.57
-        ]
-      },
-      "botPick": [
-        2,
-        0
-      ],
-      "result": {
-        "hg": 2,
-        "ag": 1
-      }
-    }
-  ]
+  "fixtures": []
 }
