@@ -215,6 +215,14 @@
     "ag": 0,
     "date": "2026-06-21"
   },
+  "M040": {
+    "status": "played",
+    "home": "new-zealand",
+    "away": "egypt",
+    "hg": 1,
+    "ag": 3,
+    "date": "2026-06-21"
+  },
   "M014": {
     "status": "played",
     "home": "spain",
