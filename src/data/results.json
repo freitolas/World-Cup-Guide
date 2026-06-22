@@ -287,6 +287,14 @@
     "ag": 1,
     "date": "2026-06-16"
   },
+  "M043": {
+    "status": "played",
+    "home": "argentina",
+    "away": "austria",
+    "hg": 2,
+    "ag": 0,
+    "date": "2026-06-22"
+  },
   "M023": {
     "status": "played",
     "home": "portugal",
