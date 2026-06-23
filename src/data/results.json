@@ -358,5 +358,13 @@
     "hg": 1,
     "ag": 0,
     "date": "2026-06-17"
+  },
+  "M045": {
+    "status": "played",
+    "home": "england",
+    "away": "ghana",
+    "hg": 0,
+    "ag": 0,
+    "date": "2026-06-23"
   }
 }
