@@ -279,6 +279,14 @@
     "ag": 0,
     "date": "2026-06-22"
   },
+  "M041": {
+    "status": "played",
+    "home": "norway",
+    "away": "senegal",
+    "hg": 3,
+    "ag": 2,
+    "date": "2026-06-22"
+  },
   "M019": {
     "status": "played",
     "home": "argentina",
@@ -301,6 +309,14 @@
     "away": "austria",
     "hg": 2,
     "ag": 0,
+    "date": "2026-06-22"
+  },
+  "M044": {
+    "status": "played",
+    "home": "jordan",
+    "away": "algeria",
+    "hg": 1,
+    "ag": 2,
     "date": "2026-06-22"
   },
   "M023": {
