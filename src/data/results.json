@@ -366,5 +366,13 @@
     "hg": 0,
     "ag": 0,
     "date": "2026-06-23"
+  },
+  "M046": {
+    "status": "played",
+    "home": "panama",
+    "away": "croatia",
+    "hg": 0,
+    "ag": 1,
+    "date": "2026-06-23"
   }
 }
