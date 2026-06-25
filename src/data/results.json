@@ -111,6 +111,22 @@
     "ag": 0,
     "date": "2026-06-19"
   },
+  "M049": {
+    "status": "played",
+    "home": "scotland",
+    "away": "brazil",
+    "hg": 0,
+    "ag": 3,
+    "date": "2026-06-24"
+  },
+  "M050": {
+    "status": "played",
+    "home": "morocco",
+    "away": "haiti",
+    "hg": 4,
+    "ag": 2,
+    "date": "2026-06-24"
+  },
   "M004": {
     "status": "played",
     "home": "usa",
