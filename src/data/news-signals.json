@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-25T17:01:16.555Z",
+  "updated": "2026-06-25T19:42:10.522Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -24,12 +24,12 @@
     "brazil": {
       "tier": 3,
       "firstSeen": "2026-06-19T21:56:35.476Z",
-      "lastSeen": "2026-06-25T17:01:15.551Z"
+      "lastSeen": "2026-06-25T19:42:09.404Z"
     },
     "scotland": {
       "tier": 1,
       "firstSeen": "2026-06-20T13:18:56.940Z",
-      "lastSeen": "2026-06-25T17:01:15.551Z"
+      "lastSeen": "2026-06-25T19:42:09.404Z"
     },
     "france": {
       "tier": 3,
@@ -84,7 +84,7 @@
     "germany": {
       "tier": 1,
       "firstSeen": "2026-06-24T19:22:21.643Z",
-      "lastSeen": "2026-06-25T17:01:15.551Z"
+      "lastSeen": "2026-06-25T19:42:09.404Z"
     },
     "japan": {
       "tier": 1,
@@ -190,6 +190,16 @@
       "tier": 1,
       "firstSeen": "2026-06-25T17:01:15.551Z",
       "lastSeen": "2026-06-25T17:01:15.551Z"
+    },
+    "south-africa": {
+      "tier": 1,
+      "firstSeen": "2026-06-25T19:42:09.404Z",
+      "lastSeen": "2026-06-25T19:42:09.404Z"
+    },
+    "south-korea": {
+      "tier": 1,
+      "firstSeen": "2026-06-25T19:42:09.404Z",
+      "lastSeen": "2026-06-25T19:42:09.404Z"
     }
   },
   "crisis": {}
