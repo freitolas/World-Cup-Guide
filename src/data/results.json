@@ -31,6 +31,22 @@
     "ag": 0,
     "date": "2026-06-18"
   },
+  "M053": {
+    "status": "played",
+    "home": "czechia",
+    "away": "mexico",
+    "hg": 0,
+    "ag": 3,
+    "date": "2026-06-24"
+  },
+  "M054": {
+    "status": "played",
+    "home": "south-africa",
+    "away": "south-korea",
+    "hg": 1,
+    "ag": 0,
+    "date": "2026-06-24"
+  },
   "M003": {
     "status": "played",
     "home": "canada",
