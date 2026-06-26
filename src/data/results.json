@@ -175,6 +175,22 @@
     "ag": 1,
     "date": "2026-06-19"
   },
+  "M059": {
+    "status": "played",
+    "home": "turkey",
+    "away": "usa",
+    "hg": 3,
+    "ag": 2,
+    "date": "2026-06-25"
+  },
+  "M060": {
+    "status": "played",
+    "home": "paraguay",
+    "away": "australia",
+    "hg": 0,
+    "ag": 0,
+    "date": "2026-06-25"
+  },
   "M010": {
     "status": "played",
     "home": "germany",
