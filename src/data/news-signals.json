@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-26T11:00:57.676Z",
+  "updated": "2026-06-26T11:15:45.560Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -19,7 +19,7 @@
     "brazil": {
       "tier": 3,
       "firstSeen": "2026-06-19T21:56:35.476Z",
-      "lastSeen": "2026-06-26T11:00:57.056Z"
+      "lastSeen": "2026-06-26T11:15:44.822Z"
     },
     "scotland": {
       "tier": 1,
@@ -174,7 +174,7 @@
     "morocco": {
       "tier": 1,
       "firstSeen": "2026-06-25T22:13:33.119Z",
-      "lastSeen": "2026-06-26T11:00:57.056Z"
+      "lastSeen": "2026-06-26T11:15:44.822Z"
     },
     "netherlands": {
       "tier": 1,
