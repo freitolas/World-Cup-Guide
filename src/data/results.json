@@ -255,6 +255,22 @@
     "ag": 4,
     "date": "2026-06-20"
   },
+  "M057": {
+    "status": "played",
+    "home": "japan",
+    "away": "sweden",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-25"
+  },
+  "M058": {
+    "status": "played",
+    "home": "tunisia",
+    "away": "netherlands",
+    "hg": 1,
+    "ag": 3,
+    "date": "2026-06-25"
+  },
   "M016": {
     "status": "played",
     "home": "belgium",
