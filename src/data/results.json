@@ -319,6 +319,22 @@
     "ag": 3,
     "date": "2026-06-21"
   },
+  "M063": {
+    "status": "played",
+    "home": "egypt",
+    "away": "iran",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-06-26"
+  },
+  "M064": {
+    "status": "played",
+    "home": "new-zealand",
+    "away": "belgium",
+    "hg": 1,
+    "ag": 5,
+    "date": "2026-06-26"
+  },
   "M014": {
     "status": "played",
     "home": "spain",
@@ -350,6 +366,22 @@
     "hg": 2,
     "ag": 2,
     "date": "2026-06-21"
+  },
+  "M065": {
+    "status": "played",
+    "home": "cape-verde",
+    "away": "saudi-arabia",
+    "hg": 0,
+    "ag": 0,
+    "date": "2026-06-26"
+  },
+  "M066": {
+    "status": "played",
+    "home": "uruguay",
+    "away": "spain",
+    "hg": 0,
+    "ag": 1,
+    "date": "2026-06-26"
   },
   "M017": {
     "status": "played",
