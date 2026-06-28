@@ -574,5 +574,13 @@
     "hg": 2,
     "ag": 1,
     "date": "2026-06-27"
+  },
+  "M073": {
+    "status": "played",
+    "home": "south-africa",
+    "away": "canada",
+    "hg": 0,
+    "ag": 1,
+    "date": "2026-06-28"
   }
 }
