@@ -463,6 +463,22 @@
     "ag": 2,
     "date": "2026-06-22"
   },
+  "M069": {
+    "status": "played",
+    "home": "algeria",
+    "away": "austria",
+    "hg": 3,
+    "ag": 3,
+    "date": "2026-06-27"
+  },
+  "M070": {
+    "status": "played",
+    "home": "jordan",
+    "away": "argentina",
+    "hg": 1,
+    "ag": 3,
+    "date": "2026-06-27"
+  },
   "M023": {
     "status": "played",
     "home": "portugal",
