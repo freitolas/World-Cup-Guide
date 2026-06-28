@@ -495,6 +495,22 @@
     "ag": 0,
     "date": "2026-06-23"
   },
+  "M071": {
+    "status": "played",
+    "home": "colombia",
+    "away": "portugal",
+    "hg": 0,
+    "ag": 0,
+    "date": "2026-06-27"
+  },
+  "M072": {
+    "status": "played",
+    "home": "dr-congo",
+    "away": "uzbekistan",
+    "hg": 3,
+    "ag": 1,
+    "date": "2026-06-27"
+  },
   "M022": {
     "status": "played",
     "home": "england",
@@ -526,5 +542,21 @@
     "hg": 0,
     "ag": 1,
     "date": "2026-06-23"
+  },
+  "M067": {
+    "status": "played",
+    "home": "panama",
+    "away": "england",
+    "hg": 0,
+    "ag": 2,
+    "date": "2026-06-27"
+  },
+  "M068": {
+    "status": "played",
+    "home": "croatia",
+    "away": "ghana",
+    "hg": 2,
+    "ag": 1,
+    "date": "2026-06-27"
   }
 }
