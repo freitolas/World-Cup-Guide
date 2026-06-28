@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-28T16:02:05.125Z",
+  "updated": "2026-06-28T18:58:05.315Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -9,7 +9,7 @@
     "canada": {
       "tier": 1,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-28T14:27:56.868Z"
+      "lastSeen": "2026-06-28T18:58:04.172Z"
     },
     "scotland": {
       "tier": 1,
@@ -19,7 +19,7 @@
     "argentina": {
       "tier": 3,
       "firstSeen": "2026-06-23T11:00:57.790Z",
-      "lastSeen": "2026-06-28T14:27:56.868Z"
+      "lastSeen": "2026-06-28T18:58:04.172Z"
     },
     "turkey": {
       "tier": 1,
@@ -99,7 +99,7 @@
     "portugal": {
       "tier": 1,
       "firstSeen": "2026-06-27T11:15:43.658Z",
-      "lastSeen": "2026-06-28T14:27:56.868Z"
+      "lastSeen": "2026-06-28T18:58:04.172Z"
     },
     "iran": {
       "tier": 1,
@@ -139,17 +139,17 @@
     "croatia": {
       "tier": 3,
       "firstSeen": "2026-06-28T11:00:55.889Z",
-      "lastSeen": "2026-06-28T14:27:56.868Z"
+      "lastSeen": "2026-06-28T18:58:04.172Z"
     },
     "austria": {
       "tier": 1,
       "firstSeen": "2026-06-28T11:00:55.889Z",
-      "lastSeen": "2026-06-28T16:02:04.131Z"
+      "lastSeen": "2026-06-28T18:58:04.172Z"
     },
     "algeria": {
       "tier": 1,
       "firstSeen": "2026-06-28T11:00:55.889Z",
-      "lastSeen": "2026-06-28T11:00:55.889Z"
+      "lastSeen": "2026-06-28T18:58:04.172Z"
     },
     "germany": {
       "tier": 1,
@@ -159,7 +159,7 @@
     "brazil": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-06-28T14:27:56.868Z"
+      "lastSeen": "2026-06-28T18:58:04.172Z"
     },
     "ecuador": {
       "tier": 1,
@@ -180,6 +180,11 @@
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
       "lastSeen": "2026-06-28T14:27:56.868Z"
+    },
+    "japan": {
+      "tier": 1,
+      "firstSeen": "2026-06-28T18:58:04.172Z",
+      "lastSeen": "2026-06-28T18:58:04.172Z"
     }
   },
   "crisis": {}
