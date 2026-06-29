@@ -582,5 +582,13 @@
     "hg": 0,
     "ag": 1,
     "date": "2026-06-28"
+  },
+  "M076": {
+    "status": "played",
+    "home": "brazil",
+    "away": "japan",
+    "hg": 2,
+    "ag": 1,
+    "date": "2026-06-29"
   }
 }
