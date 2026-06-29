@@ -1,10 +1,10 @@
 {
-  "updated": "2026-06-29T11:01:47.960Z",
+  "updated": "2026-06-29T11:16:17.087Z",
   "injury": {
     "england": {
       "tier": 3,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "canada": {
       "tier": 1,
@@ -24,7 +24,7 @@
     "spain": {
       "tier": 3,
       "firstSeen": "2026-06-25T17:01:15.551Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "uruguay": {
       "tier": 1,
@@ -44,12 +44,12 @@
     "south-africa": {
       "tier": 1,
       "firstSeen": "2026-06-25T19:42:09.404Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "south-korea": {
       "tier": 3,
       "firstSeen": "2026-06-25T19:42:09.404Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "panama": {
       "tier": 1,
@@ -64,7 +64,7 @@
     "iran": {
       "tier": 1,
       "firstSeen": "2026-06-27T18:58:32.706Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "ghana": {
       "tier": 1,
@@ -74,7 +74,7 @@
     "qatar": {
       "tier": 1,
       "firstSeen": "2026-06-27T18:58:32.706Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "uzbekistan": {
       "tier": 1,
@@ -89,7 +89,7 @@
     "croatia": {
       "tier": 3,
       "firstSeen": "2026-06-28T11:00:55.889Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "austria": {
       "tier": 1,
@@ -104,12 +104,12 @@
     "germany": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "brazil": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "ecuador": {
       "tier": 1,
@@ -129,18 +129,18 @@
     "mexico": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     },
     "japan": {
       "tier": 1,
       "firstSeen": "2026-06-28T18:58:04.172Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     }
   },
   "crisis": {
     "south-korea": {
       "firstSeen": "2026-06-29T11:01:46.776Z",
-      "lastSeen": "2026-06-29T11:01:46.776Z"
+      "lastSeen": "2026-06-29T11:16:16.433Z"
     }
   }
 }
