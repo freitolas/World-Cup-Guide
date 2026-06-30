@@ -606,5 +606,13 @@
     "hg": 2,
     "ag": 1,
     "date": "2026-06-29"
+  },
+  "M078": {
+    "status": "played",
+    "home": "cote-divoire",
+    "away": "norway",
+    "hg": 1,
+    "ag": 2,
+    "date": "2026-06-30"
   }
 }
