@@ -630,5 +630,13 @@
     "hg": 2,
     "ag": 0,
     "date": "2026-06-30"
+  },
+  "M080": {
+    "status": "played",
+    "home": "england",
+    "away": "dr-congo",
+    "hg": 2,
+    "ag": 1,
+    "date": "2026-07-01"
   }
 }
