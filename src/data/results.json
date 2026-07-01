@@ -622,5 +622,13 @@
     "hg": 1,
     "ag": 2,
     "date": "2026-06-30"
+  },
+  "M079": {
+    "status": "played",
+    "home": "mexico",
+    "away": "ecuador",
+    "hg": 2,
+    "ag": 0,
+    "date": "2026-06-30"
   }
 }

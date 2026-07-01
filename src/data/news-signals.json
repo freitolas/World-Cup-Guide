@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-01T11:16:07.169Z",
+  "updated": "2026-07-01T11:47:59.166Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -29,7 +29,7 @@
     "south-korea": {
       "tier": 3,
       "firstSeen": "2026-06-25T19:42:09.404Z",
-      "lastSeen": "2026-06-30T16:59:20.068Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "iran": {
       "tier": 1,
@@ -39,7 +39,7 @@
     "germany": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-06-30T22:06:00.779Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "brazil": {
       "tier": 1,
@@ -54,7 +54,7 @@
     "mexico": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-07-01T11:01:17.631Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "japan": {
       "tier": 1,
@@ -84,12 +84,12 @@
     "france": {
       "tier": 3,
       "firstSeen": "2026-06-30T11:01:38.089Z",
-      "lastSeen": "2026-07-01T11:16:06.508Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "paraguay": {
       "tier": 1,
       "firstSeen": "2026-06-30T11:36:45.337Z",
-      "lastSeen": "2026-07-01T11:16:06.508Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "austria": {
       "tier": 1,
@@ -104,12 +104,12 @@
     "ecuador": {
       "tier": 1,
       "firstSeen": "2026-06-30T16:59:20.068Z",
-      "lastSeen": "2026-07-01T11:01:17.631Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "sweden": {
       "tier": 1,
       "firstSeen": "2026-06-30T16:59:20.068Z",
-      "lastSeen": "2026-07-01T11:16:06.508Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "algeria": {
       "tier": 1,
@@ -134,7 +134,7 @@
     "usa": {
       "tier": 1,
       "firstSeen": "2026-07-01T11:16:06.508Z",
-      "lastSeen": "2026-07-01T11:16:06.508Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "argentina": {
       "tier": 3,
@@ -145,7 +145,7 @@
   "crisis": {
     "south-korea": {
       "firstSeen": "2026-06-29T11:01:46.776Z",
-      "lastSeen": "2026-06-30T16:59:20.068Z"
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     },
     "south-africa": {
       "firstSeen": "2026-06-29T19:28:45.320Z",
@@ -170,6 +170,10 @@
     "morocco": {
       "firstSeen": "2026-07-01T11:01:17.631Z",
       "lastSeen": "2026-07-01T11:01:17.631Z"
+    },
+    "mexico": {
+      "firstSeen": "2026-07-01T11:47:58.503Z",
+      "lastSeen": "2026-07-01T11:47:58.503Z"
     }
   }
 }
