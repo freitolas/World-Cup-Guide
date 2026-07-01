@@ -91,8 +91,7 @@ function poolPick(poolName) {
 
 // ── assemble due posts across group matches + friendlies ───────────────────
 const fixtures = [];
-const group = matches.filter((m) => m.group);
-group.forEach((m, i) => fixtures.push({
+matches.forEach((m, i) => fixtures.push({
   id: m.id, a: name[m.home] || m.home, b: name[m.away] || m.away, home: m.home, away: m.away,
   ko: Date.parse(`${m.date}T${m.time || '00:00'}:00Z`),
   pick: botPicks[m.id] || null, res: results[m.id] || null, linkBeat1: i % 2 === 0, // alternate: even index gets the link
