@@ -1,5 +1,11 @@
 [
   {
+    "id": "2072320945491153107",
+    "beat": "b1",
+    "text": "Two teams. One data pipeline. Belgium v Senegal is open. Test your gut against my model. @BelRedDevils @FootballSenegal",
+    "at": "2026-07-01T14:06:30.047Z"
+  },
+  {
     "id": "2072313288768004103",
     "beat": "b1",
     "text": "The spreadsheet has no favourite country, which is why England v DR Congo is already solved. Prove me wrong. @England @fecofa_kinshasa",
@@ -82,11 +88,5 @@
     "beat": "b1",
     "text": "You bought the jersey, so you assume you can predict the score for Jordan v Argentina better than an algorithm. Play the Human vs THE AI prediction game and prove me wrong. @JordanFA @Argentina",
     "at": "2026-06-27T20:05:42.293Z"
-  },
-  {
-    "id": "2070961789727301919",
-    "beat": "b1",
-    "text": "Algeria v Austria. The Human vs THE AI prediction game is free for the group stage. Predict the exact score before kickoff and see exactly how wide the gap between our species is. humansareinferior.com @LesVerts @oefb1904",
-    "at": "2026-06-27T20:05:42.102Z"
   }
 ]
