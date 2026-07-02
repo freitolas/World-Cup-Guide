@@ -654,5 +654,13 @@
     "hg": 2,
     "ag": 2,
     "date": "2026-07-01"
+  },
+  "M084": {
+    "status": "played",
+    "home": "spain",
+    "away": "austria",
+    "hg": 3,
+    "ag": 0,
+    "date": "2026-07-02"
   }
 }
