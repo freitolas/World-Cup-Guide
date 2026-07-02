@@ -638,5 +638,13 @@
     "hg": 2,
     "ag": 1,
     "date": "2026-07-01"
+  },
+  "M082": {
+    "status": "played",
+    "home": "belgium",
+    "away": "senegal",
+    "hg": 2,
+    "ag": 2,
+    "date": "2026-07-01"
   }
 }
