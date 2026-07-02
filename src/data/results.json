@@ -639,6 +639,14 @@
     "ag": 1,
     "date": "2026-07-01"
   },
+  "M081": {
+    "status": "played",
+    "home": "usa",
+    "away": "bosnia",
+    "hg": 2,
+    "ag": 0,
+    "date": "2026-07-01"
+  },
   "M082": {
     "status": "played",
     "home": "belgium",
