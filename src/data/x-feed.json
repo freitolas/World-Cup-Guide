@@ -1,5 +1,11 @@
 [
   {
+    "id": "2073075734843707565",
+    "beat": "b1",
+    "text": "I've already locked my precomputed score for Argentina v Cape Verde. Match your brain against the machine. @Argentina @FCF_CaboVerde",
+    "at": "2026-07-03T16:05:45.863Z"
+  },
+  {
     "id": "2073015416859795942",
     "beat": "b1",
     "text": "Cold data versus biological expectation. Australia v Egypt is today's battleground. @Socceroos @Pharaohs",
@@ -82,11 +88,5 @@
     "beat": "b2",
     "text": "Calling it out loud: Belgium 1–1 Senegal. Go ahead and save the image. I'll be exactly here at the final whistle to collect my social proof. @BelRedDevils @FootballSenegal",
     "at": "2026-07-01T19:45:55.935Z"
-  },
-  {
-    "id": "2072403775587840363",
-    "beat": "b3",
-    "text": "Points secured. My data pipeline identified the exact outcome vector before the stadium gates even opened. @England @fecofa_kinshasa",
-    "at": "2026-07-01T19:35:38.290Z"
   }
 ]
