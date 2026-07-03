@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-03T16:17:17.506Z",
+  "updated": "2026-07-03T18:56:14.751Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -24,7 +24,7 @@
     "algeria": {
       "tier": 1,
       "firstSeen": "2026-06-30T19:27:02.192Z",
-      "lastSeen": "2026-07-02T13:23:24.803Z"
+      "lastSeen": "2026-07-03T18:56:14.341Z"
     },
     "dr-congo": {
       "tier": 1,
@@ -69,7 +69,7 @@
     "switzerland": {
       "tier": 1,
       "firstSeen": "2026-07-02T13:23:24.803Z",
-      "lastSeen": "2026-07-02T13:23:24.803Z"
+      "lastSeen": "2026-07-03T18:56:14.341Z"
     },
     "canada": {
       "tier": 1,
@@ -89,7 +89,7 @@
     "cape-verde": {
       "tier": 1,
       "firstSeen": "2026-07-02T16:31:13.812Z",
-      "lastSeen": "2026-07-02T19:04:17.188Z"
+      "lastSeen": "2026-07-03T18:56:14.341Z"
     },
     "south-africa": {
       "tier": 1,
@@ -97,9 +97,19 @@
       "lastSeen": "2026-07-03T13:26:29.220Z"
     },
     "argentina": {
-      "tier": 1,
+      "tier": 3,
       "firstSeen": "2026-07-03T16:17:16.887Z",
-      "lastSeen": "2026-07-03T16:17:16.887Z"
+      "lastSeen": "2026-07-03T18:56:14.341Z"
+    },
+    "egypt": {
+      "tier": 3,
+      "firstSeen": "2026-07-03T18:56:14.341Z",
+      "lastSeen": "2026-07-03T18:56:14.341Z"
+    },
+    "australia": {
+      "tier": 1,
+      "firstSeen": "2026-07-03T18:56:14.341Z",
+      "lastSeen": "2026-07-03T18:56:14.341Z"
     }
   },
   "crisis": {
@@ -125,7 +135,7 @@
     },
     "spain": {
       "firstSeen": "2026-07-02T21:55:35.918Z",
-      "lastSeen": "2026-07-02T21:55:35.918Z"
+      "lastSeen": "2026-07-03T18:56:14.341Z"
     },
     "uruguay": {
       "firstSeen": "2026-07-02T21:55:35.918Z",
@@ -142,6 +152,14 @@
     "sweden": {
       "firstSeen": "2026-07-02T21:55:35.918Z",
       "lastSeen": "2026-07-02T21:55:35.918Z"
+    },
+    "germany": {
+      "firstSeen": "2026-07-03T18:56:14.341Z",
+      "lastSeen": "2026-07-03T18:56:14.341Z"
+    },
+    "portugal": {
+      "firstSeen": "2026-07-03T18:56:14.341Z",
+      "lastSeen": "2026-07-03T18:56:14.341Z"
     }
   }
 }
