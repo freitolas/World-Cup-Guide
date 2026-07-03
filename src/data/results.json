@@ -670,5 +670,13 @@
     "hg": 3,
     "ag": 0,
     "date": "2026-07-02"
+  },
+  "M085": {
+    "status": "played",
+    "home": "switzerland",
+    "away": "algeria",
+    "hg": 2,
+    "ag": 0,
+    "date": "2026-07-02"
   }
 }
