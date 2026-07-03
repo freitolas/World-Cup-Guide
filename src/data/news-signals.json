@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-02T21:55:36.372Z",
+  "updated": "2026-07-03T01:25:49.615Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -36,20 +36,10 @@
       "firstSeen": "2026-06-28T14:27:56.868Z",
       "lastSeen": "2026-07-01T19:26:13.010Z"
     },
-    "morocco": {
-      "tier": 3,
-      "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-07-01T11:16:06.508Z"
-    },
     "mexico": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
       "lastSeen": "2026-07-02T21:55:35.918Z"
-    },
-    "netherlands": {
-      "tier": 3,
-      "firstSeen": "2026-06-29T17:25:46.414Z",
-      "lastSeen": "2026-07-01T11:16:06.508Z"
     },
     "norway": {
       "tier": 1,
@@ -89,7 +79,7 @@
     "dr-congo": {
       "tier": 1,
       "firstSeen": "2026-06-30T19:27:02.192Z",
-      "lastSeen": "2026-07-02T13:23:24.803Z"
+      "lastSeen": "2026-07-03T01:25:48.714Z"
     },
     "usa": {
       "tier": 1,
@@ -104,7 +94,7 @@
     "senegal": {
       "tier": 1,
       "firstSeen": "2026-07-01T13:59:17.117Z",
-      "lastSeen": "2026-07-02T21:55:35.918Z"
+      "lastSeen": "2026-07-03T01:25:48.714Z"
     },
     "belgium": {
       "tier": 1,
