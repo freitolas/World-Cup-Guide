@@ -678,5 +678,13 @@
     "hg": 2,
     "ag": 0,
     "date": "2026-07-02"
+  },
+  "M088": {
+    "status": "played",
+    "home": "australia",
+    "away": "egypt",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-07-03"
   }
 }
