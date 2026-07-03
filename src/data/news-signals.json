@@ -1,15 +1,15 @@
 {
-  "updated": "2026-07-03T11:00:55.233Z",
+  "updated": "2026-07-03T11:15:54.663Z",
   "injury": {
     "england": {
       "tier": 3,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-07-03T11:00:54.589Z"
+      "lastSeen": "2026-07-03T11:15:54.158Z"
     },
     "south-korea": {
       "tier": 3,
       "firstSeen": "2026-06-25T19:42:09.404Z",
-      "lastSeen": "2026-07-03T11:00:54.589Z"
+      "lastSeen": "2026-07-03T11:15:54.158Z"
     },
     "iran": {
       "tier": 1,
@@ -19,7 +19,7 @@
     "mexico": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-07-03T11:00:54.589Z"
+      "lastSeen": "2026-07-03T11:15:54.158Z"
     },
     "algeria": {
       "tier": 1,
@@ -49,12 +49,12 @@
     "spain": {
       "tier": 3,
       "firstSeen": "2026-07-02T13:23:24.803Z",
-      "lastSeen": "2026-07-03T11:00:54.589Z"
+      "lastSeen": "2026-07-03T11:15:54.158Z"
     },
     "austria": {
       "tier": 1,
       "firstSeen": "2026-07-02T13:23:24.803Z",
-      "lastSeen": "2026-07-03T11:00:54.589Z"
+      "lastSeen": "2026-07-03T11:15:54.158Z"
     },
     "portugal": {
       "tier": 1,
