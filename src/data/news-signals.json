@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-04T11:01:00.718Z",
+  "updated": "2026-07-04T11:15:48.760Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -64,7 +64,7 @@
     "canada": {
       "tier": 1,
       "firstSeen": "2026-07-02T13:23:24.803Z",
-      "lastSeen": "2026-07-04T11:00:59.727Z"
+      "lastSeen": "2026-07-04T11:15:48.426Z"
     },
     "cape-verde": {
       "tier": 1,
@@ -84,12 +84,12 @@
     "egypt": {
       "tier": 3,
       "firstSeen": "2026-07-03T18:56:14.341Z",
-      "lastSeen": "2026-07-03T18:56:14.341Z"
+      "lastSeen": "2026-07-04T11:15:48.426Z"
     },
     "australia": {
       "tier": 1,
       "firstSeen": "2026-07-03T18:56:14.341Z",
-      "lastSeen": "2026-07-03T18:56:14.341Z"
+      "lastSeen": "2026-07-04T11:15:48.426Z"
     },
     "netherlands": {
       "tier": 1,
@@ -99,12 +99,22 @@
     "morocco": {
       "tier": 1,
       "firstSeen": "2026-07-04T11:00:59.727Z",
-      "lastSeen": "2026-07-04T11:00:59.727Z"
+      "lastSeen": "2026-07-04T11:15:48.426Z"
     },
     "qatar": {
       "tier": 1,
       "firstSeen": "2026-07-04T11:00:59.727Z",
-      "lastSeen": "2026-07-04T11:00:59.727Z"
+      "lastSeen": "2026-07-04T11:15:48.426Z"
+    },
+    "brazil": {
+      "tier": 1,
+      "firstSeen": "2026-07-04T11:15:48.426Z",
+      "lastSeen": "2026-07-04T11:15:48.426Z"
+    },
+    "france": {
+      "tier": 1,
+      "firstSeen": "2026-07-04T11:15:48.426Z",
+      "lastSeen": "2026-07-04T11:15:48.426Z"
     }
   },
   "crisis": {
