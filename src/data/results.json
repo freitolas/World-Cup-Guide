@@ -679,6 +679,14 @@
     "ag": 0,
     "date": "2026-07-02"
   },
+  "M086": {
+    "status": "played",
+    "home": "argentina",
+    "away": "cape-verde",
+    "hg": 1,
+    "ag": 1,
+    "date": "2026-07-03"
+  },
   "M088": {
     "status": "played",
     "home": "australia",
