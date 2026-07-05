@@ -1,15 +1,15 @@
 {
-  "updated": "2026-07-05T11:01:07.088Z",
+  "updated": "2026-07-05T11:15:45.986Z",
   "injury": {
     "england": {
       "tier": 3,
       "firstSeen": "2026-06-17T19:53:52.289Z",
-      "lastSeen": "2026-07-05T11:01:06.604Z"
+      "lastSeen": "2026-07-05T11:15:45.525Z"
     },
     "mexico": {
       "tier": 1,
       "firstSeen": "2026-06-28T14:27:56.868Z",
-      "lastSeen": "2026-07-05T11:01:06.604Z"
+      "lastSeen": "2026-07-05T11:15:45.525Z"
     },
     "canada": {
       "tier": 1,
@@ -52,15 +52,29 @@
       "lastSeen": "2026-07-04T11:15:48.426Z"
     },
     "france": {
-      "tier": 1,
+      "tier": 3,
       "firstSeen": "2026-07-04T11:15:48.426Z",
-      "lastSeen": "2026-07-04T11:15:48.426Z"
+      "lastSeen": "2026-07-05T11:15:45.525Z"
     },
     "ecuador": {
       "tier": 1,
       "firstSeen": "2026-07-05T11:01:06.604Z",
-      "lastSeen": "2026-07-05T11:01:06.604Z"
+      "lastSeen": "2026-07-05T11:15:45.525Z"
+    },
+    "paraguay": {
+      "tier": 1,
+      "firstSeen": "2026-07-05T11:15:45.525Z",
+      "lastSeen": "2026-07-05T11:15:45.525Z"
     }
   },
-  "crisis": {}
+  "crisis": {
+    "france": {
+      "firstSeen": "2026-07-05T11:15:45.525Z",
+      "lastSeen": "2026-07-05T11:15:45.525Z"
+    },
+    "paraguay": {
+      "firstSeen": "2026-07-05T11:15:45.525Z",
+      "lastSeen": "2026-07-05T11:15:45.525Z"
+    }
+  }
 }
