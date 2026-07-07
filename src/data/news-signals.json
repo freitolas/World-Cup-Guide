@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-06T11:16:16.074Z",
+  "updated": "2026-07-07T11:01:24.537Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -11,40 +11,20 @@
       "firstSeen": "2026-06-28T14:27:56.868Z",
       "lastSeen": "2026-07-06T11:01:32.689Z"
     },
-    "canada": {
-      "tier": 1,
-      "firstSeen": "2026-07-02T13:23:24.803Z",
-      "lastSeen": "2026-07-05T11:01:06.604Z"
-    },
     "argentina": {
       "tier": 3,
       "firstSeen": "2026-07-03T16:17:16.887Z",
       "lastSeen": "2026-07-06T11:01:32.689Z"
     },
-    "morocco": {
-      "tier": 1,
-      "firstSeen": "2026-07-04T11:00:59.727Z",
-      "lastSeen": "2026-07-05T11:01:06.604Z"
-    },
     "brazil": {
       "tier": 3,
       "firstSeen": "2026-07-04T11:15:48.426Z",
-      "lastSeen": "2026-07-06T11:16:15.577Z"
+      "lastSeen": "2026-07-07T11:01:24.013Z"
     },
     "france": {
       "tier": 3,
       "firstSeen": "2026-07-04T11:15:48.426Z",
       "lastSeen": "2026-07-06T11:01:32.689Z"
-    },
-    "ecuador": {
-      "tier": 1,
-      "firstSeen": "2026-07-05T11:01:06.604Z",
-      "lastSeen": "2026-07-05T11:15:45.525Z"
-    },
-    "paraguay": {
-      "tier": 1,
-      "firstSeen": "2026-07-05T11:15:45.525Z",
-      "lastSeen": "2026-07-05T11:15:45.525Z"
     },
     "switzerland": {
       "tier": 1,
@@ -64,18 +44,25 @@
     "norway": {
       "tier": 1,
       "firstSeen": "2026-07-06T11:01:32.689Z",
-      "lastSeen": "2026-07-06T11:16:15.577Z"
+      "lastSeen": "2026-07-07T11:01:24.013Z"
+    },
+    "spain": {
+      "tier": 1,
+      "firstSeen": "2026-07-07T11:01:24.013Z",
+      "lastSeen": "2026-07-07T11:01:24.013Z"
+    },
+    "portugal": {
+      "tier": 1,
+      "firstSeen": "2026-07-07T11:01:24.013Z",
+      "lastSeen": "2026-07-07T11:01:24.013Z"
+    },
+    "belgium": {
+      "tier": 1,
+      "firstSeen": "2026-07-07T11:01:24.013Z",
+      "lastSeen": "2026-07-07T11:01:24.013Z"
     }
   },
   "crisis": {
-    "france": {
-      "firstSeen": "2026-07-05T11:15:45.525Z",
-      "lastSeen": "2026-07-05T11:15:45.525Z"
-    },
-    "paraguay": {
-      "firstSeen": "2026-07-05T11:15:45.525Z",
-      "lastSeen": "2026-07-05T11:15:45.525Z"
-    },
     "england": {
       "firstSeen": "2026-07-06T11:16:15.577Z",
       "lastSeen": "2026-07-06T11:16:15.577Z"
