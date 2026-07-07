@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-07T11:01:24.537Z",
+  "updated": "2026-07-07T11:16:15.191Z",
   "injury": {
     "england": {
       "tier": 3,
@@ -49,12 +49,12 @@
     "spain": {
       "tier": 1,
       "firstSeen": "2026-07-07T11:01:24.013Z",
-      "lastSeen": "2026-07-07T11:01:24.013Z"
+      "lastSeen": "2026-07-07T11:16:14.449Z"
     },
     "portugal": {
       "tier": 1,
       "firstSeen": "2026-07-07T11:01:24.013Z",
-      "lastSeen": "2026-07-07T11:01:24.013Z"
+      "lastSeen": "2026-07-07T11:16:14.449Z"
     },
     "belgium": {
       "tier": 1,
