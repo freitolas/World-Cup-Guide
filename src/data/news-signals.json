@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-08T11:01:33.356Z",
+  "updated": "2026-07-08T11:16:03.563Z",
   "injury": {
     "brazil": {
       "tier": 3,
@@ -25,6 +25,21 @@
       "tier": 1,
       "firstSeen": "2026-07-07T11:01:24.013Z",
       "lastSeen": "2026-07-07T11:01:24.013Z"
+    },
+    "switzerland": {
+      "tier": 1,
+      "firstSeen": "2026-07-08T11:16:02.304Z",
+      "lastSeen": "2026-07-08T11:16:02.304Z"
+    },
+    "argentina": {
+      "tier": 3,
+      "firstSeen": "2026-07-08T11:16:02.304Z",
+      "lastSeen": "2026-07-08T11:16:02.304Z"
+    },
+    "colombia": {
+      "tier": 1,
+      "firstSeen": "2026-07-08T11:16:02.304Z",
+      "lastSeen": "2026-07-08T11:16:02.304Z"
     }
   },
   "crisis": {}
