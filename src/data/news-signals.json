@@ -1,25 +1,20 @@
 {
-  "updated": "2026-07-11T11:15:44.980Z",
+  "updated": "2026-07-12T11:01:05.036Z",
   "injury": {
     "norway": {
       "tier": 1,
       "firstSeen": "2026-07-06T11:01:32.689Z",
-      "lastSeen": "2026-07-11T11:00:53.327Z"
+      "lastSeen": "2026-07-12T11:01:03.922Z"
     },
     "england": {
       "tier": 1,
       "firstSeen": "2026-07-09T11:01:19.058Z",
-      "lastSeen": "2026-07-11T11:00:53.327Z"
+      "lastSeen": "2026-07-12T11:01:03.922Z"
     },
     "belgium": {
       "tier": 1,
       "firstSeen": "2026-07-10T11:01:29.299Z",
       "lastSeen": "2026-07-11T11:15:44.355Z"
-    },
-    "usa": {
-      "tier": 1,
-      "firstSeen": "2026-07-10T11:01:29.299Z",
-      "lastSeen": "2026-07-10T11:01:29.299Z"
     },
     "france": {
       "tier": 3,
@@ -31,10 +26,10 @@
       "firstSeen": "2026-07-10T11:15:55.238Z",
       "lastSeen": "2026-07-11T11:15:44.355Z"
     },
-    "morocco": {
+    "south-africa": {
       "tier": 1,
-      "firstSeen": "2026-07-10T11:15:55.238Z",
-      "lastSeen": "2026-07-10T11:15:55.238Z"
+      "firstSeen": "2026-07-12T11:01:03.922Z",
+      "lastSeen": "2026-07-12T11:01:03.922Z"
     }
   },
   "crisis": {}
