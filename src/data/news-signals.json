@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-13T11:01:42.373Z",
+  "updated": "2026-07-13T11:16:11.788Z",
   "injury": {
     "norway": {
       "tier": 1,
@@ -9,7 +9,7 @@
     "england": {
       "tier": 1,
       "firstSeen": "2026-07-09T11:01:19.058Z",
-      "lastSeen": "2026-07-12T11:15:50.405Z"
+      "lastSeen": "2026-07-13T11:16:10.503Z"
     },
     "south-africa": {
       "tier": 1,
@@ -25,6 +25,11 @@
       "tier": 1,
       "firstSeen": "2026-07-12T11:15:50.405Z",
       "lastSeen": "2026-07-12T11:15:50.405Z"
+    },
+    "argentina": {
+      "tier": 3,
+      "firstSeen": "2026-07-13T11:16:10.503Z",
+      "lastSeen": "2026-07-13T11:16:10.503Z"
     }
   },
   "crisis": {
