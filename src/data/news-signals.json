@@ -1,15 +1,15 @@
 {
-  "updated": "2026-07-15T11:01:42.767Z",
+  "updated": "2026-07-15T11:16:26.395Z",
   "injury": {
     "england": {
       "tier": 3,
       "firstSeen": "2026-07-09T11:01:19.058Z",
-      "lastSeen": "2026-07-15T11:01:42.035Z"
+      "lastSeen": "2026-07-15T11:16:25.796Z"
     },
     "argentina": {
       "tier": 3,
       "firstSeen": "2026-07-13T11:16:10.503Z",
-      "lastSeen": "2026-07-15T11:01:42.035Z"
+      "lastSeen": "2026-07-15T11:16:25.796Z"
     },
     "france": {
       "tier": 3,
