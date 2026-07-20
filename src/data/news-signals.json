@@ -1,5 +1,25 @@
 {
-  "updated": "2026-07-19T11:15:56.455Z",
-  "injury": {},
-  "crisis": {}
+  "updated": "2026-07-20T11:01:21.102Z",
+  "injury": {
+    "england": {
+      "tier": 3,
+      "firstSeen": "2026-07-20T11:01:20.131Z",
+      "lastSeen": "2026-07-20T11:01:20.131Z"
+    },
+    "argentina": {
+      "tier": 1,
+      "firstSeen": "2026-07-20T11:01:20.131Z",
+      "lastSeen": "2026-07-20T11:01:20.131Z"
+    }
+  },
+  "crisis": {
+    "spain": {
+      "firstSeen": "2026-07-20T11:01:20.131Z",
+      "lastSeen": "2026-07-20T11:01:20.131Z"
+    },
+    "argentina": {
+      "firstSeen": "2026-07-20T11:01:20.131Z",
+      "lastSeen": "2026-07-20T11:01:20.131Z"
+    }
+  }
 }
