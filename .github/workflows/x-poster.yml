@@ -29,6 +29,7 @@ concurrency:
 
 jobs:
   post:
+    if: false  # ⛔ DISABLED: World Cup 2026 over. Make may still dispatch, but runs skip instantly. Delete this line to re-enable.
     runs-on: ubuntu-latest
     steps:
       - name: Active-window gate (warm-ups + tournament only)

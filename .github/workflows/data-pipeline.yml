@@ -12,8 +12,7 @@ name: Daily update
 # only happen when results/predictions/picks actually change, so deploys are not
 # spammed.
 on:
-  schedule:
-    - cron: '0 */3 * * *'
+  # ⛔ Schedule cron REMOVED — World Cup 2026 ended 2026-07-19. Pipeline stopped.
   workflow_dispatch: {}
 
 permissions:
@@ -25,6 +24,7 @@ concurrency:
 
 jobs:
   update:
+    if: false  # ⛔ DISABLED: tournament over. Delete this line to re-enable.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

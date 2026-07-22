@@ -24,6 +24,7 @@ permissions:
 
 jobs:
   preview:
+    if: false  # ⛔ DISABLED: tournament over. Make may still dispatch, but runs skip instantly. Delete this line to re-enable.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
